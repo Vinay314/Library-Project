@@ -1,0 +1,70 @@
+/* Header */
+.header {
+    background-color: #007BFF;
+    color: #fff;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .header h1 {
+    margin: 0;
+    font-size: 1.5rem;
+  }
+  
+  .header nav {
+    display: flex;
+    align-items: center;
+  }
+  
+  .header nav ul {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .header nav ul li {
+    margin-right: 1rem; /* Space between navigation items */
+  }
+  
+  .header nav ul li a {
+    color: #fff;
+    text-decoration: none;
+  }
+.cart-icon {
+    width: 24px; /* Adjust the width */
+    height: 24px; /* Adjust the height */
+    margin-right: 8px; /* Add some space between the icon and the quantity */
+}
+
+  .header .cart-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #fff;
+    font-size: 1.5rem;
+    position: relative;
+  }
+  
+  .header .cart-link .cart-icon {
+    margin-right: 0.5rem; /* Space between icon and item count */
+  }
+  
+  .header .cart-link .cart-item-count {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background-color: red;
+    color: #fff;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+  }
+  

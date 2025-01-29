@@ -1,0 +1,113 @@
+/* src/styles/ProductListingPage.css */
+
+/* Style for category filter buttons */
+.category-filter {
+    display: flex;
+    justify-content: center;
+    margin: 1rem 0;
+  }
+  
+  .filter-button {
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    margin: 0 0.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .filter-button.active,
+  .filter-button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Style for product listing grid */
+  .product-listing {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+    padding: 1rem;
+  }
+.add-book-button {
+    position: absolute;
+    top: 80px;
+    right: 20px;
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.category-filter {
+    margin-top: 60px;
+}
+
+.filter-button {
+    padding: 10px;
+    margin: 0 10px;
+    background-color: #f8f9fa;
+    color: #000;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+    .filter-button.active {
+        background-color: #007bff;
+        color: #fff;
+    }
+
+.product-listing {
+    margin-top: 20px;
+}
+
+.product-item {
+    margin-bottom: 20px;
+}
+
+.remove-book-button, .about-book-button{
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+.remove-book-button {
+    background-color: #dc3545;
+    color: #fff;
+    margin-right: 10px; 
+}
+.remove-book-button {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+
+
+.about-book-button {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.description-box {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 10px;
+    background-color: #f8f9fa;
+}
+
+.alert-info {
+    border-left: 5px solid #17a2b8;
+}
+
+  /* Ensure other sections are displayed one below the other */
+  div {
+    margin: 0;
+    padding: 0;
+  }
+  

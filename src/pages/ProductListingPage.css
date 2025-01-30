@@ -1,113 +1,142 @@
-/* src/styles/ProductListingPage.css */
+.container {
+    padding-top: 1rem;
+}
 
-/* Style for category filter buttons */
-.category-filter {
+.navbar {
+    margin-bottom: 1rem;
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+}
+
+section h1 {
+    margin-bottom: 1rem;
+}
+
+section .lead {
+    margin-bottom: 1rem;
+
+}
+
+.card {
     display: flex;
-    justify-content: center;
-    margin: 1rem 0;
-  }
-  
-  .filter-button {
-    background-color: #007BFF;
-    color: #fff;
-    border: none;
-    padding: 0.5rem 1rem;
-    margin: 0 0.5rem;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .filter-button.active,
-  .filter-button:hover {
-    background-color: #0056b3;
-  }
-  
-  /* Style for product listing grid */
-  .product-listing {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 1rem;
-    padding: 1rem;
-  }
-.add-book-button {
-    position: absolute;
-    top: 80px;
-    right: 20px;
-    padding: 10px 20px;
-    background-color: #28a745;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    margin-bottom: 1rem;
 }
 
-.category-filter {
-    margin-top: 60px;
-}
-
-.filter-button {
-    padding: 10px;
-    margin: 0 10px;
-    background-color: #f8f9fa;
-    color: #000;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-    .filter-button.active {
-        background-color: #007bff;
-        color: #fff;
+    .card img {
+        object-fit: cover;
+        height: 200px; /* Adjust as needed */
+        width: 100%;
     }
 
-.product-listing {
-    margin-top: 20px;
+.card-body {
+    flex-grow: 1;
 }
 
-.product-item {
-    margin-bottom: 20px;
-}
-
-.remove-book-button, .about-book-button{
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 10px;
-}
-.remove-book-button {
-    background-color: #dc3545;
-    color: #fff;
-    margin-right: 10px; 
-}
-.remove-book-button {
-    background-color: #dc3545;
-    color: #fff;
-}
-
-
-
-.about-book-button {
-    background-color: #007bff;
-    color: #fff;
-}
-
-.description-box {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin-top: 10px;
+.footer {
+    margin-top: 2rem;
+    padding: 1rem 0;
     background-color: #f8f9fa;
+    border-top: 1px solid #e9ecef;
 }
 
-.alert-info {
-    border-left: 5px solid #17a2b8;
+#theme-toggle {
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-  /* Ensure other sections are displayed one below the other */
-  div {
-    margin: 0;
-    padding: 0;
-  }
-  
+.bg-custom{
+    background-color : #006c75 !important;
+}
+/* Custom Dark Mode Styling */
+.dark-mode {
+    background-color: #121212;
+    color: white;
+}
+
+    .dark-mode .card {
+        background-color: #2c2c2c;
+        color: white;
+    }
+
+    .dark-mode .navbar, .dark-mode footer {
+        background-color: #1c1c1c;
+    }
+
+    .dark-mode .btn-outline-secondary {
+        color: white;
+        border-color: white;
+    }
+
+        .dark-mode .btn-outline-secondary:hover {
+            background-color: white;
+            color: black;
+        }
+/* Custom Add Book Button */
+.add-book-btn {
+    padding: 12px 24px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    transition: all 0.3s ease-in-out;
+}
+
+.btn-light-mode {
+    background: linear-gradient(135deg, #007bff, #00d4ff);
+    color: white;
+    box-shadow: 0px 4px 8px rgba(0, 123, 255, 0.3);
+}
+
+    .btn-light-mode:hover {
+        background: linear-gradient(135deg, #0056b3, #0094cc);
+        transform: scale(1.05);
+    }
+
+.btn-dark-mode {
+    background: linear-gradient(135deg, #343a40, #6c757d);
+    color: white;
+    box-shadow: 0px 4px 8px rgba(255, 255, 255, 0.2);
+}
+
+    .btn-dark-mode:hover {
+        background: linear-gradient(135deg, #1d2124, #495057);
+        transform: scale(1.05);
+    }
+
+    /*Typed functionality*/
+
+.hero-section {
+    background: url('C:\Users\a90011879\OneDrive - ONEVIRTUALOFFICE\Desktop\E-Book Store\src\pages\assets\atlas-copco.jpg') no-repeat center center/cover;
+    height: 400px; /* Adjust height as needed */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    color: white;
+}
+
+.hero-overlay {
+    background: rgba(0, 0, 0, 0.5); /* Dark overlay for readability */
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.hero-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+.hero-subtitle {
+    font-size: 1.2rem;
+}

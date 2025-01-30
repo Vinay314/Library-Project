@@ -4,7 +4,7 @@ import { addToCart } from '../store/actions';
 import { useNavigate } from 'react-router-dom';
 import { REMOVE_FROM_CART, INCREASE_QUANTITY, DECREASE_QUANTITY } from '../store/actions';
 
-import penImage from './assets/edit_pen1.png';
+//import penImage from './assets/edit_pen1.png';
 
 const ProductCard = ({ product }) => {
     const dispatch = useDispatch();
@@ -112,7 +112,7 @@ const ProductCard = ({ product }) => {
                     onClick={() => navigate(`/update-book/${product.id}`)}  // Navigate to update page
                     style={styles.updateButton}
                 >
-                    <img src={penImage} alt="Update" style={styles.penImage} />
+                    <img alt="Update" style={styles.penImage} />
                 </button>
             </div>
         </div>

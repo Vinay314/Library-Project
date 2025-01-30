@@ -16,7 +16,7 @@ const Header = () => {
 
     return (
         <header className="header">
-            <h1 className="logo">Paradise of Books</h1>
+            <h1 className="logo">Atlas Copco Group</h1>
             <nav>
                 <ul>
                     

@@ -8,6 +8,7 @@ import AddBookPage from './components/AddBookPage';
 import RemoveBookPage from './components/RemoveBookPage'; // Adjust path if necessary
 import BookDescriptionPage from './pages/BookDescriptionPage'; // Import the BookDescriptionPage component
 import UpdateBookPage from './components/UpdateBookPage'; // Import the UpdateBookPage component
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const App = () => {
     return (

@@ -101,13 +101,13 @@ section .lead {
 }
 
 .btn-light-mode {
-    background: linear-gradient(135deg, #007bff, #00d4ff);
+    background: linear-gradient(#184d59, #257d77);
     color: white;
     box-shadow: 0px 4px 8px rgba(0, 123, 255, 0.3);
 }
 
     .btn-light-mode:hover {
-        background: linear-gradient(135deg, #0056b3, #0094cc);
+        background: linear-gradient(#184d59, #257d77);
         transform: scale(1.05);
     }
 

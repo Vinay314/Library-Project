@@ -54,8 +54,17 @@ section .lead {
 }
 
 .bg-custom {
-    background-color: #006c75 !important;
+    background-color: #184d59 !important;
 }
+
+.full-page-container {
+    min-height: 100vh; /* Full viewport height */
+    width: 100%; /* Full width */
+    display: flex;
+    flex-direction: column;
+}
+
+
 /* Custom Dark Mode Styling */
 .dark-mode {
     background-color: #121212;
@@ -117,7 +126,7 @@ section .lead {
 
 .hero-section {
     /*background: url('C:\Users\a90011879\OneDrive - ONEVIRTUALOFFICE\Desktop\E-Book Store\src\pages\assets\atlas-copco.jpg') no-repeat center center/cover;*/
-    background-color: #006c75 !important;
+    background-color: #184d59 !important;
     height: 400px; /* Adjust height as needed */
     display: flex;
     align-items: center;
@@ -131,15 +140,16 @@ section .lead {
     background: rgba(0, 0, 0, 0.5); /* Dark overlay for readability */
     padding: 20px;
     border-radius: 8px;
+    max-width: 1000vw;
 }
 
 .hero-title {
-    font-size: 2.5rem;
+    font-size: 3.5rem;
     font-weight: bold;
 }
 
 .hero-subtitle {
-    font-size: 1.2rem;
+    font-size: 1.5rem;
 }
 
 /*FOOTER*/
@@ -195,7 +205,7 @@ section .lead {
 /* Ensure Footer Stays Full Width */
 .footer-container {
     width: 100%;
-    background-color: #006c75 !important; /* Stays same in both themes */
+    background-color: #184d59 !important; /* Stays same in both themes */
     padding: 20px 0;
     text-align: center;
     color: white;
@@ -252,12 +262,26 @@ section .lead {
 }
 
 .hero-overlay {
-    width: 90%; /* Match the search bar width */
-    max-width: 900px; /* Adjust to match the search bar */
+    width: 100%; /* Increase width */
+    max-width: 1200px; /* Adjust max width */
     text-align: center;
     padding: 30px;
     background: rgba(0, 0, 0, 0.3);
     border-radius: 10px;
+}
+
+
+.remove-btn:hover {
+    background-color: red !important;
+    color: white !important;
+    border-color: red !important;
+}
+
+@media (min-width: 992px) {
+    .col {
+        flex: 0 0 25%;
+        max-width: 25%;
+    }
 }
 
 

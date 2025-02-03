@@ -6,7 +6,8 @@ import { useSelector } from 'react-redux';
 import './Header.css'; 
 
 
-import cartImage from './assets/cart.png';  
+import cartImage from './assets/cart.png';
+import atlascopcogroupimage from './assets/atlas_copco_group1.png';
 
 const Header = () => {
     
@@ -16,7 +17,7 @@ const Header = () => {
 
     return (
         <header className="header">
-            <h1 className="logo">Atlas Copco Group</h1>
+            <img src={atlascopcogroupimage} alt="atlasCopcoGroup" className="atlas-copco-group-icon"></img>
             <nav>
                 <ul>
                     

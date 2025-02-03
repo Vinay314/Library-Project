@@ -1,13 +1,13 @@
 /* Header */
 .header {
-    background-color: #006c75 !important;
+    background-color: #184d59 !important;
     color: #fff;
     padding: 1rem 2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
+}
   
   .header h1 {
     margin: 0;
@@ -37,6 +37,13 @@
 .cart-icon {
     width: 24px; /* Adjust the width */
     height: 24px; /* Adjust the height */
+    margin-right: 8px; /* Add some space between the icon and the quantity */
+}
+
+
+.atlas-copco-group-icon {
+    width:15vw ; /* Adjust the width */
+    height: 11vh; /* Adjust the height */
     margin-right: 8px; /* Add some space between the icon and the quantity */
 }
 

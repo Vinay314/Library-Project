@@ -68,15 +68,16 @@ function ProductListingPage() {
 
     return (
         <>
-            <div className={`container ${darkMode ? 'bg-dark text-white' : 'bg-light text-dark'}`}>
+            <div className={`container-fluid full-page-container ${darkMode ? 'bg-dark text-white' : 'bg-light text-dark'}`}>
+
                 {/* Navbar */}
-                <nav className={`navbar ${darkMode ? 'bg-dark navbar-dark' : 'bg-custom navbar-light'} p-3`}>
-                    <div className="container">
-                        <a className="navbar-brand d-flex align-items-center" href="#">
-                            <strong>Album</strong>
-                        </a>
-                    </div>
-                </nav>
+                
+                    {/*<div className="container">*/}
+                    {/*    <a className="navbar-brand d-flex align-items-center" href="#">*/}
+                    {/*        <strong>Album</strong>*/}
+                    {/*    </a>*/}
+                    {/*</div>*/}
+            
 
                 {/* Hero Section */}
                 {/*<section className="py-5 text-center container">*/}
@@ -92,7 +93,8 @@ function ProductListingPage() {
 
 
                 {/* Hero Section with Search Bar */}
-                <section className="hero-section d-flex flex-column align-items-center">
+                {/* Hero Section with Search Bar */}
+                <section className="hero-section d-flex flex-column align-items-center mt-4"> {/* Added mt-4 for spacing */}
                     <div className="hero-overlay text-center w-75">
                         <h1 className="hero-title">
                             Atlas Copco Group's space to <span className="typed-text"></span>
@@ -110,6 +112,7 @@ function ProductListingPage() {
                         <i className="bi bi-search search-icon"></i>
                     </div>
                 </section>
+
 
 
 
@@ -138,7 +141,8 @@ function ProductListingPage() {
                 {/* Product Listing Section */}
                 <div className="album py-5">
                     <div className="container">
-                        <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                        <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3">
+
                             {filteredProducts.length > 0 ? (
                                 filteredProducts.map(product => (
                                     <div key={product.id} className="col">
@@ -146,11 +150,15 @@ function ProductListingPage() {
                                             <img src={product.image || "https://via.placeholder.com/300x200"} className="card-img-top" alt={product.title} />
                                             <div className="card-body">
                                                 <p className="card-text">{product.title}</p>
+                                                <p className="card-text">{product.author}</p>
                                                 <div className="d-flex justify-content-between align-items-center">
-                                                    <button onClick={() => navigate(`/books/${product.id}`)} className="btn btn-sm btn-outline-secondary">View</button>
-                                                    <button onClick={() => navigate(`/update-book/${product.id}`)} className="btn btn-sm btn-outline-secondary">Edit</button>
-                                                    <button onClick={() => removeBookByTitle(product.title)} className="btn btn-sm btn-outline-secondary">Remove</button>
+                                                    <div className="d-flex gap-2">
+                                                        <button onClick={() => navigate(`/books/${product.id}`)} className="btn btn-sm btn-outline-secondary">View</button>
+                                                        <button onClick={() => navigate(`/update-book/${product.id}`)} className="btn btn-sm btn-outline-secondary">Edit</button>
+                                                    </div>
+                                                    <button onClick={() => removeBookByTitle(product.title)} className="btn btn-sm btn-outline-secondary remove-btn">Remove</button>
                                                 </div>
+
                                             </div>
                                         </div>
                                     </div>

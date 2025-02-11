@@ -12,6 +12,11 @@ function ProductListingPage() {
     const [searchQuery, setSearchQuery] = useState("");
     const [darkMode, setDarkMode] = useState(localStorage.getItem('darkMode') === 'enabled');
     const navigate = useNavigate();
+    const [searchTerm, setSearchTerm] = useState("");
+
+    const handleSearch = () => {
+        setSearchQuery(searchTerm);
+    };
 
     useEffect(() => {
         fetch('http://localhost:5198/api/books')
@@ -36,7 +41,7 @@ function ProductListingPage() {
 
     useEffect(() => {
         const options = {
-            strings: ["read.", "explore.", "learn.", "grow.", "play."],
+            strings: ["read.", "explore.", "learn.", "grow."],
             typeSpeed: 100,
             backSpeed: 50,
             backDelay: 1500,
@@ -47,7 +52,7 @@ function ProductListingPage() {
         return () => typed.destroy();
     }, []);
 
-
+    
     const filteredProducts = products.filter(product =>
         product.title.toLowerCase().includes(searchQuery.toLowerCase())
     );
@@ -106,11 +111,12 @@ function ProductListingPage() {
                             type="text"
                             className="search-input w-100"
                             placeholder="Search for books..."
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
                         />
-                        <i className="bi bi-search search-icon"></i>
+                        <i className="bi bi-search search-icon" onClick={handleSearch}></i>
                     </div>
+
                 </section>
 
 
@@ -142,23 +148,32 @@ function ProductListingPage() {
                 <div className="album py-5">
                     <div className="container">
                         <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3">
-
                             {filteredProducts.length > 0 ? (
                                 filteredProducts.map(product => (
                                     <div key={product.id} className="col">
-                                        <div className={`card shadow-sm ${darkMode ? 'bg-secondary text-white' : ''}`}>
-                                            <img src={product.image || "https://via.placeholder.com/300x200"} className="card-img-top" alt={product.title} />
+                                        <div className={`card shadow-sm product-card ${darkMode ? 'bg-secondary text-white' : ''}`}>
+                                            {/* Clickable Image */}
+                                            <img
+                                                src={product.image || "https://via.placeholder.com/300x200"}
+                                                className="card-img-top clickable-image"
+                                                alt={product.title}
+                                                onClick={() => navigate(`/books/${product.id}`)}
+                                            />
                                             <div className="card-body">
-                                                <p className="card-text">{product.title}</p>
-                                                <p className="card-text">{product.author}</p>
+                                                <strong><h1 className="fw-bold card-text-title">{product.title}</h1></strong>
+                                                <h4 className="card-text-author">{product.author}</h4>
                                                 <div className="d-flex justify-content-between align-items-center">
-                                                    <div className="d-flex gap-2">
-                                                        <button onClick={() => navigate(`/books/${product.id}`)} className="btn btn-sm btn-outline-secondary">View</button>
-                                                        <button onClick={() => navigate(`/update-book/${product.id}`)} className="btn btn-sm btn-outline-secondary">Edit</button>
-                                                    </div>
-                                                    <button onClick={() => removeBookByTitle(product.title)} className="btn btn-sm btn-outline-secondary remove-btn">Remove</button>
-                                                </div>
+                                                    <button onClick={() => navigate(`/update-book/${product.id}`)} className="btn btn-sm btn-outline-secondary edit-btn"><i class="bi bi-pencil"></i></button>
+                                                    {/*<button onClick={() => removeBookByTitle(product.title)} className="btn btn-sm btn-outline-secondary remove-btn">Remove</button>*/}
+                                                    <button onClick={() => removeBookByTitle(product.title)} className="btn btn-sm btn-danger remove-btn d-none d-md-inline">
+                                                        Remove
+                                                    </button>
+                                                    <button onClick={() => removeBookByTitle(product.title)} className="btn btn-sm btn-danger remove-btn d-md-none">
+                                                        <i className="bi bi-x-lg"></i>
+                                                    </button>
 
+
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -169,14 +184,15 @@ function ProductListingPage() {
                         </div>
                     </div>
                 </div>
+
             </div>
             {/* Footer (Always Same in Light/Dark Mode) */}
             <Footer />
 
             {/* Sticky Dark Mode Toggle Button */}
-            <button onClick={toggleDarkMode} className="dark-mode-toggle">
-                {darkMode ? <i className="bi bi-brightness-high-fill"></i> : <i className="bi bi-moon-fill"></i>}
-            </button>
+            {/*<button onClick={toggleDarkMode} className="dark-mode-toggle">*/}
+            {/*{darkMode ? <i className="bi bi-brightness-high-fill"></i> : <i className="bi bi-moon-fill"></i>}*/}
+            {/*</button>*/}
         </>
     );
 }

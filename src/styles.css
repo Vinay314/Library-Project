@@ -11,7 +11,7 @@ body {
 .header {
     background-color: #007BFF;
     color: #fff;
-    padding: 1rem 2rem;
+    padding: 0.5rem 2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -75,6 +75,7 @@ body {
     margin: 1rem;
     text-align: center;
     transition: box-shadow 0.3s ease;
+    height:470px;
 }
 
 .product-card:hover, .cart-item:hover {

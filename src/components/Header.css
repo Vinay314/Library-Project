@@ -2,11 +2,12 @@
 .header {
     background-color: #184d59 !important;
     color: #fff;
-    padding: 1rem 2rem;
+    padding: 0.8rem 2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    
 }
   
   .header h1 {
@@ -42,10 +43,15 @@
 
 
 .atlas-copco-group-icon {
-    width:15vw ; /* Adjust the width */
-    height: 11vh; /* Adjust the height */
-    margin-right: 8px; /* Add some space between the icon and the quantity */
+    width: auto; /* Allow width to adjust automatically */
+    height: auto; /* Allow height to adjust automatically */
+    max-width: 15%; /* Set a max width relative to the container */
+    max-height: 4vh; /* Set a max height relative to the viewport */
+    margin-right: 8px; /* Space between icon and adjacent content */
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out;
 }
+
 
   .header .cart-link {
     display: flex;
@@ -57,7 +63,9 @@
   }
   
   .header .cart-link .cart-icon {
-    margin-right: 0.5rem; /* Space between icon and item count */
+    margin-right: 0rem;
+    color:aliceblue;
+    /* Space between icon and item count */
   }
   
   .header .cart-link .cart-item-count {

@@ -17,24 +17,81 @@ section h1 {
 section .lead {
     margin-bottom: 1rem;
 }
+/* Reduced distance between author and title */
+.card-text-title {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 22px;
+    margin-bottom: 0rem; /* Adjust this value as needed */
+}
+
+.card-text-author {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 15px;
+    margin-top: 0.5rem;
+    margin-bottom:1rem;/* Adjust this value as needed */
+}
+
+/* Reduced distance between buttons and end of card */
+.edit-btn {
+    margin-top: 5px; /* Adjust this value as needed */
+}
+
+.remove-btn {
+    margin-top: 5px; /* Adjust this value as needed */
+    background-color: red !important;
+    color: white !important;
+    border-color: red
+}
+       .card img {
+        object-fit: cover;
+        height: 300px; /* Adjust as needed */
+        width: 100%;
+    }
 
 .card {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    /*justify-content: space-between;*/
     height: 100%;
-    margin-bottom: 1rem;
+    position: relative;
 }
 
     .card img {
         object-fit: cover;
-        height: 200px; /* Adjust as needed */
+        height: 300px;
         width: 100%;
+        position: relative;
     }
 
 .card-body {
     flex-grow: 1;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+/*    justify-content: space-between;*/
 }
+
+/* Button Container */
+.button-container {
+    position: absolute;
+    top: 0;
+    right: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+
+/* Ensure the buttons scale down */
+@media (max-width: 768px) {
+    .edit-btn, .remove-btn {
+        width: 30px;
+        height: 30px;
+        font-size: 12px;
+        padding: 3px;
+    }
+}
+
 
 .footer {
     margin-top: 2rem;
@@ -127,7 +184,7 @@ section .lead {
 .hero-section {
     /*background: url('C:\Users\a90011879\OneDrive - ONEVIRTUALOFFICE\Desktop\E-Book Store\src\pages\assets\atlas-copco.jpg') no-repeat center center/cover;*/
     background-color: #184d59 !important;
-    height: 400px; /* Adjust height as needed */
+    height: 430px; /* Adjust height as needed */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -271,11 +328,7 @@ section .lead {
 }
 
 
-.remove-btn:hover {
-    background-color: red !important;
-    color: white !important;
-    border-color: red !important;
-}
+
 
 @media (min-width: 992px) {
     .col {
@@ -318,4 +371,26 @@ section .lead {
     color: white;
     font-size: 20px;
     margin-left: 10px;
+    padding-right: 15px;
+    cursor: pointer;
 }
+/* Clickable Image */
+.clickable-image {
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out;
+}
+
+    .clickable-image:hover {
+        transform: scale(1.05);
+    }
+
+/* Professional Hover Effect on Card */
+.product-card {
+    transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out;
+    border-radius: 10px;
+}
+
+   /* .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+    }*/

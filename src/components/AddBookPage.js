@@ -172,7 +172,7 @@ const styles = {
         borderRadius: '5px',
         width: '100%',
         boxSizing: 'border-box',
-        height: '40px',  // Same height as input fields
+        height: '100px',  // Same height as input fields
         resize: 'none',  // Prevent the user from resizing the textarea
     },
     button: {

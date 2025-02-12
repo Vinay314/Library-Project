@@ -9,6 +9,10 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     
 }
+
+.home-link {
+    cursor: pointer;
+}
   
   .header h1 {
     margin: 0;
@@ -45,8 +49,8 @@
 .atlas-copco-group-icon {
     width: auto; /* Allow width to adjust automatically */
     height: auto; /* Allow height to adjust automatically */
-    max-width: 15%; /* Set a max width relative to the container */
-    max-height: 4vh; /* Set a max height relative to the viewport */
+    max-width: 60%; /* Set a max width relative to the container */
+    max-height: 12vh; /* Set a max height relative to the viewport */
     margin-right: 8px; /* Space between icon and adjacent content */
     cursor: pointer;
     transition: transform 0.3s ease-in-out;

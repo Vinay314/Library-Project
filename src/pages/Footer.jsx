@@ -20,7 +20,7 @@ const Footer = () => {
                     <i className="bi bi-linkedin"></i>
                 </a>
             </div>
-            <p>&copy; 2024 CTIS Library. All Rights Reserved.</p>
+            <p>&copy; 2024 Atlas Copco Group. All Rights Reserved.</p>
         </footer>
     );
 };

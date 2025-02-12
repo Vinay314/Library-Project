@@ -50,7 +50,7 @@ const Header = () => {
                         </li>
                     </div>
                     <li>
-                        <Link to="/cart" className="cart-link">
+                        <Link to="/cart" className="cart-link position-relative">
                             <span className="cart-icon">
                                 <i className="bi bi-cart2"></i>
                             </span>

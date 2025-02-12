@@ -20,7 +20,9 @@ const Footer = () => {
                     <i className="bi bi-linkedin"></i>
                 </a>
             </div>
-            <p>&copy; 2024 Atlas Copco Group. All Rights Reserved.</p>
+            <p>&copy; 2024 Atlas Copco Group.
+                <span class="footer-text"> All Rights Reserved. </span>
+            </p>
         </footer>
     );
 };

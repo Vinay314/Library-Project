@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Typed from 'typed.js';
 import ProductCard from '../components/ProductCard';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import { Plus } from "lucide-react";
+import "bootstrap/dist/css/bootstrap.min.css";
 import './ProductListingPage.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import Footer from './Footer';
@@ -13,6 +14,31 @@ function ProductListingPage() {
     const [darkMode, setDarkMode] = useState(localStorage.getItem('darkMode') === 'enabled');
     const navigate = useNavigate();
     const [searchTerm, setSearchTerm] = useState("");
+    const [suggestions, setSuggestions] = useState([]);
+
+    const handleSearchChange = (e) => {
+        const value = e.target.value;
+        setSearchTerm(value);
+
+        if (value.trim() === "") {
+            setSuggestions([]);
+            setSearchQuery(""); 
+        } else {
+            const filteredSuggestions = products
+                .filter(product => product.title.toLowerCase().includes(value.toLowerCase()))
+                .map(product => product.title);
+
+            setSuggestions(filteredSuggestions);
+        }
+    };
+
+
+    const handleSuggestionClick = (title) => {
+        setSearchTerm(title);
+        setSuggestions([]);
+        setSearchQuery(title); // Perform search when a suggestion is selected
+    };
+
 
     const handleSearch = () => {
         setSearchQuery(searchTerm);
@@ -41,7 +67,7 @@ function ProductListingPage() {
 
     useEffect(() => {
         const options = {
-            strings: ["read.", "explore.", "learn.", "grow."],
+            strings: ["Read.", "Explore.", "Learn.", "Grow.","Transform.","Enlighten.","Connect.","Absorb.","Engage.","Enrich.","Flourish.","Inspire." ],
             typeSpeed: 100,
             backSpeed: 50,
             backDelay: 1500,
@@ -70,6 +96,8 @@ function ProductListingPage() {
             })
             .catch(error => console.error('Error removing book:', error));
     };
+
+
 
     return (
         <>
@@ -100,23 +128,32 @@ function ProductListingPage() {
                 {/* Hero Section with Search Bar */}
                 {/* Hero Section with Search Bar */}
                 <section className="hero-section d-flex flex-column align-items-center mt-4"> {/* Added mt-4 for spacing */}
-                    <div className="hero-overlay text-center w-75">
+                    <div className="hero-overlay text-center w-100 d-flex flex-column align-items-center justify-content-center">
                         <h1 className="hero-title">
-                            Atlas Copco Group's space to <span className="typed-text"></span>
+                            Atlas Copco Group's Space to <span className="typed-text"></span>
                         </h1>
                         <p className="hero-subtitle">Technology that transforms the future.</p>
                     </div>
-                    <div className="search-bar w-75">
+                    <div className="search-bar w-85">
                         <input
                             type="text"
-                            className="search-input w-100"
+                            className="search-input"
                             placeholder="Search for books..."
                             value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
+                            onChange={handleSearchChange}
                         />
                         <i className="bi bi-search search-icon" onClick={handleSearch}></i>
-                    </div>
 
+                        {suggestions.length > 0 && (
+                            <ul className="suggestions-list">
+                                {suggestions.map((title, index) => (
+                                    <li key={index} onClick={() => handleSuggestionClick(title)}>
+                                        {title}
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                    </div>
                 </section>
 
 
@@ -135,14 +172,14 @@ function ProductListingPage() {
 
 
                 {/* Add Book Button */}
-                <div className="text-center my-4">
-                    <button
-                        onClick={() => navigate('/add-book')}
-                        className={`btn add-book-btn ${darkMode ? 'btn-dark-mode' : 'btn-light-mode'}`}
-                    >
-                        Add a New Book
-                    </button>
-                </div>
+                {/*<div className="text-center my-4">*/}
+                {/*    <button*/}
+                {/*        onClick={() => navigate('/add-book')}*/}
+                {/*        className={`btn add-book-btn ${darkMode ? 'btn-dark-mode' : 'btn-light-mode'}`}*/}
+                {/*    >*/}
+                {/*        Add a New Book*/}
+                {/*    </button>*/}
+                {/*</div>*/}
 
                 {/* Product Listing Section */}
                 <div className="album py-5">
@@ -186,6 +223,12 @@ function ProductListingPage() {
                 </div>
 
             </div>
+
+            {/* Floating Add Button above Footer */}
+            <button className="add-book-button" onClick={() => navigate('/add-book')}>
+                <Plus size={30} />
+            </button>
+
             {/* Footer (Always Same in Light/Dark Mode) */}
             <Footer />
 

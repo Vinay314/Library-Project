@@ -138,7 +138,21 @@ body {
     width: 100%;
     max-width: 350px; /* Adjust as needed for your design */
 }
-
+.cart-quantity{
+    position:absolute;
+    top:-5px;
+    right:-5px;
+    background-color:red;
+    color:white;
+    font-size:0.8rem;
+    font-weight:bold;
+    border-radius:50%;
+    width:18px;
+    height:18px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
 .cart-item img {
     max-width: 100%;
     height: auto; /* Maintain aspect ratio */
@@ -151,6 +165,17 @@ body {
     gap: 0.5rem; /* Adds space between buttons */
 }
 
+.home-link,nav-item{
+    font-weight:bold;
+}
+.cart-icon i{
+    font-size:1.5rem;
+}
+.nav-list{
+    display:flex;
+    align-items:center;
+    gap:25px;
+}
 .cart-summary {
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);

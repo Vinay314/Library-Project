@@ -49,8 +49,8 @@
 .atlas-copco-group-icon {
     width: auto; /* Allow width to adjust automatically */
     height: auto; /* Allow height to adjust automatically */
-    max-width: 60%; /* Set a max width relative to the container */
-    max-height: 12vh; /* Set a max height relative to the viewport */
+    max-width: 52%; /* Set a max width relative to the container */
+    max-height: 9vh; /* Set a max height relative to the viewport */
     margin-right: 8px; /* Space between icon and adjacent content */
     cursor: pointer;
     transition: transform 0.3s ease-in-out;

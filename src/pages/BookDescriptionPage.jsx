@@ -96,7 +96,6 @@ const BookDescriptionPage = () => {
                                 <h5 className="text-muted">by {book.author}</h5>
                             </div>
                             <p className="mt-3 flex-grow-1">{book.description}</p>
-                            
                         </div>
                     </div>
 

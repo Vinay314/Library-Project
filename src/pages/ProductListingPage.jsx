@@ -13,6 +13,7 @@ function ProductListingPage() {
     const [searchQuery, setSearchQuery] = useState("");
     const [darkMode, setDarkMode] = useState(localStorage.getItem('darkMode') === 'enabled');
     const navigate = useNavigate();
+    const [selectedBook, setSelectedBook] = useState(null);
     const [searchTerm, setSearchTerm] = useState("");
     const [suggestions, setSuggestions] = useState([]);
 
@@ -20,7 +21,7 @@ function ProductListingPage() {
         const value = e.target.value;
         setSearchTerm(value);
 
-        if (value.trim() === "") {
+        if (value.trim().length<3) {
             setSuggestions([]);
             setSearchQuery(""); 
         } else {
@@ -38,6 +39,20 @@ function ProductListingPage() {
         setSuggestions([]);
         setSearchQuery(title); // Perform search when a suggestion is selected
     };
+
+    const handleOpenModal = (book) => {
+        setSelectedBook(book);
+        document.body.style.overflow = "hidden"; // Prevent background scrolling
+    };
+
+    const handleCloseModal = () => {
+        setSelectedBook(null);
+        document.body.style.overflow = "auto"; // Restore scrolling
+    };
+
+
+
+
 
 
     const handleSearch = () => {
@@ -101,7 +116,7 @@ function ProductListingPage() {
 
     return (
         <>
-            <div className={`container-fluid full-page-container ${darkMode ? 'bg-dark text-white' : 'bg-light text-dark'}`}>
+            <div className={`container-fluid full-page-container ${darkMode ? 'bg-dark text-white' : 'bg-light text-dark'} ${selectedBook ? 'blur-background' : ''}`}>
 
                 {/* Navbar */}
                 
@@ -194,7 +209,7 @@ function ProductListingPage() {
                                                 src={product.image || "https://via.placeholder.com/300x200"}
                                                 className="card-img-top clickable-image"
                                                 alt={product.title}
-                                                onClick={() => navigate(`/books/${product.id}`)}
+                                                onClick={() => handleOpenModal(product)}
                                             />
                                             <div className="card-body">
                                                 <strong><h1 className="fw-bold card-text-title">{product.title}</h1></strong>
@@ -214,7 +229,7 @@ function ProductListingPage() {
                                             </div>
                                         </div>
                                     </div>
-                                ))
+                                )) 
                             ) : (
                                 <p className="text-center">No books found.</p>
                             )}
@@ -228,6 +243,27 @@ function ProductListingPage() {
             <button className="add-book-button" onClick={() => navigate('/add-book')}>
                 <Plus size={30} />
             </button>
+            {selectedBook && (
+                <div className="modal-overlay">
+                    <div className="modal-content d-flex">
+                        <div className="col-md-4 d-flex justify-content-center align-items-start">
+                            <img
+                                src={selectedBook.image || 'https://via.placeholder.com/200'}
+                                alt={selectedBook.title}
+                                className="img-fluid rounded shadow"
+                                style={{ maxHeight: '300px' }}
+                            />
+                        </div>
+                        <div className="col-md-8 d-flex flex-column justify-content-start align-items-start text-left modal-text">
+                            <h2 className="fw-bold">{selectedBook.title}</h2>
+                            <p><strong>Author:</strong> {selectedBook.author}</p>
+                            <p>{selectedBook.description}</p>
+                        </div>
+                        <span className="close-button" onClick={handleCloseModal}>&times;</span>
+                    </div>
+                </div>
+            )}
+
 
             {/* Footer (Always Same in Light/Dark Mode) */}
             <Footer />

@@ -24,6 +24,64 @@ section .lead {
     margin-bottom: 0rem; /* Adjust this value as needed */
 }
 
+.blurred-bg {
+    filter: blur(8px); /* Apply blur effect */
+    pointer-events: none; /* Prevent interaction with background */
+}
+/* Blur background when modal is open */
+.blur-background {
+    filter: blur(5px);
+    pointer-events: none;
+}
+
+/* Modal overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* Modal content */
+.modal-content {
+    display: flex;
+    flex-direction: row;
+    align-items: start;
+    padding: 20px;
+    background: white;
+    max-width: 600px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.modal-text {
+    margin-left: 20px;
+    text-align: left;
+}
+
+    .modal-text h2 {
+        margin-bottom: 10px;
+    }
+
+    .modal-text p {
+        margin: 5px 0;
+    }
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+
 .card-text-author {
     font-family: "Times New Roman", Times, serif;
     font-size: 15px;

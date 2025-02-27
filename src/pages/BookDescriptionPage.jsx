@@ -79,15 +79,7 @@ const BookDescriptionPage = () => {
 
                     <div className="row flex-grow-1 overflow-auto align-items-start">
                         {/* Book Image */}
-                        <div className="col-md-4 d-flex justify-content-center align-items-start">
-                            <img
-                                src={book.image || 'https://via.placeholder.com/200'}
-                                alt={book.title}
-                                className="img-fluid rounded shadow"
-                                style={{ maxHeight: '300px' }}
-                            />
-
-                        </div>
+                       
 
                         {/* Book Details */}
                         <div className="col-md-8 d-flex flex-column">
@@ -99,7 +91,7 @@ const BookDescriptionPage = () => {
                         </div>
                     </div>
 
-                    {/* Sticky Footer */}
+                    
                     <div className="mt-auto p-3 border-top bg-white text-center">
                         {inCart ? (
                             <div className="d-flex justify-content-center align-items-center">

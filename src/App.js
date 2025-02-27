@@ -1,7 +1,7 @@
 import React from 'react';
-import {BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import Header from './components/Header';
-import LandingPage from './pages/LandingPage';
+/*import LandingPage from './pages/LandingPage';*/
 import ProductListingPage from './pages/ProductListingPage';
 import ShoppingCartPage from './pages/ShoppingCartPage';
 import AddBookPage from './components/AddBookPage';

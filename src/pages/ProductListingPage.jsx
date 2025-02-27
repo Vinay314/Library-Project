@@ -7,7 +7,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import './ProductListingPage.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import Footer from './Footer';
-
+import { useDispatch } from 'react-redux';
+import { addToCart } from '../store/actions';
 function ProductListingPage() {
     const [products, setProducts] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
@@ -16,7 +17,8 @@ function ProductListingPage() {
     const [selectedBook, setSelectedBook] = useState(null);
     const [searchTerm, setSearchTerm] = useState("");
     const [suggestions, setSuggestions] = useState([]);
-
+    const [inCart, setInCart] = useState(false);
+    const dispatch = useDispatch();
     const handleSearchChange = (e) => {
         const value = e.target.value;
         setSearchTerm(value);
@@ -33,7 +35,15 @@ function ProductListingPage() {
         }
     };
 
-
+    const handleAddToCart = () => {
+        if (selectedBook.availableCopies > 0) {
+            dispatch(addToCart(selectedBook));
+            setInCart(true);
+            setSelectedBook(prev => ({ ...prev, quantity: 1 }));
+        } else {
+            alert('No more available copies');
+        }
+    };
     const handleSuggestionClick = (title) => {
         setSearchTerm(title);
         setSuggestions([]);
@@ -49,11 +59,6 @@ function ProductListingPage() {
         setSelectedBook(null);
         document.body.style.overflow = "auto"; // Restore scrolling
     };
-
-
-
-
-
 
     const handleSearch = () => {
         setSearchQuery(searchTerm);
@@ -258,6 +263,15 @@ function ProductListingPage() {
                             <h2 className="fw-bold">{selectedBook.title}</h2>
                             <p><strong>Author:</strong> {selectedBook.author}</p>
                             <p>{selectedBook.description}</p>
+                            <div className="mt-auto p-3 border-top bg-white text-center">
+                                {inCart ? (
+                                    <div className="d-flex justify-content-center align-items-center">
+                                        <button type="button" class="btn btn-secondary w-100" disabled>Added to Cart</button>
+                                    </div>
+                                ) : (
+                                    <button onClick={handleAddToCart} className="btn btn-success w-100">Add to Cart</button>
+                                )}
+                            </div>
                         </div>
                         <span className="close-button" onClick={handleCloseModal}>&times;</span>
                     </div>

@@ -8,6 +8,7 @@ import './ProductListingPage.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import Footer from './Footer';
 import { useDispatch } from 'react-redux';
+import { Pencil, Trash } from "lucide-react";
 import { addToCart } from '../store/actions';
 function ProductListingPage() {
     const [products, setProducts] = useState([]);
@@ -18,11 +19,12 @@ function ProductListingPage() {
     const [searchTerm, setSearchTerm] = useState("");
     const [suggestions, setSuggestions] = useState([]);
     const [inCart, setInCart] = useState(false);
+    const [cartItems, setCartItems] = useState({});
     const dispatch = useDispatch();
     const handleSearchChange = (e) => {
         const value = e.target.value;
         setSearchTerm(value);
-
+       
         if (value.trim().length<3) {
             setSuggestions([]);
             setSearchQuery(""); 
@@ -35,15 +37,28 @@ function ProductListingPage() {
         }
     };
 
-    const handleAddToCart = () => {
-        if (selectedBook.availableCopies > 0) {
-            dispatch(addToCart(selectedBook));
-            setInCart(true);
+    useEffect(() => {
+        window.clearSearch = () => {
+            setSearchTerm("");
+            setSearchQuery("");
+            setSuggestions([]);
+        };
+    }, []);
+
+
+    const handleAddToCart = (book) => {
+        if (book.availableCopies > 0) {
+            dispatch(addToCart(book));
+            setCartItems(prevCart => ({
+                ...prevCart,
+                [book.id]: true, // Mark this book as added to cart
+            }));
             setSelectedBook(prev => ({ ...prev, quantity: 1 }));
         } else {
             alert('No more available copies');
         }
     };
+
     const handleSuggestionClick = (title) => {
         setSearchTerm(title);
         setSuggestions([]);
@@ -203,43 +218,97 @@ function ProductListingPage() {
 
                 {/* Product Listing Section */}
                 <div className="album py-5">
+                    {/*<div className="container">*/}
+                    {/*    <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3">*/}
+                    {/*        {filteredProducts.length > 0 ? (*/}
+                    {/*            filteredProducts.map(product => (*/}
+                    {/*                <div key={product.id} className="col">*/}
+                    {/*                    <div className={`card shadow-sm product-card ${darkMode ? 'bg-secondary text-white' : ''}`}>*/}
+                    {/*                        */}{/* Clickable Image */}
+                    {/*                        <img*/}
+                    {/*                            src={product.image || "https://via.placeholder.com/300x200"}*/}
+                    {/*                            className="card-img-top clickable-image"*/}
+                    {/*                            alt={product.title}*/}
+                    {/*                            onClick={() => handleOpenModal(product)}*/}
+                    {/*                        />*/}
+                    {/*                        <div className="card-body">*/}
+                    {/*                            <strong><h1 className="fw-bold card-text-title">{product.title}</h1></strong>*/}
+                    {/*                            <h4 className="card-text-author">{product.author}</h4>*/}
+                    {/*                            <div className="d-flex justify-content-between align-items-center">*/}
+                    {/*                                <button onClick={() => navigate(`/update-book/${product.id}`)} className="btn btn-sm btn-outline-secondary edit-btn"><i class="bi bi-pencil"></i></button>*/}
+                    {/*                                */}{/*<button onClick={() => removeBookByTitle(product.title)} className="btn btn-sm btn-outline-secondary remove-btn">Remove</button>*/}
+                    {/*                                <button onClick={() => removeBookByTitle(product.title)} className="btn btn-sm btn-danger remove-btn d-none d-md-inline">*/}
+                    {/*                                    Remove*/}
+                    {/*                                </button>*/}
+                    {/*                                <button onClick={() => removeBookByTitle(product.title)} className="btn btn-sm btn-danger remove-btn d-md-none">*/}
+                    {/*                                    <i className="bi bi-x-lg"></i>*/}
+                    {/*                                </button>*/}
+
+
+                    {/*                            </div>*/}
+                    {/*                        </div>*/}
+                    {/*                    </div>*/}
+                    {/*                </div>*/}
+                    {/*            )) */}
+                    {/*        ) : (*/}
+                    {/*            <p className="text-center">No books found.</p>*/}
+                    {/*        )}*/}
+                    {/*    </div>*/}
+                    {/*</div>*/}
+
+
+
+
+
                     <div className="container">
                         <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3">
+
                             {filteredProducts.length > 0 ? (
+
                                 filteredProducts.map(product => (
                                     <div key={product.id} className="col">
                                         <div className={`card shadow-sm product-card ${darkMode ? 'bg-secondary text-white' : ''}`}>
-                                            {/* Clickable Image */}
+
+                                            {/* Button Container in Top Right */}
+                                            <div className="button-container">
+                                                <button onClick={() => navigate(`/update-book/${product.id}`)} className="btn btn-sm btn-outline-secondary edit-btn">
+                                                    <i className="bi bi-pencil"></i>
+                                                </button>
+                                                <button onClick={() => removeBookByTitle(product.title)} className="btn btn-sm btn-danger remove-btn">
+                                                    <i className="bi bi-trash3"></i>
+                                                </button>
+                                            </div>
+
+                                            {/* Clickable Image moved slightly down */}
                                             <img
+
                                                 src={product.image || "https://via.placeholder.com/300x200"}
-                                                className="card-img-top clickable-image"
+
+                                                className="card-img-top clickable-image mt-4"
+
                                                 alt={product.title}
+
                                                 onClick={() => handleOpenModal(product)}
+
                                             />
-                                            <div className="card-body">
+
+                                            <div className="card-body pb-2">
                                                 <strong><h1 className="fw-bold card-text-title">{product.title}</h1></strong>
                                                 <h4 className="card-text-author">{product.author}</h4>
-                                                <div className="d-flex justify-content-between align-items-center">
-                                                    <button onClick={() => navigate(`/update-book/${product.id}`)} className="btn btn-sm btn-outline-secondary edit-btn"><i class="bi bi-pencil"></i></button>
-                                                    {/*<button onClick={() => removeBookByTitle(product.title)} className="btn btn-sm btn-outline-secondary remove-btn">Remove</button>*/}
-                                                    <button onClick={() => removeBookByTitle(product.title)} className="btn btn-sm btn-danger remove-btn d-none d-md-inline">
-                                                        Remove
-                                                    </button>
-                                                    <button onClick={() => removeBookByTitle(product.title)} className="btn btn-sm btn-danger remove-btn d-md-none">
-                                                        <i className="bi bi-x-lg"></i>
-                                                    </button>
-
-
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                )) 
+
+                                ))
+
                             ) : (
                                 <p className="text-center">No books found.</p>
+
                             )}
                         </div>
                     </div>
+
+
                 </div>
 
             </div>
@@ -251,6 +320,7 @@ function ProductListingPage() {
             {selectedBook && (
                 <div className="modal-overlay">
                     <div className="modal-content d-flex">
+                        {/* Image Section */}
                         <div className="col-md-4 d-flex justify-content-center align-items-start">
                             <img
                                 src={selectedBook.image || 'https://via.placeholder.com/200'}
@@ -259,22 +329,28 @@ function ProductListingPage() {
                                 style={{ maxHeight: '300px' }}
                             />
                         </div>
-                        <div className="col-md-8 d-flex flex-column justify-content-start align-items-start text-left modal-text">
-                            <h2 className="fw-bold">{selectedBook.title}</h2>
-                            <p><strong>Author:</strong> {selectedBook.author}</p>
-                            <p>{selectedBook.description}</p>
-                            <div className="mt-auto p-3 border-top bg-white text-center">
-                                {inCart ? (
-                                    <div className="d-flex justify-content-center align-items-center">
-                                        <button type="button" class="btn btn-secondary w-100" disabled>Added to Cart</button>
-                                    </div>
+
+                        {/* Text Section */}
+                        <div className="col-md-8 d-flex flex-column justify-content-between modal-text">
+                            <div>
+                                <h2 className="fw-bold">{selectedBook.title}</h2>
+                                <p><strong>Author:</strong> {selectedBook.author}</p>
+                                <p>{selectedBook.description}</p>
+                            </div>
+
+                            {/* Button at Bottom */}
+                            <div className="modal-footer">
+                                {cartItems[selectedBook?.id] ? (
+                                    <button type="button" className="btn btn-secondary w-100" disabled>Added to Cart</button>
                                 ) : (
-                                    <button onClick={handleAddToCart} className="btn btn-success w-100">Add to Cart</button>
+                                    <button onClick={() => handleAddToCart(selectedBook)} className="btn btn-success w-100">Add to Cart</button>
                                 )}
                             </div>
                         </div>
+
                         <span className="close-button" onClick={handleCloseModal}>&times;</span>
                     </div>
+
                 </div>
             )}
 

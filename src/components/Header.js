@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -17,12 +17,13 @@ const Header = () => {
 
     const handleNavigation = (source) => {
         setLoadingSource(source);
-
+        if (window.clearSearch) window.clearSearch();
         setTimeout(() => {
             navigate("/products");
-            window.location.reload();
+            
         }, 1000); 
     };
+    
 
     return (
         <header className="header">
@@ -44,9 +45,7 @@ const Header = () => {
                     <div className="home-link">
                         <li onClick={() => handleNavigation("home")} className="nav-item">
                             Home{" "}
-                            {loadingSource === "home" && (
-                                <span className="spinner-border spinner-border-sm ms-2"></span>
-                            )}
+                            
                         </li>
                     </div>
                     <li>

@@ -8,11 +8,11 @@ const AddBookPage = () => {
     const [description, setDescription] = useState('');
     const [image, setImage] = useState(null);
     const [availableCopies, setAvailableCopies] = useState(1);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const navigate = useNavigate();
 
     const handleAddBook = async (e) => {
         e.preventDefault();
-
         if (!image) {
             console.error('No image provided.');
             return;
@@ -46,6 +46,16 @@ const AddBookPage = () => {
         setImage(e.target.files[0]);
     };
 
+    const handlePreviewClick = () => {
+        if (image) {
+            setIsModalOpen(true);
+        }
+    };
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+    };
+
     const handleClose = () => {
         navigate('/products');
     };
@@ -56,32 +66,15 @@ const AddBookPage = () => {
             <form onSubmit={handleAddBook} style={styles.form}>
                 <div style={styles.formGroup}>
                     <label style={styles.label}>Title:</label>
-                    <input
-                        type="text"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                        style={styles.input}
-                        required
-                    />
+                    <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} style={styles.input} required />
                 </div>
                 <div style={styles.formGroup}>
                     <label style={styles.label}>Author:</label>
-                    <input
-                        type="text"
-                        value={author}
-                        onChange={(e) => setAuthor(e.target.value)}
-                        style={styles.input}
-                        required
-                    />
+                    <input type="text" value={author} onChange={(e) => setAuthor(e.target.value)} style={styles.input} required />
                 </div>
                 <div style={styles.formGroup}>
                     <label style={styles.label}>Category:</label>
-                    <select
-                        value={category}
-                        onChange={(e) => setCategory(e.target.value)}
-                        style={styles.input}
-                        required
-                    >
+                    <select value={category} onChange={(e) => setCategory(e.target.value)} style={styles.input} required>
                         <option value="">Select Category</option>
                         <option value="Comedy">Comedy</option>
                         <option value="Adventure">Adventure</option>
@@ -90,39 +83,31 @@ const AddBookPage = () => {
                 </div>
                 <div style={styles.formGroup}>
                     <label style={styles.label}>Description:</label>
-                    <textarea
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                        style={styles.textarea}
-                        required
-                    />
+                    <textarea value={description} onChange={(e) => setDescription(e.target.value)} style={styles.textarea} required />
                 </div>
                 <div style={styles.formGroup}>
                     <label style={styles.label}>Available Copies:</label>
-                    <input
-                        type="number"
-                        value={availableCopies}
-                        onChange={(e) => setAvailableCopies(e.target.value)}
-                        style={styles.input}
-                        required
-                    />
+                    <input type="number" value={availableCopies} onChange={(e) => setAvailableCopies(e.target.value)} style={styles.input} required />
                 </div>
                 <div style={styles.formGroup}>
                     <label style={styles.label}>Image:</label>
-                    <input
-                        type="file"
-                        onChange={handleImageUpload}
-                        accept="image/*"
-                        style={styles.input}
-                        required
-                    />
+                    <input type="file" onChange={handleImageUpload} accept="image/*" style={styles.input} required />
+                    <div style={styles.formGroup}>
+                        <label style={styles.label}>Preview:</label>
+                        <button type="button" onClick={handlePreviewClick} style={styles.previewButton}>
+                            <i className="bi bi-eye"></i>
+                        </button>
+                    </div>
                 </div>
                 <button type="submit" style={styles.button}>Add Book</button>
             </form>
 
-            {image && (
-                <div style={styles.imageContainer}>
-                    <img src={URL.createObjectURL(image)} alt="Preview" style={styles.image} />
+            {isModalOpen && image && (
+                <div style={styles.modalOverlay}>
+                    <div style={styles.modalContent}>
+                        <span style={styles.modalClose} onClick={handleCloseModal}>&times;</span>
+                        <img src={URL.createObjectURL(image)} alt="Preview" style={styles.modalImage} />
+                    </div>
                 </div>
             )}
         </div>
@@ -139,7 +124,7 @@ const styles = {
         justifyContent: 'center',
         alignItems: 'center',
         height: '100vh',
-        position: 'relative',  // Added relative positioning
+        position: 'relative',
     },
     form: {
         backgroundColor: '#fff',
@@ -172,8 +157,8 @@ const styles = {
         borderRadius: '5px',
         width: '100%',
         boxSizing: 'border-box',
-        height: '100px',  // Same height as input fields
-        resize: 'none',  // Prevent the user from resizing the textarea
+        height: '100px',
+        resize: 'none',
     },
     button: {
         padding: '10px',
@@ -183,13 +168,46 @@ const styles = {
         borderRadius: '5px',
         cursor: 'pointer',
     },
-    imageContainer: {
-        marginTop: '20px',
+    previewButton: {
+        padding: '5px 10px',
+        backgroundColor: '#184d59',
+        color: 'white',
+        border: 'none',
+        borderRadius: '5px',
+        cursor: 'pointer',
+        fontSize: '16px',
     },
-    image: {
-        width: '100px',
-        height: '100px',
-        objectFit: 'cover',
+    modalOverlay: {
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 1000,
+    },
+    modalContent: {
+        backgroundColor: '#fff',
+        padding: '20px',
+        borderRadius: '10px',
+        boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
+        position: 'relative',
+        textAlign: 'center',
+    },
+    modalClose: {
+        position: 'absolute',
+        top: '10px',
+        right: '10px',
+        fontSize: '20px',
+        cursor: 'pointer',
+        color: '#ff4d4d',
+    },
+    modalImage: {
+        maxWidth: '400px',
+        maxHeight: '400px',
         borderRadius: '5px',
     },
     closeButton: {

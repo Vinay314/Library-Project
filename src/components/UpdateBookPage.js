@@ -10,7 +10,7 @@ const UpdateBookPage = () => {
     const [image, setImage] = useState(null);
     const [availableCopies, setAvailableCopies] = useState(1);
     const navigate = useNavigate();
-
+    const [isModalOpen, setIsModalOpen] = useState(false);
     // Fetch the current book data from the API when the component mounts
     useEffect(() => {
         const fetchBookData = async () => {
@@ -83,6 +83,15 @@ const UpdateBookPage = () => {
     const handleClose = () => {
         navigate('/products');
     };
+    const handlePreviewClick = () => {
+        if (image) {
+            setIsModalOpen(true);
+        }
+    };
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+    };
 
     return (
         <div style={styles.container}>
@@ -149,13 +158,23 @@ const UpdateBookPage = () => {
                         accept="image/*"
                         style={styles.input}
                     />
+                    <div style={styles.formGroup}>
+                        <label style={styles.label}>Preview:</label>
+                        <button type="button" onClick={handlePreviewClick} style={styles.previewButton}>
+                            <i className="bi bi-eye"></i>
+                        </button>
+                    </div>
                 </div>
+
                 <button type="submit" style={styles.button}>Update Book</button>
             </form>
 
-            {image && (
-                <div style={styles.imageContainer}>
-                    <img src={URL.createObjectURL(image)} alt="Preview" style={styles.image} />
+            {isModalOpen && image && (
+                <div style={styles.modalOverlay}>
+                    <div style={styles.modalContent}>
+                        <span style={styles.modalClose} onClick={handleCloseModal}>&times;</span>
+                        <img src={URL.createObjectURL(image)} alt="Preview" style={styles.modalImage} />
+                    </div>
                 </div>
             )}
         </div>
@@ -223,6 +242,68 @@ const styles = {
         width: '100px',
         height: '100px',
         objectFit: 'cover',
+        borderRadius: '5px',
+    },
+    closeButton: {
+        position: 'absolute',
+        top: '10px',
+        right: '10px',
+        padding: '5px 10px',
+        backgroundColor: '#ff4d4d',
+        color: 'white',
+        border: 'none',
+        borderRadius: '5px',
+        cursor: 'pointer',
+        fontSize: '16px',
+    },
+    button: {
+        padding: '10px',
+        backgroundColor: '#28a745',
+        color: '#fff',
+        border: 'none',
+        borderRadius: '5px',
+        cursor: 'pointer',
+    },
+    previewButton: {
+        padding: '5px 10px',
+        backgroundColor: '#184d59',
+        color: 'white',
+        border: 'none',
+        borderRadius: '5px',
+        cursor: 'pointer',
+        fontSize: '16px',
+    },
+    modalOverlay: {
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 1000,
+    },
+    modalContent: {
+        backgroundColor: '#fff',
+        padding: '20px',
+        borderRadius: '10px',
+        boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
+        position: 'relative',
+        textAlign: 'center',
+    },
+    modalClose: {
+        position: 'absolute',
+        top: '10px',
+        right: '10px',
+        fontSize: '20px',
+        cursor: 'pointer',
+        color: '#ff4d4d',
+    },
+    modalImage: {
+        maxWidth: '400px',
+        maxHeight: '400px',
         borderRadius: '5px',
     },
     closeButton: {

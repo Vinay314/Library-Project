@@ -81,6 +81,7 @@ const UpdateBookPage = () => {
     };
 
     const handleClose = () => {
+        localStorage.setItem("bookUpdated", "false");
         navigate('/products');
     };
     const handlePreviewClick = () => {

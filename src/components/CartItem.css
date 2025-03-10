@@ -1,0 +1,90 @@
+/* Container for cart items - horizontal layout */
+.cart-item {
+    display: flex;
+    flex-direction: row; /* Items in a row */
+    align-items: center;
+    justify-content: space-between;
+    width: 90%;
+    max-width: 700px; /* Limit max width */
+    background-color: white;
+    border-radius: 10px;
+    padding: 15px;
+    margin: 10px auto; /* Center horizontally */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    transition: border 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    border: 2px solid transparent; /* Default border */
+}
+
+    /* Hover effect - Teal border */
+    .cart-item:hover {
+        border: 2px solid teal; /* Highlighted border */
+        box-shadow: 0px 4px 15px rgba(0, 128, 128, 0.3);
+    }
+
+/* Book image - aligned to the left */
+.cart-item-image {
+    width: 100px;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 5px;
+    margin-right: 20px;
+}
+
+/* Book details */
+.cart-item-details {
+    flex: 1; /* Takes available space */
+    text-align: left;
+}
+
+.item-name {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+.title, .author {
+    font-size: 16px;
+    color: #555;
+    font-weight: bold;
+    margin-top: 4px;
+}
+
+/* Button container for quantity controls */
+.buttons-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+/* Quantity buttons */
+.button {
+    padding: 8px 12px;
+    background-color: #f0f0f0;
+    color: #333;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+    .button:hover {
+        background-color: #ddd;
+    }
+
+/* Remove button */
+.remove-button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+    .remove-button:hover {
+        background-color: #c82333;
+    }

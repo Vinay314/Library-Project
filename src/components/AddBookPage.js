@@ -34,6 +34,8 @@ const AddBookPage = () => {
 
             if (response.ok) {
                 navigate('/products');
+                sessionStorage.setItem("bookAdded", "true");
+                
             } else {
                 console.error('Failed to add the book:', response.statusText);
             }
@@ -57,6 +59,7 @@ const AddBookPage = () => {
     };
 
     const handleClose = () => {
+        sessionStorage.setItem("bookAdded", "false");
         navigate('/products');
     };
 

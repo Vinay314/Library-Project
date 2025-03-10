@@ -1,7 +1,13 @@
 .container {
     padding-top: 1rem;
 }
-
+.container {
+    display: grid;
+    gap: 20px;
+    justify-content: center;
+    padding: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
 .navbar {
     margin-bottom: 1rem;
 }
@@ -175,34 +181,40 @@ section .lead {
  
 /* Reduced distance between buttons and end of card */
 .edit-btn {
-    margin-top: 5px; /* Adjust this value as needed */
+    margin-top: 5px;
+    border-color: #184d59 !important; /* Adjust this value as needed */
+    background-color: teal !important;
+    color: white !important;
 }
 
 .remove-btn {
     margin-top: 5px; /* Adjust this value as needed */
-    background-color: #184d59;
+    background-color: teal !important;
     color: white !important;
-    border-color: #184d59
+    border-color: teal !important;
 }
        .card img {
         object-fit: cover;
         height: 300px; /* Adjust as needed */
         width: 100%;
     }
- 
+
 .card {
-    display: flex;
-    flex-direction: column;
-    /*justify-content: space-between;*/
-    height: 100%;
+    flex: 1 1 100%;
     position: relative;
+    width: 100%;
+    max-width: 220px; /* Slightly increase card size */
+    padding: 10px;
+    border: 1px solid #ddd; /* Hide border */
+    border-radius: 8px;
+    transition: border 0.3s ease-in-out, transform 0.2s ease-in-out;
 }
  
     .card img {
         top: 14px;
  
         object-fit: cover;
-        height: 300px;
+        height: 250px;
         width: 100%;
         position: relative;
 /*  Margin increased to shift the image*/
@@ -219,19 +231,19 @@ section .lead {
     padding-bottom: 10px;
 /*    justify-content: space-between;*/
 }
- 
+.card:hover {
+    border: 2px solid #184d59; /* Show border on hover */
+    transform: scale(1.03); /* Slight zoom effect */
+}
 /* Button Container */
 .button-container {
     position: absolute;
-    top: 8px;
-    right: 8px;
+    right: 10px;
+    top: 5px;
     display: flex;
-    flex-direction: row;
     gap: 5px;
- 
-   
 }
- 
+
  
 /* Adjust Button Size */
 .edit-btn, .remove-btn {
@@ -352,6 +364,70 @@ section .lead {
     .btn-dark-mode:hover {
         background: linear-gradient(135deg, #1d2124, #495057);
         transform: scale(1.05);
+    }
+/* Settings Icon - Hidden by Default */
+.settings-container {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+}
+
+.settings-icon {
+    font-size: 20px;
+    color: #666;
+    padding: 5px;
+    border-radius: 50%;
+    transition: color 0.3s ease;
+    opacity: 0; /* Hidden initially */
+}
+
+/* Show settings icon on hover */
+.book-card:hover .settings-icon {
+    opacity: 1;
+}
+
+/* Dropdown menu */
+.dropdown-menu {
+    position: absolute;
+    top: 30px;
+    right: 0;
+    background: white;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    display: none;
+    flex-direction: column;
+    min-width: 120px;
+    padding: 5px 0;
+}
+
+/* Show dropdown on hover */
+.settings-container:hover .dropdown-menu {
+    display: flex;
+}
+
+/* Dropdown Items */
+.dropdown-item {
+    background: none;
+    border: none;
+    padding: 8px 12px;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    cursor: pointer;
+    font-size: 14px;
+    color: #333;
+    transition: background 0.3s;
+}
+
+    .dropdown-item:hover {
+        background: #184d59;
+        color:white;
     }
 
 /*Typed functionality*/
@@ -520,12 +596,15 @@ section .lead {
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    min-height: 300px; /* Adjust as needed */
+    height:400px;
+    max-height: 500px;
+   /* Adjust as needed */
 }
+
 
 .hero-overlay {
     width: 100%; /* Increase width */
-    max-width: 1200px; /* Adjust max width */
+    max-width: 1500px; /* Adjust max width */
     text-align: center;
     padding: 30px;
     background: rgba(0, 0, 0, 0.3);
@@ -644,11 +723,182 @@ section .lead {
 
 /* Professional Hover Effect on Card */
 .product-card {
+    height: 400px;
     transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out;
     border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
-
-   /* .product-card:hover {
+    /* .product-card:hover {
         transform: translateY(-5px);
         box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
     }*/
+    .card-img-top {
+    height: 250px; /* Fixed image height */
+    object-fit: cover; /* Maintain aspect ratio */
+}
+.row {
+    margin: 0; /* Ensure no margin around rows */
+    gap: 0 !important; /* Remove gap between cards */
+    justify-content: center;
+}
+
+    .book-card:hover {
+        transform: scale(1.05);
+        box-shadow: 0px 5px 15px teal;
+    }
+
+.button-container {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    gap: 5px;
+}
+
+
+/* Container adjustments */
+.container {
+    width: 100%;
+    padding: 10px;
+}
+
+/* Grid Layout */
+.book-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: -13px; /* Slight gap for better spacing */
+}
+
+/* Book Card */
+.book-card {
+    height: 430px;
+    width: 250px; /* Increase card width */
+    padding: 0px; /* Add spacing inside */
+    border-radius: 10px; /* Smooth corners */
+    text-align: center;
+    position: relative;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+@media (max-width: 1200px) {
+    /*.book-card {
+        flex: 1 1 calc(100% / 3);
+        max-width: calc(100% / 3);
+    }*/
+    .product-card {
+        flex: 1 1 calc(100% / 3);
+        max-width: calc(100% / 3);
+    }
+}
+
+@media (max-width: 992px) {
+    /*.book-card {
+        flex: 1 1 calc(100% / 2);
+        max-width: calc(100% / 2);
+    }*/
+    .product-card {
+        flex: 1 1 calc(100% / 2);
+        max-width: calc(100% / 2);
+    }
+}
+
+@media (max-width: 768px) {
+    /*.book-card {
+        flex: 1 1 100%;
+        max-width: 100%;
+    }*/
+    .product-card {
+        flex: 1 1 100%;
+        max-width: 100%;
+    }
+}
+
+/* Card Styles */
+.card {
+    width: 100%;
+    min-height: 350px; /* Ensures consistent height */
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    background: #fff;
+    transition: transform 0.2s ease-in-out;
+    position: relative;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+    .card:hover {
+        transform: scale(1.05);
+        
+    }
+
+/* Dark Mode */
+.dark-mode {
+    background: #2c2c2c;
+    color: white;
+}
+
+/* Book Image */
+.book-image {
+    width: 180px; /* Adjust width to make it proportional */
+    height: auto; /* Fixed height */
+    object-fit: cover; /* Ensures images don't get stretched */
+    border-radius: 5px; /* Slight rounding for better look */ 
+    padding-top:40px;/* Center the image */
+}
+
+/* Card Body */
+.card-body {
+    padding: 10px;
+    text-align: center;
+    margin-top:20px;
+}
+
+.card-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 8px;
+}
+
+.card-author {
+    font-size: 14px;
+    color: gray;
+}
+
+/* Button Container */
+.button-container {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    display: flex;
+    gap: 5px;
+    z-index: 10; /* Ensures it's above the image */
+    
+    padding: 5px;
+    border-radius: 5px;
+}
+
+/* Buttons */
+.edit-btn, .remove-btn {
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+
+
+
+
+
+/* No Books Message */
+.no-books {
+    text-align: center;
+    font-size: 20px;
+    margin-top: 20px;
+}
+

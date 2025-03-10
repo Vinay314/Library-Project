@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { clearCart } from '../store/actions';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import Header from "../components/Header";
 const ShoppingCartPage = () => {
     const cartItems = useSelector(state => state.cart.items);
     const totalCost = useSelector(state => state.cart.totalCost);
@@ -108,6 +109,7 @@ const ShoppingCartPage = () => {
 
     return (
         <div>
+            
             {/* Updated styles for the top-right buttons */}
             <div style={styles.topRightButtons}>
                 <Link to="/products">

@@ -1,0 +1,141 @@
+.book-page-container {
+	display: flex;
+	width: 100vw; /* Full viewport width */
+	height: 100vh; /* Full viewport height */
+	margin: 0;
+	padding: 0;
+}
+
+/* Left Section: Image & Metadata */
+.book-details-left {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	text-align: left;
+	padding: 0;
+	margin: 0;
+	width: 50vw; /* Ensure it takes half the screen */
+}
+
+.book-cover {
+	width: 100%; /* Make it span the full left section */
+	max-width: 450px; /* Increase size */
+	height: auto;
+	border-radius: 5px;
+	box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Metadata Table */
+.book-meta {
+	width: 100%;
+	margin-top: 20px;
+	padding: 20px;
+	background: #f9f9f9;
+	border-radius: 5px;
+	box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Vertical Line Separator */
+.vertical-line {
+	width: 3px;
+	background: #000;
+	height: 100vh;
+	position: absolute;
+	left: 25%;
+	transform: translateX(-50%);
+}
+
+/* Right Section: Description */
+.book-details-right {
+	flex: 1;
+	padding: 20px;
+	text-align: left;
+	width: 50vw; /* Takes half the screen */
+}
+
+.book-description {
+	font-size: 18px;
+	line-height: 1.6;
+	color: #444;
+}
+
+/* Floating Add to Cart Button */
+.floating-cart-btn {
+	position: fixed;
+	bottom: 20px;
+	right: 20px;
+	padding: 10px 20px;
+	font-size: 16px;
+	border-radius: 5px;
+}
+
+
+
+/* Right Section: Book Details & Description */
+.book-details-right {
+	width: 65%;
+	display: flex;
+	flex-direction: column;
+}
+
+/* Book Metadata */
+.book-meta {
+	width: 44%;
+	border: 1px solid #ccc;
+}
+
+.meta-row {
+	display: flex;
+	background-color: #e9ecef;
+}
+
+	.meta-row:nth-child(odd) {
+		background-color: #ffffff;
+	}
+
+.meta-label {
+	width: 30%;
+	padding: 10px;
+	font-weight: bold;
+	background-color: #d6d8db;
+}
+
+.meta-value {
+	width: 70%;
+	padding: 10px;
+	background-color: #ffffff;
+}
+
+/* Book Description */
+.book-description {
+	font-size: 16px;
+	line-height: 1.6;
+	color: #333;
+	margin-top: 20px;
+}
+/* Disabled Button Styling */
+.floating-cart-btn:disabled {
+	background-color: #6c757d; /* Gray out the button */
+	cursor: not-allowed;
+}
+
+/* Floating Cart Button */
+.floating-cart-btn {
+	position: fixed;
+	bottom: 20px;
+	right: 20px;
+	padding: 10px 15px;
+	font-size: 16px;
+}
+
+/* Modal for Place in Cart */
+.cart-modal {
+	position: fixed;
+	bottom: 20px;
+	right: 20px;
+	background: white;
+	padding: 10px;
+	border-radius: 8px;
+	box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}

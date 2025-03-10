@@ -162,6 +162,31 @@ section .lead {
         padding: 3px;
     }
 }*/
+.modal-buttons {
+    display: flex;
+    justify-content: center; /* Align buttons horizontally */
+    gap: 10px; /* Space between buttons */
+    margin-top: 15px;
+}
+
+    .modal-buttons button {
+        flex: 1; /* Make buttons equal width */
+        padding: 10px;
+        font-size: 16px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+.btn-warning {
+    background-color: #f0ad4e;
+    color: white;
+}
+
+    .btn-warning:hover {
+        background-color: #ec971f;
+    }
 
 .close-button {
     position: absolute;

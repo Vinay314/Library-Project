@@ -465,6 +465,14 @@ function ProductListingPage() {
 
                             {/* Button at Bottom */}
                             <div className="modal-footer">
+                                <div className="modal-buttons">
+                                    <button
+                                        type="button"
+                                        className="btn btn-warning w-100"
+                                        onClick={() => navigate(`/books/${selectedBook.id}`)}
+                                    >
+                                        View More Details
+                                    </button>
                                 {cartItems[selectedBook?.id] ? (
                                     <button
                                         type="button"
@@ -483,7 +491,7 @@ function ProductListingPage() {
                                     </button>
                                 )}
 
-
+                                </div>
 
                             </div>
 

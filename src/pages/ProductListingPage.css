@@ -1,6 +1,7 @@
 .container {
     padding-top: 1rem;
 }
+
 .container {
     display: grid;
     gap: 20px;
@@ -8,6 +9,7 @@
     padding: 20px;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
 }
+
 .navbar {
     margin-bottom: 1rem;
 }
@@ -62,10 +64,12 @@ section .lead {
     align-items: stretch; /* Ensures both sections take up equal height */
     width: 50%;
     max-width: 800px;
+    max-height: 80vh;
     background: white;
     padding: 20px;
     border-radius: 10px;
     position: relative;
+    overflow: hidden;
 }
 
     .modal-content > div {
@@ -79,10 +83,19 @@ section .lead {
     flex-direction: column;
     justify-content: space-between;
     height: 100%; /* Ensures full height alignment */
+    max-height: 60vh; /* Limits height */
+    overflow-y: auto; /* Enables scrolling */
+    padding-right: 10px;
 }
 
 .modal-footer {
     margin-top: 135px; /* Pushes button to the bottom */
+    width: 100%;
+    position: sticky;
+    bottom: 0;
+    background: white;
+    padding: 10px;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); /* Optional: subtle shadow effect */
     width: 100%;
 }
 
@@ -99,7 +112,7 @@ section .lead {
     font-family: "Times New Roman", Times, serif;
     font-size: 15px;
     margin-top: 0.5rem;
-    margin-bottom:1rem;*//* Adjust this value as needed */
+    margin-bottom:1rem;*/ /* Adjust this value as needed */
 /*}*/
 
 /* Reduced distance between buttons and end of card */
@@ -109,21 +122,21 @@ section .lead {
 
 .remove-btn {
     margin-top: 5px;*/ /* Adjust this value as needed */
-    /*background-color: red !important;
+/*background-color: red !important;
     color: white !important;
     border-color: red
 }
        .card img {
         object-fit: cover;
         height: 300px;*/ /* Adjust as needed */
-        /*width: 100%;
+/*width: 100%;
     }
 
 .card {
     display: flex;
     flex-direction: column;*/
-    /*justify-content: space-between;*/
-    /*height: 100%;
+/*justify-content: space-between;*/
+/*height: 100%;
     position: relative;
 }
 
@@ -195,15 +208,15 @@ section .lead {
     font-size: 24px;
     cursor: pointer;
 }
- 
- 
+
+
 .card-text-author {
     font-family: "Times New Roman", Times, serif;
     font-size: 15px;
     margin-top: 0.5rem;
-    margin-bottom:1rem;/* Adjust this value as needed */
+    margin-bottom: 1rem; /* Adjust this value as needed */
 }
- 
+
 /* Reduced distance between buttons and end of card */
 .edit-btn {
     margin-top: 5px;
@@ -218,11 +231,12 @@ section .lead {
     color: white !important;
     border-color: teal !important;
 }
-       .card img {
-        object-fit: cover;
-        height: 300px; /* Adjust as needed */
-        width: 100%;
-    }
+
+.card img {
+    object-fit: cover;
+    height: 300px; /* Adjust as needed */
+    width: 100%;
+}
 
 .card {
     flex: 1 1 100%;
@@ -234,28 +248,27 @@ section .lead {
     border-radius: 8px;
     transition: border 0.3s ease-in-out, transform 0.2s ease-in-out;
 }
- 
+
     .card img {
         top: 14px;
- 
         object-fit: cover;
         height: 250px;
         width: 100%;
         position: relative;
-/*  Margin increased to shift the image*/
+        /*  Margin increased to shift the image*/
         margin-top: 40px;
     }
- 
+
 .card-body {
     flex-grow: 1;
- 
     padding: 2rem;
-/*Padding changed for button */
+    /*Padding changed for button */
     display: flex;
     flex-direction: column;
     padding-bottom: 10px;
-/*    justify-content: space-between;*/
+    /*    justify-content: space-between;*/
 }
+
 .card:hover {
     border: 2px solid #184d59; /* Show border on hover */
     transform: scale(1.03); /* Slight zoom effect */
@@ -269,7 +282,7 @@ section .lead {
     gap: 5px;
 }
 
- 
+
 /* Adjust Button Size */
 .edit-btn, .remove-btn {
     width: 32px;
@@ -278,17 +291,15 @@ section .lead {
     display: flex;
     align-items: center;
     justify-content: center;
-    
-    border-radius:30px;
-
+    border-radius: 30px;
 }
- 
- 
+
+
 .card-img-top {
     margin-top: 40px; /* Adjust as needed */
 }
- 
- 
+
+
 /* Ensure the buttons scale down */
 @media (max-width: 768px) {
     .edit-btn, .remove-btn {
@@ -298,6 +309,7 @@ section .lead {
         padding: 3px;
     }
 }
+
 .rmove-btn {
     background-color: #cc0000;
     color: white !important;
@@ -452,7 +464,7 @@ section .lead {
 
     .dropdown-item:hover {
         background: #184d59;
-        color:white;
+        color: white;
     }
 
 /*Typed functionality*/
@@ -461,7 +473,7 @@ section .lead {
     /*background: url('C:\Users\a90011879\OneDrive - ONEVIRTUALOFFICE\Desktop\E-Book Store\src\pages\assets\atlas-copco.jpg') no-repeat center center/cover;*/
     background-color: #184d59 !important;
     height: 430px; /* Adjust height as needed */
-    width:97vw;
+    width: 97vw;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -494,12 +506,12 @@ section .lead {
     .add-book-button:hover {
         transform: scale(1.1);
     }
+
 .hero-overlay {
     background: rgba(0, 0, 0, 0.5); /* Dark overlay for readability */
     padding: 20px;
     border-radius: 8px;
-    width:100%;
-
+    width: 100%;
 }
 
 .hero-title {
@@ -576,14 +588,15 @@ section .lead {
         margin: 0 10px;
         font-size: 1.5rem;
     }
-    
+
 .footer-text {
     display: block; /* Moves text to a new line */
     margin-top: 10px; /* Adjusts spacing */
 }
-        .footer-container a:hover {
-            opacity: 0.7;
-        }
+
+.footer-container a:hover {
+    opacity: 0.7;
+}
 
 /* Sticky Dark Mode Toggle Button */
 .dark-mode-toggle {
@@ -621,9 +634,9 @@ section .lead {
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    height:400px;
+    height: 400px;
     max-height: 500px;
-   /* Adjust as needed */
+    /* Adjust as needed */
 }
 
 
@@ -722,7 +735,7 @@ section .lead {
     color: white;
     font-size: 16px;
     padding: 10px;
-    width:100%;
+    width: 100%;
 }
 
     .search-input::placeholder {
@@ -753,24 +766,25 @@ section .lead {
     border-radius: 10px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
-    /* .product-card:hover {
+/* .product-card:hover {
         transform: translateY(-5px);
         box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
     }*/
-    .card-img-top {
+.card-img-top {
     height: 250px; /* Fixed image height */
     object-fit: cover; /* Maintain aspect ratio */
 }
+
 .row {
     margin: 0; /* Ensure no margin around rows */
     gap: 0 !important; /* Remove gap between cards */
     justify-content: center;
 }
 
-    .book-card:hover {
-        transform: scale(1.05);
-        box-shadow: 0px 5px 15px teal;
-    }
+.book-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 5px 15px teal;
+}
 
 .button-container {
     position: absolute;
@@ -860,7 +874,6 @@ section .lead {
 
     .card:hover {
         transform: scale(1.05);
-        
     }
 
 /* Dark Mode */
@@ -874,15 +887,15 @@ section .lead {
     width: 180px; /* Adjust width to make it proportional */
     height: auto; /* Fixed height */
     object-fit: cover; /* Ensures images don't get stretched */
-    border-radius: 5px; /* Slight rounding for better look */ 
-    padding-top:40px;/* Center the image */
+    border-radius: 5px; /* Slight rounding for better look */
+    padding-top: 40px; /* Center the image */
 }
 
 /* Card Body */
 .card-body {
     padding: 10px;
     text-align: center;
-    margin-top:20px;
+    margin-top: 20px;
 }
 
 .card-title {
@@ -904,7 +917,7 @@ section .lead {
     display: flex;
     gap: 5px;
     z-index: 10; /* Ensures it's above the image */
-    
+
     padding: 5px;
     border-radius: 5px;
 }
@@ -926,4 +939,3 @@ section .lead {
     font-size: 20px;
     margin-top: 20px;
 }
-

@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Typed from 'typed.js';
 import ProductCard from '../components/ProductCard';
@@ -28,16 +28,16 @@ function ProductListingPage() {
     const [bookAdded, setBookAdded] = useState(false);
     const location = useLocation();
 
-    
+
 
 
     const handleSearchChange = (e) => {
         const value = e.target.value;
         setSearchTerm(value);
-       
-        if (value.trim().length<3) {
+
+        if (value.trim().length < 3) {
             setSuggestions([]);
-            setSearchQuery(""); 
+            setSearchQuery("");
         } else {
             const filteredSuggestions = products
                 .filter(product => product.title.toLowerCase().includes(value.toLowerCase()))
@@ -48,7 +48,7 @@ function ProductListingPage() {
     };
     const handleAddBook = () => {
         navigate("/add-book");
-        
+
     };
     useEffect(() => {
         if (sessionStorage.getItem("bookAdded") === "true") {
@@ -117,13 +117,13 @@ function ProductListingPage() {
 
 
     useEffect(() => {
-    // Check if this is the first page load
-    if (!sessionStorage.getItem("hasLoadedBefore")) {
-        localStorage.removeItem("cartItems"); // Clear cart ONLY on full refresh
-        setCartItems({}); // Reset cart state
-        sessionStorage.setItem("hasLoadedBefore", "true"); // Set flag to prevent clearing on navigation
-    }
-}, []);
+        // Check if this is the first page load
+        if (!sessionStorage.getItem("hasLoadedBefore")) {
+            localStorage.removeItem("cartItems"); // Clear cart ONLY on full refresh
+            setCartItems({}); // Reset cart state
+            sessionStorage.setItem("hasLoadedBefore", "true"); // Set flag to prevent clearing on navigation
+        }
+    }, []);
 
 
 
@@ -175,7 +175,7 @@ function ProductListingPage() {
 
     useEffect(() => {
         const options = {
-            strings: ["Read.", "Explore.", "Learn.", "Grow.","Transform.","Enlighten.","Connect.","Absorb.","Engage.","Enrich.","Flourish.","Inspire." ],
+            strings: ["Read.", "Explore.", "Learn.", "Grow.", "Transform.", "Enlighten.", "Connect.", "Absorb.", "Engage.", "Enrich.", "Flourish.", "Inspire."],
             typeSpeed: 100,
             backSpeed: 50,
             backDelay: 1500,
@@ -246,19 +246,19 @@ function ProductListingPage() {
 
     return (
         <>
-            
-                <Header searchQuery={searchQuery} setSearchQuery={setSearchQuery} products={products} />
-            
+
+            <Header searchQuery={searchQuery} setSearchQuery={setSearchQuery} products={products} />
+
             <div className={`container-fluid full-page-container ${darkMode ? 'bg-dark text-white' : 'bg-light text-dark'} ${selectedBook ? 'blur-background' : ''}`}>
 
                 {/* Navbar */}
-                
-                    {/*<div className="container">*/}
-                    {/*    <a className="navbar-brand d-flex align-items-center" href="#">*/}
-                    {/*        <strong>Album</strong>*/}
-                    {/*    </a>*/}
-                    {/*</div>*/}
-            
+
+                {/*<div className="container">*/}
+                {/*    <a className="navbar-brand d-flex align-items-center" href="#">*/}
+                {/*        <strong>Album</strong>*/}
+                {/*    </a>*/}
+                {/*</div>*/}
+
 
                 {/* Hero Section */}
                 {/*<section className="py-5 text-center container">*/}
@@ -282,7 +282,7 @@ function ProductListingPage() {
                         </h1>
                         <p className="hero-subtitle">Technology that transforms the future.</p>
                     </div>
-                   
+
                     <div className="search-bar w-85">
                         <input
                             type="text"
@@ -292,7 +292,7 @@ function ProductListingPage() {
                             onChange={handleSearchChange}
                         />
                         <i className="bi bi-search search-icon" onClick={handleSearch}></i>
-                        
+
                         {suggestions.length > 0 && (
                             <ul className="suggestions-list">
                                 {suggestions.map((title, index) => (
@@ -466,30 +466,30 @@ function ProductListingPage() {
                             {/* Button at Bottom */}
                             <div className="modal-footer">
                                 <div className="modal-buttons">
-                                    <button
-                                        type="button"
-                                        className="btn btn-warning w-100"
-                                        onClick={() => navigate(`/books/${selectedBook.id}`)}
-                                    >
-                                        View More Details
-                                    </button>
-                                {cartItems[selectedBook?.id] ? (
-                                    <button
-                                        type="button"
-                                        className="btn btn-danger w-100"
-                                        onClick={() => handleRemoveFromCart(selectedBook.id)}
-                                    >
-                                        Remove from Cart
-                                    </button>
-                                ) : (
-                                    <button
-                                        onClick={() => handleAddToCart(selectedBook)}
-                                        className="btn btn-success w-100"
-                                        style={{ backgroundColor: "teal", color: "white" }}
-                                    >
-                                        Add to Cart
-                                    </button>
-                                )}
+                                    {/*<button*/}
+                                    {/*    type="button"*/}
+                                    {/*    className="btn btn-warning w-100"*/}
+                                    {/*    onClick={() => navigate(`/books/${selectedBook.id}`)}*/}
+                                    {/*>*/}
+                                    {/*    View More Details*/}
+                                    {/*</button>*/}
+                                    {cartItems[selectedBook?.id] ? (
+                                        <button
+                                            type="button"
+                                            className="btn btn-danger w-100"
+                                            onClick={() => handleRemoveFromCart(selectedBook.id)}
+                                        >
+                                            Remove from Cart
+                                        </button>
+                                    ) : (
+                                        <button
+                                            onClick={() => handleAddToCart(selectedBook)}
+                                            className="btn btn-success w-100"
+                                            style={{ backgroundColor: "teal", color: "white" }}
+                                        >
+                                            Add to Cart
+                                        </button>
+                                    )}
 
                                 </div>
 

@@ -14,6 +14,7 @@ import { removeFromCart } from '../store/actions'
 import Header from "../components/Header";
 import Swal from 'sweetalert2';
 import { useLocation } from 'react-router-dom';
+import emptyBookImage from './assets/dislike_9250694.png';
 function ProductListingPage() {
     const [products, setProducts] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
@@ -76,12 +77,23 @@ function ProductListingPage() {
     const handleRemoveFromCart = (bookId) => {
         dispatch(removeFromCart(bookId));
 
-        // Update localStorage to remove the book
-        const updatedCart = { ...cartItems };
-        delete updatedCart[bookId];
-        setCartItems(updatedCart);
-        localStorage.setItem("cartItems", JSON.stringify(updatedCart));
+        setCartItems((prevCartItems) => {
+            const updatedCart = { ...prevCartItems };
+            delete updatedCart[bookId];
+
+            // Ensure localStorage is updated
+            localStorage.setItem("cartItems", JSON.stringify(updatedCart));
+
+            console.log("Updated Cart:", updatedCart); // Debugging log
+            return updatedCart;
+        });
+
+        // Force a re-render
+        setTimeout(() => {
+            setInCart((prev) => !prev);
+        }, 100);
     };
+
 
 
 
@@ -89,16 +101,34 @@ function ProductListingPage() {
         if (book.availableCopies > 0) {
             dispatch(addToCart(book));
 
-            // Update cart state in localStorage
-            const updatedCart = { ...cartItems, [book.id]: true };
-            setCartItems(updatedCart);
-            localStorage.setItem("cartItems", JSON.stringify(updatedCart));
+            setCartItems((prevCartItems) => {
+                const updatedCart = { ...prevCartItems, [book.id]: true };
 
-            setSelectedBook(prev => ({ ...prev, quantity: 1 }));
+                localStorage.setItem("cartItems", JSON.stringify(updatedCart));
+                console.log("Cart before update:", cartItems);
+                console.log("Updated Cart:", updatedCart);
+
+                return updatedCart;
+            });
+
+            setInCart(true); // Trigger re-render
         } else {
-            alert('No more available copies');
+            Swal.fire({
+                icon: 'warning',  // Warning icon
+                title: 'Oops!',
+                text: 'No more available copies',
+                confirmButtonText: 'OK',
+                timer: 3000,  // Auto-close after 3 seconds
+                timerProgressBar: true
+            });
         }
     };
+    useEffect(() => {
+        const storedCart = JSON.parse(localStorage.getItem("cartItems")) || {};
+        setCartItems(storedCart);
+    }, []);
+    const [, forceUpdate] = useState();
+    setTimeout(() => forceUpdate({}), 0);
 
     useEffect(() => {
         const storedCart = localStorage.getItem("cartItems");
@@ -391,6 +421,17 @@ function ProductListingPage() {
                                                     <button onClick={() => removeBookByTitle(product.title)} className="dropdown-item">
                                                         <i className="bi bi-trash3"></i> Delete
                                                     </button>
+                                                    <button
+                                                        onClick={() => {
+                                                            cartItems[product.id]
+                                                                ? handleRemoveFromCart(product.id)
+                                                                : handleAddToCart(product);
+                                                        }}
+                                                        className="dropdown-item"
+                                                    >
+                                                        <i className="bi bi-cart"></i>
+                                                        {cartItems[product.id] ? " Remove from Cart" : " Place in Cart"}
+                                                    </button>
                                                 </div>
                                             </div>
 
@@ -427,7 +468,32 @@ function ProductListingPage() {
                                 ))
 
                             ) : (
-                                <p className="text-center">No books found.</p>
+                                    <div style={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        textAlign: 'center',
+                                        position: 'absolute',  // Absolute positioning for full-page centering
+                                        top: '75%',
+                                        left: '50%',
+                                        transform: 'translate(-50%, -50%)',  // Moves the div exactly to the center
+                                        padding: '20px'
+                                    }}>
+                                        <img src={emptyBookImage} alt="No Product" style={{
+                                            width: '150px',
+                                            display: 'block'
+                                        }} />
+                                        <p style={{
+                                            fontSize: '16px',
+                                            color: '#555',
+                                            marginTop: '10px',
+                                            marginLeft: '20px' // Adjust to move text slightly right
+                                        }}>
+                                            Add some books to get started
+                                        </p>
+                                    </div>
+
 
                             )}
                         </div>
@@ -490,6 +556,7 @@ function ProductListingPage() {
                                             Add to Cart
                                         </button>
                                     )}
+
 
                                 </div>
 

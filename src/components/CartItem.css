@@ -1,90 +1,54 @@
-/* Container for cart items - horizontal layout */
-.cart-item {
+/* Parent container to stack books vertically */
+.cart-container {
     display: flex;
-    flex-direction: row; /* Items in a row */
+    flex-direction: column; /* Stack items vertically */
     align-items: center;
-    justify-content: space-between;
-    width: 90%;
-    max-width: 700px; /* Limit max width */
-    background-color: white;
-    border-radius: 10px;
-    padding: 15px;
-    margin: 10px auto; /* Center horizontally */
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    transition: border 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-    border: 2px solid transparent; /* Default border */
+    width: 100%;
 }
 
-    /* Hover effect - Teal border */
-    .cart-item:hover {
-        border: 2px solid teal; /* Highlighted border */
-        box-shadow: 0px 4px 15px rgba(0, 128, 128, 0.3);
-    }
+/* Each book in a row format */
+.cart-item {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: white;
+    padding: 15px;
+    border-bottom: 2px solid #0a3d5e; /* Dark blue bottom border */
+}
 
-/* Book image - aligned to the left */
+/* Book Image */
 .cart-item-image {
-    width: 100px;
-    height: 140px;
-    object-fit: cover;
-    border-radius: 5px;
+    width: 50px; /* Smaller size for consistency */
+    height: auto;
     margin-right: 20px;
 }
 
-/* Book details */
+/* Book Details */
 .cart-item-details {
-    flex: 1; /* Takes available space */
-    text-align: left;
-}
-
-.item-name {
-    font-size: 18px;
-    font-weight: bold;
-    color: #333;
-}
-
-.title, .author {
-    font-size: 16px;
-    color: #555;
-    font-weight: bold;
-    margin-top: 4px;
-}
-
-/* Button container for quantity controls */
-.buttons-container {
+    flex-grow: 1;
     display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-top: 10px;
+    flex-direction: column;
 }
 
-/* Quantity buttons */
-.button {
-    padding: 8px 12px;
-    background-color: #f0f0f0;
-    color: #333;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    cursor: pointer;
+/* Title Styling */
+.item-title {
+    font-weight: bold;
     font-size: 16px;
-    transition: background-color 0.3s ease;
+    color: black;
+    margin-bottom: 2px;
 }
 
-    .button:hover {
-        background-color: #ddd;
-    }
-
-/* Remove button */
-.remove-button {
-    background-color: #dc3545;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s ease;
+/* Author Styling */
+.author {
+    font-size: 14px;
+    color: gray;
+    margin-bottom: 2px;
 }
 
-    .remove-button:hover {
-        background-color: #c82333;
-    }
+/* Status (Wink) */
+.status {
+    font-size: 14px;
+    color: #0a3d5e;
+    font-weight: bold;
+}

@@ -129,6 +129,7 @@ const Header = ({ searchQuery, setSearchQuery, products }) => {
 
     return (
         <header className="header">
+            
             <div className="logo-container" onClick={handleNavigation}>
                 <img
                     className="atlas-copco-group-icon"
@@ -136,7 +137,7 @@ const Header = ({ searchQuery, setSearchQuery, products }) => {
                     alt="atlascopcogroup"
                 />
             </div>
-
+            <div className="fw-bold" style={{ display: 'flex', justifyContent: 'center' }}>BrainBank Library Poject</div>
             {/* Search Bar */}
             {/*<div className="search-container" ref={inputRef}>*/}
             {/*    <input*/}

@@ -58,7 +58,7 @@ body {
 }
 
 .shopping-cart {
-    display: grid;
+    
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Wider cards with auto-fit */
     gap: 1rem; /* Space between grid items */
     padding: 2rem;

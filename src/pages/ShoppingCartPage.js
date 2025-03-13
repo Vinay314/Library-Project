@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect , useRef} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import CartItem from '../components/CartItem';
 import { Link, useNavigate } from 'react-router-dom';
@@ -6,6 +6,7 @@ import { clearCart } from '../store/actions';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import Header from "../components/Header";
+import emptyCartImage from './assets/shopping.png';
 const ShoppingCartPage = () => {
     const cartItems = useSelector(state => state.cart.items);
     const totalCost = useSelector(state => state.cart.totalCost);
@@ -17,16 +18,37 @@ const ShoppingCartPage = () => {
     const navigate = useNavigate();
     const [title, setTitle] = useState('');
     const [bookTitles, setBookTitles] = useState([]);
-    
-    const id = useParams();
+    const [isSticky, setIsSticky] = useState(false);
+    const buttonsRef = useRef(null);
+
+    const { id } = useParams();
     useEffect(() => {
-        fetch(`http://localhost:5198/api/books/${id}/title`)
-            .then(response => response.text())
-            .then(title => setTitle(title))
-            .catch(error => console.error('Error fetching title:', error));
+        if (id) {
+            fetch(`http://localhost:5198/api/books/${id}/title`)
+                .then(response => response.text())
+                .then(title => setTitle(title))
+                .catch(error => console.error('Error fetching title:', error));
+        }
     }, [id]);
 
-    
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                setIsSticky(!entry.isIntersecting);
+            },
+            { root: null, threshold: 0 }
+        );
+
+        if (buttonsRef.current) {
+            observer.observe(buttonsRef.current);
+        }
+
+        return () => {
+            if (buttonsRef.current) {
+                observer.unobserve(buttonsRef.current);
+            }
+        };
+    }, []);
 
     const calculateReturnDate = (date) => {
         let returnDate = new Date(date);
@@ -111,13 +133,23 @@ const ShoppingCartPage = () => {
         <div>
             
             {/* Updated styles for the top-right buttons */}
-            <div style={styles.topRightButtons}>
+            <div ref={buttonsRef} style={styles.topRightButtons}>
                 <Link to="/products">
                     <button style={styles.continueShoppingButton}>Continue Shopping</button>
                 </Link>
                 <button onClick={checkout} style={styles.checkoutButton}>Checkout</button>
             </div>
-
+            {/* Sticky Buttons */}
+            {isSticky && (
+                <div style={styles.stickyButtons}>
+                    <Link to="/products">
+                        <button style={styles.continueShoppingButton}>Continue Shopping</button>
+                    </Link>
+                    <button style={styles.checkoutButton} onClick={checkout}>
+                        Checkout
+                    </button>
+                </div>
+            )}
             {!checkoutComplete && (
                 <div className="shopping-cart">
                     {cartItems.length > 0 ? (
@@ -127,7 +159,31 @@ const ShoppingCartPage = () => {
                             ))}
                         </>
                     ) : (
-                        <p>Your cart is empty</p>
+                            <div style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                textAlign: 'center',
+                                padding: '20px'
+                            }}>
+                                <img src={emptyCartImage} alt="No Product" style={{
+                                    width: '150px',
+                                    display: 'block'
+                                }} />
+                                <p style={{
+                                    fontSize: '16px',
+                                    color: '#555',
+                                    marginTop: '10px',
+                                    marginLeft: '20px' // Move text slightly to the right
+                                }}>
+                                    Go find the books you like.....
+                                </p>
+                            </div>
+
+
+
+                    
                     )}
                 </div>
             )}
@@ -163,10 +219,21 @@ const styles = {
     // Remove fixed positioning for buttons
     topRightButtons: {
         display: 'flex',
-        flexDirection: 'row', // Position buttons side by side
-        gap: '20px',  // Adjust space between the buttons
-        marginTop: '20px', // Add some margin so buttons don't stick at the top
-        justifyContent: 'flex-end', // Align buttons to the right
+        justifyContent: 'flex-end',
+        gap: '20px',
+        marginTop: '20px',
+        marginRight:'-78px',
+    },
+    stickyButtons: {
+        position: 'fixed',
+        bottom: '20px',
+        right: '-20px',
+        display: 'flex',
+        gap: '10px',
+        background: 'white',
+        padding: '10px',
+        //borderRadius: '8px',
+        //boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
     },
     continueShoppingButton: {
         padding: '12px 20px',
@@ -183,6 +250,7 @@ const styles = {
         padding: '12px 20px',
         backgroundColor: '#28a745',
         color: 'white',
+        marginRight:'5vw',
         border: 'none',
         borderRadius: '5px',
         cursor: 'pointer',

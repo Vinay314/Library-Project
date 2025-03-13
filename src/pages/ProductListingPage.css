@@ -186,8 +186,8 @@ section .lead {
         flex: 1; /* Make buttons equal width */
         padding: 10px;
         font-size: 16px;
-        border: none;
-        border-radius: 5px;
+        /*border: none;
+        border-radius: 5px;*/
         cursor: pointer;
         transition: 0.3s;
     }

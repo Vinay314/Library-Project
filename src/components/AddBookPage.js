@@ -202,11 +202,11 @@ const styles = {
     },
     modalClose: {
         position: 'absolute',
-        top: '10px',
-        right: '10px',
+        top: '-2px',
+        right: '6px',
         fontSize: '20px',
         cursor: 'pointer',
-        color: '#ff4d4d',
+        color: 'black',
     },
     modalImage: {
         maxWidth: '400px',
@@ -218,13 +218,15 @@ const styles = {
         top: '10px',
         right: '10px',
         padding: '5px 10px',
-        backgroundColor: '#ff4d4d',
-        color: 'white',
+        color: 'darkblack',
         border: 'none',
-        borderRadius: '5px',
+        borderRadius: '10px',
         cursor: 'pointer',
-        fontSize: '16px',
-    },
+        fontSize: '12px',
+
+
+
+    }
 };
 
 export default AddBookPage;

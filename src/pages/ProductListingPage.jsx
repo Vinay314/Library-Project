@@ -15,6 +15,8 @@ import Header from "../components/Header";
 import Swal from 'sweetalert2';
 import { useLocation } from 'react-router-dom';
 import emptyBookImage from './assets/dislike_9250694.png';
+import AddBookPage from '../components/AddBookPage';
+import UpdateBookPage from '../components/UpdateBookPage';
 function ProductListingPage() {
     const [products, setProducts] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
@@ -28,7 +30,10 @@ function ProductListingPage() {
     const dispatch = useDispatch();
     const [bookAdded, setBookAdded] = useState(false);
     const location = useLocation();
-
+    const [isAddBookModalOpen, setIsAddBookModalOpen] = useState(false);
+    const [products1, setProducts1] = useState([]);
+    const [isUpdateBookModalOpen, setIsUpdateBookModalOpen] = useState(false);
+    const [bookToUpdate, setBookToUpdate] = useState(null);
 
 
 
@@ -47,23 +52,51 @@ function ProductListingPage() {
             setSuggestions(filteredSuggestions);
         }
     };
+    const handleBookAdded = (newBook) => {
+        setProducts(prevBooks => [...prevBooks, newBook]); 
+    };
+
+
+
+
+
     const handleAddBook = () => {
-        navigate("/add-book");
+        /*navigate("/add-book");*/
+        setIsAddBookModalOpen(true);
 
     };
+    const handleCloseAddBookModal = () => {
+        setIsAddBookModalOpen(false);
+    };
+
+
     useEffect(() => {
-        if (sessionStorage.getItem("bookAdded") === "true") {
+        if (bookAdded) {
             Swal.fire({
                 title: "Book Added!",
                 text: "The book has been successfully added.",
                 icon: "success",
                 confirmButtonColor: "#008080",
             });
-
-            sessionStorage.removeItem("bookAdded"); // Remove flag after alert
         }
-    }, []);
+    }, [bookAdded]); 
 
+    const handleEditBook1 = (book) => {
+        setBookToUpdate(book);
+        setIsUpdateBookModalOpen(true);
+    };
+    const handleCloseUpdateBookModal = () => {
+        setIsUpdateBookModalOpen(false);
+        setBookToUpdate(null);
+    };
+
+    const handleBookUpdated = (updatedBook) => {
+        setProducts((prevBooks) =>
+            prevBooks.map((book) => (book.id === updatedBook.id ? updatedBook : book))
+        );
+    };
+
+   
     useEffect(() => {
         window.clearSearch = () => {
             setSearchQuery(""); // Clear searchQuery first
@@ -222,6 +255,20 @@ function ProductListingPage() {
         localStorage.setItem("bookUpdated", "true");
     };
     useEffect(() => {
+        const disableRightClick = (event) => {
+            if (selectedBook || isAddBookModalOpen || isUpdateBookModalOpen) {
+                event.preventDefault();
+            }
+        };
+
+        document.addEventListener("contextmenu", disableRightClick);
+
+        return () => {
+            document.removeEventListener("contextmenu", disableRightClick);
+        };
+    }, [selectedBook, isAddBookModalOpen, isUpdateBookModalOpen]);
+
+    useEffect(() => {
         if (localStorage.getItem("bookUpdated") === "true") {
             Swal.fire({
                 title: 'Book Updated!',
@@ -279,7 +326,7 @@ function ProductListingPage() {
 
             <Header searchQuery={searchQuery} setSearchQuery={setSearchQuery} products={products} />
 
-            <div className={`container-fluid full-page-container ${darkMode ? 'bg-dark text-white' : 'bg-light text-dark'} ${selectedBook ? 'blur-background' : ''}`}>
+            <div className={`container-fluid full-page-container ${darkMode ? 'bg-dark text-white' : 'bg-light text-dark'} ${selectedBook ? 'blur-background' : ''} ${isAddBookModalOpen ? 'blur-background' : ''} ${isUpdateBookModalOpen ? 'blur-background' : ''}`}>
 
                 {/* Navbar */}
 
@@ -320,6 +367,11 @@ function ProductListingPage() {
                             placeholder="Search for books..."
                             value={searchTerm}
                             onChange={handleSearchChange}
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter") {
+                                    handleSearch();
+                                }
+                            }}
                         />
                         <i className="bi bi-search search-icon" onClick={handleSearch}></i>
 
@@ -415,9 +467,11 @@ function ProductListingPage() {
                                             <div className="settings-container">
                                                 <i className="bi bi-three-dots-vertical settings-icon"></i>
                                                 <div className="dropdown-menu">
-                                                    <button onClick={() => handleEditBook(product)} className="dropdown-item">
+                                                    <button onClick={() => handleEditBook1(product)} className="dropdown-item">
                                                         <i className="bi bi-pencil"></i> Edit
                                                     </button>
+                                                    
+
                                                     <button onClick={() => removeBookByTitle(product.title)} className="dropdown-item">
                                                         <i className="bi bi-trash3"></i> Delete
                                                     </button>
@@ -475,7 +529,7 @@ function ProductListingPage() {
                                         justifyContent: 'center',
                                         textAlign: 'center',
                                         position: 'absolute',  // Absolute positioning for full-page centering
-                                        top: '75%',
+                                        top: '85%',
                                         left: '50%',
                                         transform: 'translate(-50%, -50%)',  // Moves the div exactly to the center
                                         padding: '20px'
@@ -490,7 +544,7 @@ function ProductListingPage() {
                                             marginTop: '10px',
                                             marginLeft: '20px' // Adjust to move text slightly right
                                         }}>
-                                            Add some books to get started
+                                            No books found.
                                         </p>
                                     </div>
 
@@ -508,6 +562,24 @@ function ProductListingPage() {
             <button className="add-book-button" onClick={handleAddBook}>
                 <Plus size={30} />
             </button>
+            {isAddBookModalOpen && (
+                <div className="modal-overlay-add">
+                    <div className="modal-content-add">
+                        <AddBookPage onClose={handleCloseAddBookModal} onBookAdded={handleBookAdded} />
+                   </div>
+                </div>
+            )}
+            {isUpdateBookModalOpen && bookToUpdate && (
+                <div className="modal-overlay-update">
+                    <div className="modal-content-update">
+                        <UpdateBookPage
+                            book={bookToUpdate}
+                            onClose={handleCloseUpdateBookModal}
+                            onBookUpdated={handleBookUpdated}
+                        />
+                    </div>
+                </div>
+            )}
             {selectedBook && (
                 <div className="modal-overlay">
                     <div className="modal-content d-flex">

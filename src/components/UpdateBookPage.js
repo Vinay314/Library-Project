@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-
-const UpdateBookPage = () => {
-    const { id } = useParams(); // Get the book ID from URL parameters
+import Swal from 'sweetalert2';
+const UpdateBookPage = ({ book, onClose, onBookUpdated }) => {
+    /*const { id } = useParams();*/ // Get the book ID from URL parameters
     const [title, setTitle] = useState('');
     const [author, setAuthor] = useState('');
     const [category, setCategory] = useState('');
@@ -13,76 +13,72 @@ const UpdateBookPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     // Fetch the current book data from the API when the component mounts
     useEffect(() => {
-        const fetchBookData = async () => {
-            try {
-                const response = await fetch(`http://localhost:5198/api/books/${id}`);
-                if (response.ok) {
-                    const book = await response.json();
-                    setTitle(book.title);
-                    setAuthor(book.author);
-                    setCategory(book.category);
-                    setDescription(book.description);
-                    setAvailableCopies(book.availableCopies);
-                } else {
-                    console.error('Failed to fetch book data');
-                    alert('Book not found');
-                }
-            } catch (error) {
-                console.error('Error fetching book data:', error);
-                alert('Error fetching book data');
-            }
-        };
+        if (book) {
+            setTitle(book.title);
+            setAuthor(book.author);
+            setCategory(book.category);
+            setDescription(book.description);
+            setAvailableCopies(book.availableCopies);
+            
+        }
+    }, [book]);  // ? Runs only when book data is received
 
-        fetchBookData();
-    }, [id]);
 
     const handleUpdateBook = async (e) => {
         e.preventDefault();
 
         const formData = new FormData();
-
-        // Add all required fields (without price)
         formData.append('title', title);
         formData.append('author', author);
         formData.append('category', category);
         formData.append('description', description);
         formData.append('availableCopies', parseInt(availableCopies, 10));
 
-        if (image) {
-            formData.append('file', image);  // Add the image if it's provided
-        }
 
-        // Log FormData entries to inspect the data being sent
-        for (let pair of formData.entries()) {
-            console.log(pair[0] + ': ' + pair[1]);
+        if (image) {
+            formData.append('file', image);
         }
 
         try {
-            const response = await fetch(`http://localhost:5198/api/books/${id}`, {
+            const response = await fetch(`http://localhost:5198/api/books/${book.id}`, {
                 method: 'PUT',
                 body: formData,
             });
 
             if (response.ok) {
-                navigate('/products'); // Redirect to the products page after successful update
+                const updatedBook = await response.json();
+
+                onBookUpdated(updatedBook); 
+                onClose(); 
+
+                Swal.fire("Success", "Book updated successfully!", "success");
             } else {
-                console.error('Failed to update the book:', response.statusText);
-                alert('Failed to update the book');
+                Swal.fire("Error", "Failed to update the book!", "error");
             }
         } catch (error) {
             console.error('Error updating the book:', error);
-            alert('Error updating the book');
+            Swal.fire("Error", "Something went wrong!", "error");
         }
     };
+
 
 
     const handleImageUpload = (e) => {
         setImage(e.target.files[0]);
     };
 
+    //const handleClose = () => {
+    //    localStorage.setItem("bookUpdated", "false");
+    //    navigate('/products');
+    //};
     const handleClose = () => {
         localStorage.setItem("bookUpdated", "false");
-        navigate('/products');
+        console.log("onClose function:", onClose); 
+        if (onClose) {
+            onClose(); 
+        } else {
+            console.error("onClose is undefined!");
+        } 
     };
     const handlePreviewClick = () => {
         if (image) {
@@ -225,7 +221,7 @@ const styles = {
         borderRadius: '5px',
         width: '100%',
         boxSizing: 'border-box',
-        height: '40px',  // Same height as input fields
+        height: '150px',  // Same height as input fields
         resize: 'none',  // Prevent the user from resizing the textarea
     },
     button: {

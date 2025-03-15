@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-const AddBookPage = () => {
+import Swal from 'sweetalert2';
+const AddBookPage = ({onClose ,onBookAdded}) => {
     const [title, setTitle] = useState('');
     const [author, setAuthor] = useState('');
     const [category, setCategory] = useState('');
@@ -10,11 +10,13 @@ const AddBookPage = () => {
     const [availableCopies, setAvailableCopies] = useState(1);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const navigate = useNavigate();
-
+    const [isSubmitting, setIsSubmitting] = useState(false); 
     const handleAddBook = async (e) => {
         e.preventDefault();
+        if (isSubmitting) return;
+        setIsSubmitting(true);
         if (!image) {
-            console.error('No image provided.');
+            Swal.fire("Error", "Please upload an image!", "error");
             return;
         }
 
@@ -33,16 +35,26 @@ const AddBookPage = () => {
             });
 
             if (response.ok) {
-                navigate('/products');
-                sessionStorage.setItem("bookAdded", "true");
+                const newBook = await response.json();
+
+                onClose();  
+                onBookAdded(newBook); 
+
+                setTimeout(() => {  
+                    Swal.fire("Success", "Book added successfully!", "success");
+                }, 300);
 
             } else {
-                console.error('Failed to add the book:', response.statusText);
+                Swal.fire("Error", "Failed to add book", "error");
             }
         } catch (error) {
-            console.error('Failed to fetch:', error);
+            console.error("Error adding book:", error);
+            Swal.fire("Error", "Something went wrong!", "error");
+        } finally {
+            setIsSubmitting(false);
         }
     };
+
 
     const handleImageUpload = (e) => {
         setImage(e.target.files[0]);
@@ -58,14 +70,19 @@ const AddBookPage = () => {
         setIsModalOpen(false);
     };
 
+    //const handleClose = () => {
+    //    sessionStorage.setItem("bookAdded", "false");
+    //    navigate('/products');
+    //};
     const handleClose = () => {
         sessionStorage.setItem("bookAdded", "false");
-        navigate('/products');
+        onClose();
     };
 
     return (
         <div style={styles.container}>
-            <div style={styles.closeButton} onClick={handleClose}>X</div>
+            <button style={styles.closeButton} onClick={handleClose}>X</button>
+
             <form onSubmit={handleAddBook} style={styles.form}>
                 <div style={styles.formGroup}>
                     <label style={styles.label}>Title:</label>

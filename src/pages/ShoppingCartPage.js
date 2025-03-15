@@ -7,6 +7,8 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import Header from "../components/Header";
 import emptyCartImage from './assets/shopping.png';
+import Swal from 'sweetalert2';
+
 const ShoppingCartPage = () => {
     const cartItems = useSelector(state => state.cart.items);
     const totalCost = useSelector(state => state.cart.totalCost);
@@ -95,11 +97,24 @@ const ShoppingCartPage = () => {
                     bookId: item.id,
                     availableCopies: newAvailableCopies,
                 });
+                const storedCart = JSON.parse(localStorage.getItem("cartItems")) || {};
+
+                // Remove the item from cart
+                delete storedCart[item.id];
+
+                // Update localStorage
+                localStorage.setItem("cartItems", JSON.stringify(storedCart));
             }));
 
             // Alert the user with a summary before navigating
             const summaryMessage = `Purchase Summary:\nBorrowing Date: ${today.toDateString()}\nReturn Date: ${returnDate.toDateString()}\n\nThank you for your purchase!`;
-            alert(summaryMessage);
+            //alert(summaryMessage);
+            Swal.fire({
+                title: "Purchase Summary\n",
+                text: /*`\nBorrowing Date: ${today.toDateString()} \nReturn Date: ${returnDate.toDateString()}\n\n Thank you for your purchase!`*/summaryMessage,
+                icon: "success",
+                confirmButtonText: "OK"
+            });
 
             // Clear the cart on successful checkout
             dispatch(clearCart());
@@ -137,7 +152,18 @@ const ShoppingCartPage = () => {
                 <Link to="/products">
                     <button style={styles.continueShoppingButton}>Continue Shopping</button>
                 </Link>
-                <button onClick={checkout} style={styles.checkoutButton}>Checkout</button>
+                <button
+                    onClick={checkout}
+                    style={{
+                        ...styles.checkoutButton,
+                        backgroundColor: cartItems.length === 0 ? 'gray' : 'teal',
+                        cursor: cartItems.length === 0 ? 'not-allowed' : 'pointer'
+                    }}
+                    disabled={cartItems.length === 0}
+                >
+                    Checkout
+                </button>
+
             </div>
             {/* Sticky Buttons */}
             {isSticky && (
@@ -200,7 +226,7 @@ const ShoppingCartPage = () => {
                             </li>
                         ))}
                     </ul>
-                    <button onClick={() => navigate("/products")} style={styles.backButton}>Back to Products</button>
+                    <button onClick={() => navigate("/products")} style={styles.backButton}>Back to Books</button>
                 </div>
             )}
 
@@ -237,7 +263,7 @@ const styles = {
     },
     continueShoppingButton: {
         padding: '12px 20px',
-        backgroundColor: '#6c757d',
+        backgroundColor: 'teal',
         color: 'white',
         border: 'none',
         borderRadius: '5px',
@@ -248,7 +274,7 @@ const styles = {
     },
     checkoutButton: {
         padding: '12px 20px',
-        backgroundColor: '#28a745',
+        backgroundColor: 'teal',
         color: 'white',
         marginRight:'5vw',
         border: 'none',

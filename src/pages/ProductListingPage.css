@@ -43,140 +43,139 @@ section .lead {
 }
 
 /* Modal overlay */
+/* ----- General Modal Styling ----- */
 .modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.5); /* Dark overlay */
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000;
+    z-index: 1000; /* Ensures it's above other elements */
 }
 
-/* Modal content */
+/* ----- Main Modal Content ----- */
 .modal-content {
     display: flex;
-    flex-direction: row; /* Ensures image and text are side by side */
+    flex-direction: row;
     justify-content: space-between;
-    align-items: stretch; /* Ensures both sections take up equal height */
-    width: 50%;
-    max-width: 800px;
-    max-height: 80vh;
+    align-items: stretch;
+    width: 60%;
+    max-width: 1000px;
+    max-height: 85vh;
     background: white;
     padding: 20px;
     border-radius: 10px;
     position: relative;
     overflow: hidden;
+    height:52%;
 }
 
-    .modal-content > div {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between; /* Pushes content apart */
+/* ----- Book Image Section ----- */
+.book-image {
+    /*display: flex;*/
+    flex-direction: column;
+    align-items: center;
+    width: 40%;
+    max-width: 350px;
+}
+
+    .book-image img {
+        width: 100%;
+        max-height: 400px;
+        object-fit: cover;
+        border-radius: 10px;
     }
 
+/* Book details table below image */
+.book-details {
+    width: 100%;
+    margin-top: 15px;
+    background: #f5f5f5;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+    .book-details table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .book-details th {
+        text-align: left;
+        padding: 8px;
+        background: #d3d3d3;
+    }
+
+    .book-details td {
+        padding: 8px;
+    }
+
+/* ----- Text & Details Section ----- */
 .modal-text {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    height: 100%; /* Ensures full height alignment */
-    max-height: 60vh; /* Limits height */
-    overflow-y: auto; /* Enables scrolling */
-    padding-right: 10px;
+    justify-content: flex-start;
+    width: 60%;
+    padding-left: 20px;
+    overflow-y: auto;
+    max-height: 60vh;
 }
 
+/* ----- Button at Bottom Right ----- */
 .modal-footer {
-    margin-top: 135px; /* Pushes button to the bottom */
-    width: 100%;
-    position: sticky;
-    bottom: 0;
-    background: white;
-    padding: 10px;
-    /*box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);*/ /* Optional: subtle shadow effect */
-    width: 100%;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
 }
 
-/*.close-button {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    font-size: 24px;
+.place-cart-btn {
+    background: green;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
     cursor: pointer;
 }
 
-
-.card-text-author {
-    font-family: "Times New Roman", Times, serif;
-    font-size: 15px;
-    margin-top: 0.5rem;
-    margin-bottom:1rem;*/ /* Adjust this value as needed */
-/*}*/
-
-/* Reduced distance between buttons and end of card */
-/*.edit-btn {
-    margin-top: 5px;*/ /* Adjust this value as needed */
-/*}
-
-.remove-btn {
-    margin-top: 5px;*/ /* Adjust this value as needed */
-/*background-color: red !important;
-    color: white !important;
-    border-color: red
-}
-       .card img {
-        object-fit: cover;
-        height: 300px;*/ /* Adjust as needed */
-/*width: 100%;
+    .place-cart-btn:hover {
+        background: darkgreen;
     }
 
-.card {
-    display: flex;
-    flex-direction: column;*/
-/*justify-content: space-between;*/
-/*height: 100%;
-    position: relative;
-}
+/* ----- Responsive Design ----- */
+@media (max-width: 768px) {
+    .modal-content {
+        flex-direction: column;
+        width: 90%;
+        max-height: 90vh;
+    }
 
-    .card img {
-        object-fit: cover;
-        height: 300px;
+    .book-image {
         width: 100%;
-        position: relative;
+        align-items: center;
     }
 
-.card-body {
-    flex-grow: 1;
-    padding: 1rem;
-    display: flex;
-    flex-direction: column;*/
-/*    justify-content: space-between;*/
-/*}*/
+        .book-image img {
+            width: 75%;
+        }
 
-/* Button Container */
-/*.button-container {
-    position: absolute;
-    top: 0;
-    right: 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}*/
-
-
-/* Ensure the buttons scale down */
-/*@media (max-width: 768px) {
-    .edit-btn, .remove-btn {
-        width: 30px;
-        height: 30px;
-        font-size: 12px;
-        padding: 3px;
+    .modal-text {
+        width: 100%;
+        padding-left: 0;
+        max-height: 50vh;
     }
-}*/
 
-/* Modal styling */
+    .modal-footer {
+        position: static;
+        text-align: center;
+        margin-top: 15px;
+    }
+}
+
+/* ----- Update Modal Styling ----- */
 .modal-overlay-update {
     position: fixed;
     top: 0;
@@ -200,6 +199,7 @@ section .lead {
     position: relative;
 }
 
+/* ----- Add Modal Overlay ----- */
 .modal-overlay-add {
     z-index: 2000 !important; /* Ensure it's above everything */
     display: flex !important; /* Force display */
@@ -228,6 +228,7 @@ section .lead {
     position: relative;
 }
 
+/* ----- Buttons Styling ----- */
 .modal-buttons {
     display: flex;
     justify-content: center; /* Align buttons horizontally */
@@ -245,6 +246,7 @@ section .lead {
         transition: 0.3s;
     }
 
+/* ----- Warning Button ----- */
 .btn-warning {
     background-color: #f0ad4e;
     color: white;
@@ -254,6 +256,7 @@ section .lead {
         background-color: #ec971f;
     }
 
+/* ----- Close Button ----- */
 .close-button {
     position: absolute;
     top: 0px;
@@ -262,6 +265,29 @@ section .lead {
     cursor: pointer;
 }
 
+/* Floating Chat Button */
+.chat-button {
+    position: fixed;
+    bottom: 110px; /* Positioned above the Add Book button */
+    right: 15px;
+    width: 65px;
+    height: 65px;
+    background: linear-gradient(#184d59, #257d77);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+    z-index: 1000;
+}
+
+    /* Hover Effect */
+    .chat-button:hover {
+        transform: scale(1.1);
+    }
 
 .card-text-author {
     font-family: "Times New Roman", Times, serif;
@@ -757,7 +783,29 @@ section .lead {
         align-items: center;
         gap: 10px;
     }
+/* Book details table below image */
+.book-details {
+    width: 100%;
+    margin-top: 15px;
+    background: #f5f5f5;
+    padding: 10px;
+    border-radius: 8px;
+}
 
+    .book-details table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .book-details th {
+        text-align: left;
+        padding: 8px;
+        background: #d3d3d3;
+    }
+
+    .book-details td {
+        padding: 8px;
+    }
         /* Hover effect */
         .suggestions-list li:hover {
             background: linear-gradient(90deg, #007bff, #0056b3);
@@ -866,10 +914,10 @@ section .lead {
 
 /* Book Card */
 .book-card {
-    height: 430px;
-    width: 250px; /* Increase card width */
+    height: 471px;
+    width: 254px; /* Increase card width */
     padding: 0px; /* Add spacing inside */
-    border-radius: 10px; /* Smooth corners */
+    border-radius: px; /* Smooth corners */
     text-align: center;
     position: relative;
     flex-direction: column;
@@ -938,13 +986,21 @@ section .lead {
 
 /* Book Image */
 .book-image {
-    width: 180px; /* Adjust width to make it proportional */
-    height: auto; /* Fixed height */
+    /*display: flex;*/
+    flex-direction: column;
+    align-items: center;
+    width: 200px; /* Adjust width to make it proportional */
+    height: 340px; /* Fixed height */
     object-fit: cover; /* Ensures images don't get stretched */
     border-radius: 5px; /* Slight rounding for better look */
     padding-top: 40px; /* Center the image */
 }
-
+    .book-image img {
+        width: 100%;
+        max-height: 400px;
+        object-fit: cover;
+        border-radius: 10px;
+    }
 /* Card Body */
 .card-body {
     padding: 10px;

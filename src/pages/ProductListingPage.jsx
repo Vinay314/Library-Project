@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Typed from 'typed.js';
 import ProductCard from '../components/ProductCard';
-import { Plus } from "lucide-react";
+import { Plus , BotMessageSquare} from "lucide-react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import './ProductListingPage.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
@@ -17,6 +17,8 @@ import { useLocation } from 'react-router-dom';
 import emptyBookImage from './assets/dislike_9250694.png';
 import AddBookPage from '../components/AddBookPage';
 import UpdateBookPage from '../components/UpdateBookPage';
+import Chatbot from './Chatbot';
+import "./Chatbot.css";
 function ProductListingPage() {
     const [products, setProducts] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
@@ -34,6 +36,7 @@ function ProductListingPage() {
     const [products1, setProducts1] = useState([]);
     const [isUpdateBookModalOpen, setIsUpdateBookModalOpen] = useState(false);
     const [bookToUpdate, setBookToUpdate] = useState(null);
+    const [isChatOpen, setIsChatOpen] = useState(false);
 
 
 
@@ -190,8 +193,7 @@ function ProductListingPage() {
 
 
 
-
-
+    
     const filteredProducts = products.filter((product) =>
         product?.title?.toLowerCase().includes(searchQuery.toLowerCase())
     );
@@ -562,16 +564,20 @@ function ProductListingPage() {
             <button className="add-book-button" onClick={handleAddBook}>
                 <Plus size={30} />
             </button>
+            <button className="chat-button" onClick={() => setIsChatOpen(!isChatOpen)} >
+                <BotMessageSquare size={30} />
+            </button>
+            {isChatOpen && <Chatbot onClose={() => setIsChatOpen(false)}/>}
             {isAddBookModalOpen && (
-                <div className="modal-overlay-add">
-                    <div className="modal-content-add">
+                <div className="modal-overlay-add" onClick={handleCloseAddBookModal}>
+                    <div className="modal-content-add" onClick={(e) => e.stopPropagation()}>
                         <AddBookPage onClose={handleCloseAddBookModal} onBookAdded={handleBookAdded} />
                    </div>
                 </div>
             )}
             {isUpdateBookModalOpen && bookToUpdate && (
-                <div className="modal-overlay-update">
-                    <div className="modal-content-update">
+                <div className="modal-overlay-update" onClick={handleCloseUpdateBookModal}>
+                    <div className="modal-content-update" onClick={(e) => e.stopPropagation()}>
                         <UpdateBookPage
                             book={bookToUpdate}
                             onClose={handleCloseUpdateBookModal}
@@ -581,65 +587,136 @@ function ProductListingPage() {
                 </div>
             )}
             {selectedBook && (
+                //<div className="modal-overlay" onClick={handleCloseModal}>
+                //    <div className="modal-content d-flex" onClick={(e) => e.stopPropagation()}>
+                //        {/* Image Section */}
+                //        <div className="col-md-4 d-flex justify-content-center align-items-start">
+                //            <img
+                //                src={selectedBook.image || 'https://via.placeholder.com/200'}
+                //                alt={selectedBook.title}
+                //                className="img-fluid rounded shadow"
+                //                style={{ maxHeight: '300px' }}
+                //            />
+                //        </div>
+
+                //        {/* Text Section */}
+                //        <div className="col-md-8 d-flex flex-column justify-content-between modal-text">
+                //            <div>
+                //                <h2 className="fw-bold">{selectedBook.title}</h2>
+                //                <p><strong>Author:</strong> {selectedBook.author}</p>
+                //                <p>{selectedBook.description}</p>
+                //            </div>
+
+                //            {/* Button at Bottom */}
+                //            <div className="modal-footer">
+                //                <div className="modal-buttons">
+                //                    {/*<button*/}
+                //                    {/*    type="button"*/}
+                //                    {/*    className="btn btn-warning w-100"*/}
+                //                    {/*    onClick={() => navigate(`/books/${selectedBook.id}`)}*/}
+                //                    {/*>*/}
+                //                    {/*    View More Details*/}
+                //                    {/*</button>*/}
+                //                    {cartItems[selectedBook?.id] ? (
+                //                        <button
+                //                            type="button"
+                //                            className="btn btn-danger w-100"
+                //                            onClick={() => handleRemoveFromCart(selectedBook.id)}
+                //                        >
+                //                            Remove from Cart
+                //                        </button>
+                //                    ) : (
+                //                        <button
+                //                            onClick={() => handleAddToCart(selectedBook)}
+                //                            className="btn btn-success w-100"
+                //                            style={{ backgroundColor: "teal", color: "white" }}
+                //                        >
+                //                            Add to Cart
+                //                        </button>
+                //                    )}
+
+
+                //                </div>
+
+                //            </div>
+
+                //        </div>
+
+                //        <span className="close-button" onClick={handleCloseModal}>&times;</span>
+                //    </div>
+
+                //</div>
                 <div className="modal-overlay">
-                    <div className="modal-content d-flex">
-                        {/* Image Section */}
-                        <div className="col-md-4 d-flex justify-content-center align-items-start">
+                    <div className="modal-content">
+                        {/* Left Side: Image and Book Details */}
+                        <div className="book-image">
+                            {/* Book Image */}
                             <img
                                 src={selectedBook.image || 'https://via.placeholder.com/200'}
                                 alt={selectedBook.title}
-                                className="img-fluid rounded shadow"
-                                style={{ maxHeight: '300px' }}
+                                style={{ width: "65%" }}
                             />
+                            {/* Book Details Table */}
+                            <div className="book-details">
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <th>Title:</th>
+                                            <td>{selectedBook.title}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Author:</th>
+                                            <td>{selectedBook.author}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>ISBN:</th>
+                                            <td>{selectedBook.isbn || 'N/A'}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Region:</th>
+                                            <td>{selectedBook.region || 'N/A'}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Pages:</th>
+                                            <td>{selectedBook.pages || 'N/A'}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
 
-                        {/* Text Section */}
-                        <div className="col-md-8 d-flex flex-column justify-content-between modal-text">
-                            <div>
-                                <h2 className="fw-bold">{selectedBook.title}</h2>
-                                <p><strong>Author:</strong> {selectedBook.author}</p>
-                                <p>{selectedBook.description}</p>
-                            </div>
-
-                            {/* Button at Bottom */}
-                            <div className="modal-footer">
-                                <div className="modal-buttons">
-                                    {/*<button*/}
-                                    {/*    type="button"*/}
-                                    {/*    className="btn btn-warning w-100"*/}
-                                    {/*    onClick={() => navigate(`/books/${selectedBook.id}`)}*/}
-                                    {/*>*/}
-                                    {/*    View More Details*/}
-                                    {/*</button>*/}
-                                    {cartItems[selectedBook?.id] ? (
-                                        <button
-                                            type="button"
-                                            className="btn btn-danger w-100"
-                                            onClick={() => handleRemoveFromCart(selectedBook.id)}
-                                        >
-                                            Remove from Cart
-                                        </button>
-                                    ) : (
-                                        <button
-                                            onClick={() => handleAddToCart(selectedBook)}
-                                            className="btn btn-success w-100"
-                                            style={{ backgroundColor: "teal", color: "white" }}
-                                        >
-                                            Add to Cart
-                                        </button>
-                                    )}
-
-
-                                </div>
-
-                            </div>
-
+                        {/* Right Side: Book Summary */}
+                        <div className="modal-text">
+                            <h2 className="fw-bold">Book Summary</h2>
+                            <p>{selectedBook.description || "No summary available."}</p>
                         </div>
 
+                        {/* Add to Cart Button at Bottom Right */}
+                        <div className="modal-footer">
+                            {cartItems[selectedBook?.id] ? (
+                                <button
+                                    type="button"
+                                    className="place-cart-btn btn-danger"
+                                    onClick={() => handleRemoveFromCart(selectedBook.id)}
+                                >
+                                    Remove from Cart
+                                </button>
+                            ) : (
+                                <button
+                                    onClick={() => handleAddToCart(selectedBook)}
+                                    className="place-cart-btn"
+                                >
+                                    Add to Cart
+                                </button>
+                            )}
+                        </div>
+
+                        {/* Close Button */}
                         <span className="close-button" onClick={handleCloseModal}>&times;</span>
                     </div>
-
                 </div>
+
+
             )}
 
 

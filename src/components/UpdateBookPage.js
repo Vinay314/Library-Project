@@ -1,6 +1,78 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import { User,BookCopy, BookOpen, FileText, Layers,IdCard, Image as ImageIcon, X } from 'lucide-react';
+const styles = {
+    form: {
+        backgroundColor: '#184d59',
+        padding: '50px',
+        borderRadius: '20px',
+        boxShadow: '0 0 10px rgba(255, 255, 255, 0.1)',
+        width: '100%',
+        maxWidth: '650px',
+        display: 'flex',
+        flexDirection: 'column',
+        position: 'relative',
+        background: 'transparent !important',
+        boxShadow: 'none !important',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+
+
+    },
+
+
+    formGroup: {
+        display: 'flex',
+        alignItems: 'center',
+        backgroundColor: 'white',
+        padding: '10px',
+        borderRadius: '5px',
+        marginBottom: '15px',
+        justifyContent: 'space-between',
+
+    },
+    icon: {
+        color: 'black',
+        marginRight: '10px',
+    },
+    input: {
+        backgroundColor: 'white',
+        border: 'none',
+        color: 'black',
+        outline: 'none',
+        flex: 1,
+    },
+    textarea: {
+        backgroundColor: 'white',
+        color: 'black',
+        border: 'none',
+        outline: 'none',
+        flex: 1,
+        height: '50px',
+        resize: 'none',
+    },
+    button: {
+        padding: '10px',
+        backgroundColor: 'teal',
+        color: 'white',
+        border: '100px',
+        borderRadius: '10px',
+        cursor: 'pointer',
+        fontWeight: 'bold',
+        marginTop: '20px',
+        height: '70px',
+    },
+    closeButton: {
+        position: 'absolute',
+        top: '10px',
+        right: '10px',
+        background: 'none',
+        border: 'none',
+        color: '#fff',
+        cursor: 'pointer',
+    },
+};
 const UpdateBookPage = ({ book, onClose, onBookUpdated }) => {
     /*const { id } = useParams();*/ // Get the book ID from URL parameters
     const [title, setTitle] = useState('');
@@ -11,6 +83,7 @@ const UpdateBookPage = ({ book, onClose, onBookUpdated }) => {
     const [availableCopies, setAvailableCopies] = useState(1);
     const navigate = useNavigate();
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isbn, setIsbn] = useState('');
     // Fetch the current book data from the API when the component mounts
     useEffect(() => {
         if (book) {
@@ -19,6 +92,7 @@ const UpdateBookPage = ({ book, onClose, onBookUpdated }) => {
             setCategory(book.category);
             setDescription(book.description);
             setAvailableCopies(book.availableCopies);
+            setIsbn(book.isbn);
             
         }
     }, [book]);  // ? Runs only when book data is received
@@ -33,7 +107,7 @@ const UpdateBookPage = ({ book, onClose, onBookUpdated }) => {
         formData.append('category', category);
         formData.append('description', description);
         formData.append('availableCopies', parseInt(availableCopies, 10));
-
+        formData.append('isbn', isbn);
 
         if (image) {
             formData.append('file', image);
@@ -51,13 +125,31 @@ const UpdateBookPage = ({ book, onClose, onBookUpdated }) => {
                 onBookUpdated(updatedBook); 
                 onClose(); 
 
-                Swal.fire("Success", "Book updated successfully!", "success");
+                Swal.fire({
+                    title: "Success",
+                    text: "Book updated successfully!",
+                    icon: "success",
+                    confirmButtonText: "OK",
+                    confirmButtonColor: "#008080" // Teal color
+                });
             } else {
-                Swal.fire("Error", "Failed to update the book!", "error");
+                Swal.fire({
+                    title: "Error",
+                    text: "Failed to update the book!",
+                    icon: "error",
+                    confirmButtonText: "OK",
+                    confirmButtonColor: "#008080" // Red color for errors
+                });
             }
         } catch (error) {
             console.error('Error updating the book:', error);
-            Swal.fire("Error", "Something went wrong!", "error");
+            Swal.fire({
+                title: "Error",
+                text: "Something went wrong!",
+                icon: "error",
+                confirmButtonText: "OK",
+                confirmButtonColor: "#d33" // Red color for errors
+            });
         }
     };
 
@@ -89,230 +181,74 @@ const UpdateBookPage = ({ book, onClose, onBookUpdated }) => {
     const handleCloseModal = () => {
         setIsModalOpen(false);
     };
+    const handleClose1 = () => {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "Do you want to discard your changes?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, discard",
+            cancelButtonText: "No, keep editing",
+            confirmButtonColor: "#008080"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                onClose(); // Call the actual close function if confirmed
+            }
+        });
+    };
 
     return (
-        <div style={styles.container}>
-            <div style={styles.closeButton} onClick={handleClose}>X</div>
-            <form onSubmit={handleUpdateBook} style={styles.form}>
-                <div style={styles.formGroup}>
-                    <label style={styles.label}>Title:</label>
-                    <input
-                        type="text"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                        style={styles.input}
-                        required
-                    />
-                </div>
-                <div style={styles.formGroup}>
-                    <label style={styles.label}>Author:</label>
-                    <input
-                        type="text"
-                        value={author}
-                        onChange={(e) => setAuthor(e.target.value)}
-                        style={styles.input}
-                        required
-                    />
-                </div>
-                <div style={styles.formGroup}>
-                    <label style={styles.label}>Category:</label>
-                    <select
-                        value={category}
-                        onChange={(e) => setCategory(e.target.value)}
-                        style={styles.input}
-                        required
-                    >
-                        <option value="">Select Category</option>
-                        <option value="Comedy">Comedy</option>
-                        <option value="Adventure">Adventure</option>
-                        <option value="Fictional">Fictional</option>
-                    </select>
-                </div>
-                <div style={styles.formGroup}>
-                    <label style={styles.label}>Description:</label>
-                    <textarea
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                        style={styles.textarea}
-                        required
-                    />
-                </div>
-                <div style={styles.formGroup}>
-                    <label style={styles.label}>Available Copies:</label>
-                    <input
-                        type="number"
-                        value={availableCopies}
-                        onChange={(e) => setAvailableCopies(e.target.value)}
-                        style={styles.input}
-                        required
-                    />
-                </div>
-                <div style={styles.formGroup}>
-                    <label style={styles.label}>Image:</label>
-                    <input
-                        type="file"
-                        onChange={handleImageUpload}
-                        accept="image/*"
-                        style={styles.input}
-                    />
-                    <div style={styles.formGroup}>
-                        <label style={styles.label}>Preview:</label>
-                        <button type="button" onClick={handlePreviewClick} style={styles.previewButton}>
-                            <i className="bi bi-eye"></i>
-                        </button>
-                    </div>
-                </div>
+        <form onSubmit={handleUpdateBook} style={styles.form}>
+            <button type="button" onClick={handleClose1} style={styles.closeButton}>
+                <X size={18} />
+            </button>
 
-                <button type="submit" style={styles.button}>Update Book</button>
-            </form>
+            <h1 style={{ color: 'white', textAlign: 'center', marginBottom: '20px' }}>Update Book</h1>
 
-            {isModalOpen && image && (
-                <div style={styles.modalOverlay}>
-                    <div style={styles.modalContent}>
-                        <span style={styles.modalClose} onClick={handleCloseModal}>&times;</span>
-                        <img src={URL.createObjectURL(image)} alt="Preview" style={styles.modalImage} />
-                    </div>
-                </div>
-            )}
-        </div>
+            <div style={styles.formGroup}>
+                <BookOpen size={18} style={styles.icon} />
+                <input type="text" placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)} style={styles.input} required />
+            </div>
+
+            <div style={styles.formGroup}>
+                <User size={18} style={styles.icon} />
+                <input type="text" placeholder="Author" value={author} onChange={(e) => setAuthor(e.target.value)} style={styles.input} required />
+            </div>
+
+            <div style={styles.formGroup}>
+                <Layers size={18} style={styles.icon} />
+                <select value={category} onChange={(e) => setCategory(e.target.value)} style={styles.input} required>
+                    <option value="">Select Region</option>
+                    <option value="Wilrijk">Wilrijk</option>
+                    <option value="Gecia">Gecia</option>
+                    <option value="Brno">Brno</option>
+                </select>
+            </div>
+
+            <div style={styles.formGroup}>
+                <FileText size={18} style={styles.icon} />
+                <textarea placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} style={styles.textarea} required />
+            </div>
+            <div style={styles.formGroup}>
+                <IdCard size={18} style={styles.icon} />
+                <input type="text" value={isbn} onChange={(e) => setIsbn(e.target.value)} style={styles.input} required />
+            </div>
+            <div style={styles.formGroup}>
+                <BookCopy size={18} style={styles.icon} />
+                <input type="number" value={availableCopies} onChange={(e) => setAvailableCopies(e.target.value)} style={styles.input} required />
+            </div>
+
+            <div style={styles.formGroup}>
+                <ImageIcon size={18} style={styles.icon} />
+                <input type="file" onChange={(e) => setImage(e.target.files[0])} accept="image/*" style={styles.input} />
+            </div>
+
+            <button type="submit" style={styles.button}>Update Book</button>
+        </form>
     );
 };
 
-const styles = {
-    container: {
-        fontFamily: 'Arial, sans-serif',
-        backgroundColor: '#f4f4f4',
-        margin: 0,
-        padding: '20px',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh',
-        position: 'relative',  // Added relative positioning
-    },
-    form: {
-        backgroundColor: '#fff',
-        padding: '20px',
-        borderRadius: '10px',
-        boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
-        width: '400px',
-        display: 'flex',
-        flexDirection: 'column',
-    },
-    formGroup: {
-        marginBottom: '15px',
-    },
-    label: {
-        marginBottom: '5px',
-        fontWeight: 'bold',
-        color: '#333',
-        display: 'block',
-    },
-    input: {
-        padding: '10px',
-        border: '1px solid #ccc',
-        borderRadius: '5px',
-        width: '100%',
-        boxSizing: 'border-box',
-    },
-    textarea: {
-        padding: '10px',
-        border: '1px solid #ccc',
-        borderRadius: '5px',
-        width: '100%',
-        boxSizing: 'border-box',
-        height: '150px',  // Same height as input fields
-        resize: 'none',  // Prevent the user from resizing the textarea
-    },
-    button: {
-        padding: '10px',
-        backgroundColor: '#28a745',
-        color: '#fff',
-        border: 'none',
-        borderRadius: '5px',
-        cursor: 'pointer',
-    },
-    imageContainer: {
-        marginTop: '20px',
-    },
-    image: {
-        width: '100px',
-        height: '100px',
-        objectFit: 'cover',
-        borderRadius: '5px',
-    },
-    closeButton: {
-        position: 'absolute',
-        top: '10px',
-        right: '10px',
-        padding: '5px 10px',
-        color: 'black',
-        border: 'none',
-        borderRadius: '5px',
-        cursor: 'pointer',
-        fontSize: '12px',
-    },
-    button: {
-        padding: '10px',
-        backgroundColor: '#28a745',
-        color: '#fff',
-        border: 'none',
-        borderRadius: '5px',
-        cursor: 'pointer',
-    },
-    previewButton: {
-        padding: '5px 10px',
-        backgroundColor: '#184d59',
-        color: 'white',
-        border: 'none',
-        borderRadius: '5px',
-        cursor: 'pointer',
-        fontSize: '16px',
-    },
-    modalOverlay: {
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        zIndex: 1000,
-    },
-    modalContent: {
-        backgroundColor: '#fff',
-        padding: '20px',
-        borderRadius: '10px',
-        boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
-        position: 'relative',
-        textAlign: 'center',
-    },
-    modalClose: {
-        position: 'absolute',
-        top: '10px',
-        right: '10px',
-        fontSize: '20px',
-        cursor: 'pointer',
-        color: '#ff4d4d',
-    },
-    modalImage: {
-        maxWidth: '400px',
-        maxHeight: '400px',
-        borderRadius: '5px',
-    },
-    closeButton: {
-        position: 'absolute',
-        top: '10px',
-        right: '10px',
-        padding: '5px 10px',
-        color: 'black',
-        border: 'none',
-        borderRadius: '5px',
-        cursor: 'pointer',
-        fontSize: '12px',
-    },
-};
+
+
 
 export default UpdateBookPage;

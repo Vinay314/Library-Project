@@ -66,11 +66,24 @@ function ProductListingPage() {
     const handleAddBook = () => {
         /*navigate("/add-book");*/
         setIsAddBookModalOpen(true);
+        
 
     };
     const handleCloseAddBookModal = () => {
         setIsAddBookModalOpen(false);
+        
     };
+    useEffect(() => {
+        if (isAddBookModalOpen || isUpdateBookModalOpen || selectedBook) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "auto";
+        }
+
+        return () => {
+            document.body.style.overflow = "auto"; // Cleanup function to reset overflow
+        };
+    }, [isAddBookModalOpen, isUpdateBookModalOpen, selectedBook]);
 
 
     useEffect(() => {
@@ -79,7 +92,10 @@ function ProductListingPage() {
                 title: "Book Added!",
                 text: "The book has been successfully added.",
                 icon: "success",
-                confirmButtonColor: "#008080",
+                customClass: {
+                    confirmButton: "swal-custom-ok-button" // Apply teal color to the OK button
+                }
+               
             });
         }
     }, [bookAdded]); 
@@ -87,10 +103,12 @@ function ProductListingPage() {
     const handleEditBook1 = (book) => {
         setBookToUpdate(book);
         setIsUpdateBookModalOpen(true);
+        
     };
     const handleCloseUpdateBookModal = () => {
         setIsUpdateBookModalOpen(false);
         setBookToUpdate(null);
+        
     };
 
     const handleBookUpdated = (updatedBook) => {
@@ -98,8 +116,6 @@ function ProductListingPage() {
             prevBooks.map((book) => (book.id === updatedBook.id ? updatedBook : book))
         );
     };
-
-   
     useEffect(() => {
         window.clearSearch = () => {
             setSearchQuery(""); // Clear searchQuery first
@@ -155,7 +171,8 @@ function ProductListingPage() {
                 text: 'No more available copies',
                 confirmButtonText: 'OK',
                 timer: 3000,  // Auto-close after 3 seconds
-                timerProgressBar: true
+                timerProgressBar: true,
+                confirmButtonColor: '#008080'
             });
         }
     };
@@ -276,7 +293,10 @@ function ProductListingPage() {
                 title: 'Book Updated!',
                 text: 'The book has been successfully edited.',
                 icon: 'success',
-                confirmButtonColor: '#008080',
+                customClass: {
+                    confirmButton: "swal-custom-ok-button" // Apply teal color to the OK button
+                }
+               
             });
 
             // Remove the flag to prevent showing the alert again
@@ -289,8 +309,11 @@ function ProductListingPage() {
             text: `Do you really want to delete "${title}"? This action cannot be undone.`,
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#008080', // Teal color
-            cancelButtonColor: '#d33',
+            customClass: {
+                confirmButton: "swal-custom-ok-button" // Apply teal color to the OK button
+            },
+            
+            cancelButtonColor: 'gray',
             confirmButtonText: 'Yes, delete it!',
         }).then((result) => {
             if (result.isConfirmed) {
@@ -305,7 +328,9 @@ function ProductListingPage() {
                             title: 'Deleted!',
                             text: `Book titled "${title}" has been removed successfully.`,
                             icon: 'success',
-                            confirmButtonColor: '#008080'
+                            customClass: {
+                                confirmButton: "swal-custom-ok-button" // Apply teal color to the OK button
+                            }
                         });
                     })
                     .catch(error => {
@@ -490,7 +515,7 @@ function ProductListingPage() {
                                                     </button>
                                                 </div>
                                             </div>
-
+                                            
                                             {/* Button Container in Top Right */}
                                             {/*<div className="button-container">*/}
                                             {/*    <button onClick={() => handleEditBook(product)} className="edit-btn">*/}
@@ -646,8 +671,8 @@ function ProductListingPage() {
                 //    </div>
 
                 //</div>
-                <div className="modal-overlay">
-                    <div className="modal-content">
+                <div className="modal-overlay" onClick={handleCloseModal}>
+                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                         {/* Left Side: Image and Book Details */}
                         <div className="book-image">
                             {/* Book Image */}
@@ -674,11 +699,11 @@ function ProductListingPage() {
                                         </tr>
                                         <tr>
                                             <th>Region:</th>
-                                            <td>{selectedBook.region || 'N/A'}</td>
+                                            <td>{selectedBook.category || 'N/A'}</td>
                                         </tr>
                                         <tr>
-                                            <th>Pages:</th>
-                                            <td>{selectedBook.pages || 'N/A'}</td>
+                                            <th>Copies:</th>
+                                            <td>{selectedBook.availableCopies || 'N/A'}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -696,7 +721,7 @@ function ProductListingPage() {
                             {cartItems[selectedBook?.id] ? (
                                 <button
                                     type="button"
-                                    className="place-cart-btn btn-danger"
+                                    className="btn btn-sm btn-danger removecart"
                                     onClick={() => handleRemoveFromCart(selectedBook.id)}
                                 >
                                     Remove from Cart

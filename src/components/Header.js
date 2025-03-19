@@ -137,7 +137,19 @@ const Header = ({ searchQuery, setSearchQuery, products }) => {
                     alt="atlascopcogroup"
                 />
             </div>
-            <div className="fw-bold" style={{ display: 'flex', justifyContent: 'center' }}>BrainBank Library Poject</div>
+            <div
+                style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    fontSize: '20px', // Increased size
+                    fontWeight: 'bold',
+                    paddingLeft: '9%', // Moves it more to the right
+                    width: '100%',
+                }}
+            >
+                BrainBank Library Project
+            </div>
+
             {/* Search Bar */}
             {/*<div className="search-container" ref={inputRef}>*/}
             {/*    <input*/}

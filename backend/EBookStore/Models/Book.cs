@@ -8,4 +8,5 @@ public class Book
 	public string Image { get; set; } = string.Empty; // Initialize with default value
 	public int AvailableCopies { get; set; } = 3; // Initialize with default value of 3
 	public string Description {get; set; }=string.Empty;
+	public string ISBN { get; set; } = string.Empty;
 }

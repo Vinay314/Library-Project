@@ -107,14 +107,18 @@ const ShoppingCartPage = () => {
             }));
 
             // Alert the user with a summary before navigating
-            const summaryMessage = `Purchase Summary:\nBorrowing Date: ${today.toDateString()}\nReturn Date: ${returnDate.toDateString()}\n\nThank you for your purchase!`;
-            //alert(summaryMessage);
+            /*const summaryMessage = `Purchase Summary:\n\nBorrowing Date: ${today.toDateString()}\nReturn Date: ${returnDate.toDateString()}\n\nThank you for your purchase!`;*/
+
             Swal.fire({
-                title: "Purchase Summary\n",
-                text: /*`\nBorrowing Date: ${today.toDateString()} \nReturn Date: ${returnDate.toDateString()}\n\n Thank you for your purchase!`*/summaryMessage,
+                title: "Purchase Summary",
+                html: `<p><strong>Borrowing Date:</strong> ${today.toDateString()}</p>
+           <p><strong>Return Date:</strong> ${returnDate.toDateString()}</p>
+           <p>Thank you for your purchase!</p>`,
                 icon: "success",
-                confirmButtonText: "OK"
+                confirmButtonText: "OK",
+                confirmButtonColor:"#008080"
             });
+
 
             // Clear the cart on successful checkout
             dispatch(clearCart());

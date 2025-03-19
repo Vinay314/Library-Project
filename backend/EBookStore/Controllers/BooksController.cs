@@ -13,7 +13,7 @@ namespace YourNamespace.Controllers
     public class BooksController : ControllerBase
     {
         [HttpPost]
-        public async Task<IActionResult> AddBook([FromForm] IFormFile file, [FromForm] string title, [FromForm] string author, [FromForm] string category, [FromForm] decimal price, [FromForm] string description, [FromForm] int availableCopies = 3)
+        public async Task<IActionResult> AddBook([FromForm] IFormFile file, [FromForm] string title, [FromForm] string author, [FromForm] string category, [FromForm] decimal price, [FromForm] string description, [FromForm] string ISBN, [FromForm] int availableCopies = 3)
         {
             if (file == null || file.Length == 0)
             {
@@ -36,7 +36,8 @@ namespace YourNamespace.Controllers
                 //Price = price,
                 Image = "/assets/" + file.FileName,
                 AvailableCopies = availableCopies,
-                Description = description
+                Description = description,
+                ISBN = ISBN,
             };
 
             BookStore.Books.Add(newBook);
@@ -44,7 +45,7 @@ namespace YourNamespace.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateBook(Guid id, [FromForm] IFormFile file, [FromForm] string title, [FromForm] string author, [FromForm] string category, [FromForm] string description, [FromForm] int availableCopies)
+        public async Task<IActionResult> UpdateBook(Guid id, [FromForm] IFormFile file, [FromForm] string title, [FromForm] string author, [FromForm] string category, [FromForm] string description, [FromForm] string isbn, [FromForm] int availableCopies)
         {
             var book = BookStore.Books.FirstOrDefault(b => b.Id == id);
             if (book == null)
@@ -78,6 +79,7 @@ namespace YourNamespace.Controllers
             book.Category = category;
             book.Description = description;
             book.AvailableCopies = availableCopies;
+            book.ISBN = isbn;
 
             return Ok(book);
         }

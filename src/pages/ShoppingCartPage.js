@@ -152,23 +152,24 @@ const ShoppingCartPage = () => {
         <div>
             
             {/* Updated styles for the top-right buttons */}
-            <div ref={buttonsRef} style={styles.topRightButtons}>
-                <Link to="/products">
-                    <button style={styles.continueShoppingButton}>Continue Shopping</button>
-                </Link>
-                <button
-                    onClick={checkout}
-                    style={{
-                        ...styles.checkoutButton,
-                        backgroundColor: cartItems.length === 0 ? 'gray' : 'teal',
-                        cursor: cartItems.length === 0 ? 'not-allowed' : 'pointer'
-                    }}
-                    disabled={cartItems.length === 0}
-                >
-                    Checkout
-                </button>
+            {/*<div ref={buttonsRef} style={styles.topRightButtons}>*/}
+            {/*    <Link to="/products">*/}
+            {/*        <button style={styles.continueShoppingButton}>Continue Shopping</button>*/}
+            {/*    </Link>*/}
+            {/*    <button*/}
+            {/*        onClick={checkout}*/}
+            {/*        style={{*/}
+            {/*            ...styles.checkoutButton,*/}
+            {/*            backgroundColor: cartItems.length === 0 ? 'gray' : 'teal',*/}
+            {/*            cursor: cartItems.length === 0 ? 'not-allowed' : 'pointer'*/}
+            {/*        }}*/}
+            {/*        disabled={cartItems.length === 0}*/}
+            {/*    >*/}
+            {/*        Checkout*/}
+            {/*    </button>*/}
 
-            </div>
+            {/*</div>*/}
+
             {/* Sticky Buttons */}
             {isSticky && (
                 <div style={styles.stickyButtons}>
@@ -180,59 +181,45 @@ const ShoppingCartPage = () => {
                     </button>
                 </div>
             )}
+          
+
+               <div className="cart-container"> {/* Updated class for overall layout */}
             {!checkoutComplete && (
                 <div className="shopping-cart">
                     {cartItems.length > 0 ? (
                         <>
                             {cartItems.map(item => (
-                                <CartItem key={item.id} item={item} />
+                                <div className="outer-cart-item" key={item.id}> {/* Updated layout */}
+                                    <CartItem item={item} />
+                                </div>
                             ))}
                         </>
                     ) : (
-                            <div style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                textAlign: 'center',
-                                padding: '20px'
-                            }}>
-                                <img src={emptyCartImage} alt="No Product" style={{
-                                    width: '150px',
-                                    display: 'block'
-                                }} />
-                                <p style={{
-                                    fontSize: '16px',
-                                    color: '#555',
-                                    marginTop: '10px',
-                                    marginLeft: '20px' // Move text slightly to the right
-                                }}>
-                                    Go find the books you like.....
-                                </p>
-                            </div>
-
-
-
-                    
+                        <div className="empty-cart">
+                            <img src={emptyCartImage} alt="No Product" className="empty-cart-image" />
+                            <p className="empty-cart-text">Go find the books you like.....</p>
+                        </div>
                     )}
                 </div>
             )}
 
             {showSummary && (
-                <div className="purchase-summary" style={styles.summaryStyles}>
-                    <h2 style={{ color: '#007bff' }}>Summary</h2>
+                <div className="purchase-summary">
+                    <h2>Summary</h2>
                     <p>Borrowing Date: {purchaseDate && purchaseDate.toDateString()}</p>
                     <p>Return Date: {returnDate && returnDate.toDateString()}</p>
-                    <ul style={{ paddingLeft: '20px' }}>
+                    <ul>
                         {bookTitles.map((title, index) => (
-                            <li key={index}>
-                                {title}
-                            </li>
+                            <li key={index}>{title}</li>
                         ))}
                     </ul>
-                    <button onClick={() => navigate("/products")} style={styles.backButton}>Back to Books</button>
+                    <button onClick={() => navigate("/products")} className="back-button">Back to Books</button>
                 </div>
             )}
+
+            {/* Action buttons for shopping and checkout */}
+
+        </div>
 
         </div>
     );
@@ -254,17 +241,54 @@ const styles = {
         marginTop: '20px',
         marginRight:'-78px',
     },
+    //stickyButtons: {
+    //    position: 'fixed',
+    //    bottom: '20px',
+    //    right: '-20px',
+    //    display: 'flex',
+    //    gap: '10px',
+    //    background: 'white',
+    //    padding: '10px',
+    //    //borderRadius: '8px',
+    //    //boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+    //},
+    //continueShoppingButton: {
+    //    padding: '12px 20px',
+    //    backgroundColor: 'teal',
+    //    color: 'white',
+    //    border: 'none',
+    //    borderRadius: '5px',
+    //    cursor: 'pointer',
+    //    fontSize: '16px',
+    //    transition: 'background-color 0.3s ease',
+    //    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',  // Add subtle shadow for depth
+    //},
+    //checkoutButton: {
+    //    padding: '12px 20px',
+    //    backgroundColor: 'teal',
+    //    color: 'white',
+    //    marginRight:'5vw',
+    //    border: 'none',
+    //    borderRadius: '5px',
+    //    cursor: 'pointer',
+    //    fontSize: '16px',
+    //    transition: 'background-color 0.3s ease',
+    //    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',  // Add subtle shadow for depth
+    //},
+
     stickyButtons: {
-        position: 'fixed',
-        bottom: '20px',
-        right: '-20px',
+        position: 'fixed',  // Keeps it in the viewport
+        bottom: '20px',     // Positions it near the bottom
+        right: '20px',      // Positions it near the right corner
         display: 'flex',
         gap: '10px',
-        background: 'white',
-        padding: '10px',
-        //borderRadius: '8px',
-        //boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+        background: 'transparent',
+        padding: '12px 15px',
+        borderRadius: '8px', // Optional: Adds smooth edges
+        //boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)', // Adds a slight shadow for visibility
+        zIndex: 1000, // Ensures it stays above other elements
     },
+
     continueShoppingButton: {
         padding: '12px 20px',
         backgroundColor: 'teal',
@@ -274,20 +298,27 @@ const styles = {
         cursor: 'pointer',
         fontSize: '16px',
         transition: 'background-color 0.3s ease',
-        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',  // Add subtle shadow for depth
+        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
     },
+
     checkoutButton: {
         padding: '12px 20px',
         backgroundColor: 'teal',
         color: 'white',
-        marginRight:'5vw',
         border: 'none',
         borderRadius: '5px',
         cursor: 'pointer',
         fontSize: '16px',
         transition: 'background-color 0.3s ease',
-        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',  // Add subtle shadow for depth
+        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
     },
+
+
+
+
+
+
+
     backButton: {
         padding: '10px 20px',
         backgroundColor: '#007bff',

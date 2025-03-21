@@ -58,7 +58,7 @@ section .lead {
 }
 
 /* ----- Main Modal Content ----- */
-.modal-content{
+/*.modal-content{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -72,27 +72,27 @@ section .lead {
     position: relative;
     overflow: hidden;
     height:74%;
-}
+}*/
 
 /* Book Info Container (Centers Image and Details) */
-.book-info-container {
+/*.book-info-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     width: 100%;
-}
+}*/
 /* ----- Book Image Section ----- */
 /* Book Image */
-.book-image img {
-    max-width: 150px; /* Adjust size for responsiveness */
-    height: auto;
+/*.book-image img {
+    max-width: 150px;*/ /* Adjust size for responsiveness */
+    /*height: auto;
     border-radius: 8px;
     margin-bottom: 10px;
-}
+}*/
 
 /* Book Details (Table Styling) */
-.book-details {
+/*.book-details {
     width: 100%;
     background: #f5f5f5;
     padding: 10px;
@@ -108,7 +108,7 @@ section .lead {
     .book-details th, .book-details td {
         padding: 5px;
         text-align: left;
-    }
+    }*/
 /* ----- Text & Details Section ----- */
 /*.modal-text {
     display: flex;
@@ -121,7 +121,7 @@ section .lead {
 }*/
 
 /* Book Summary Styling */
-.modal-text {
+/*.modal-text {
     flex-grow: 1;
     max-height: 60vh;
     overflow-y: auto;
@@ -135,10 +135,10 @@ section .lead {
     word-wrap: break-word;
     white-space: pre-line;
     margin-bottom: 20px;
-}
+}*/
 
 /* ----- Button at Bottom Right ----- */
-.modal-footer {
+/*.modal-footer {
     position: absolute;
     bottom: 10px;
     right: 10px;
@@ -155,7 +155,7 @@ section .lead {
 
     .place-cart-btn:hover {
         background: darkgreen;
-    }
+    }*/
 
 /* ----- Responsive Design ----- */
 /*@media (max-width: 768px) {
@@ -188,7 +188,7 @@ section .lead {
 }*/
 
 /* Responsive Design */
-@media (max-width: 768px) {
+/*@media (max-width: 768px) {
     .modal-content {
         flex-direction: column;
         width: 90%;
@@ -216,7 +216,368 @@ section .lead {
         text-align: center;
         margin-top: 15px;
     }
+}*/
+
+/*.modal-content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: stretch;
+    width: 60%;
+    max-width: 1000px;
+    max-height: 85vh;
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+    height: 55%;
+}*/
+
+/* Book Info Container (Centers Image and Details) */
+/*.book-info-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}*/
+
+/* ----- Book Image Section ----- */
+/* Increased Book Image Size */
+/*.book-image img {
+    max-width: 220px;*/ /* Increased from 150px */
+    /*height: 320px;*/ /* Set a fixed taller height */
+    /*border-radius: 8px;
+    margin-bottom: 10px;
+    object-fit: cover;*/ /* Ensure proper aspect ratio */
+/*}*/
+
+/* ----- Book Details (Table Styling) ----- */
+/* Increased Table Width and Height */
+/*.book-details {
+    width: 110%;*/ /* Increased from 100% */
+    /*background: #f5f5f5;
+    padding: 15px;*/ /* Increased padding for better spacing */
+    /*border-radius: 8px;
+    text-align: center;
+    min-height: 200px;*/ /* Increased height for better structure */
+    /*height: 70%;
+}*/
+
+    /* Table Inside Book Details */
+    /*.book-details table {
+        width: 100%;
+        border-collapse: collapse;
+    }*/
+
+    /* Increased Padding in Table Cells */
+    /*.book-details th, .book-details td {
+        padding: 10px;*/ /* Increased from 5px */
+        /*text-align: left;
+        font-size: 16px;*/ /* Made text slightly larger */
+    /*}*/
+
+
+/* ----- Separate Book Image Styling ----- */
+/*.book-image-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 30%;*/ /* Adjusted width */
+    /*margin-right: 20px;
+}*/
+
+/* Increased Book Image Size */
+/*.book-image {
+    max-width: 200px;*/ /* Increased width */
+    /*height: 280px;*/ /* Increased height */
+    /*border-radius: 8px;
+    object-fit: cover;
+}*/
+
+/* ----- Book Details (Table Styling) ----- */
+/*.book-details {
+    width: 100%;
+    background: #f8f8f8;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: left;
+    min-height: 200px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+}*/
+
+    /* Table Inside Book Details */
+    /*.book-details table {
+        width: 100%;
+        border-collapse: collapse;
+    }*/
+
+    /* Increased Padding in Table Cells */
+    /*.book-details th, .book-details td {
+        padding: 12px;
+        border-bottom: 1px solid #ddd;
+        font-size: 16px;
+    }
+
+    .book-details th {
+        background-color: #ddd;
+        font-weight: bold;
+    }*/
+
+
+
+
+
+/* ----- Text & Details Section ----- */
+/*.modal-text {
+    flex-grow: 1;
+    max-height: 60vh;
+    overflow-y: auto;
+    padding: 10px;
+    text-align: justify;
+    margin-left: 15px;
+    margin-bottom: 15px;
+    width:
 }
+
+.formatted-summary {
+    word-wrap: break-word;
+    white-space: pre-line;
+    margin-bottom: 20px;
+}*/
+
+/* ----- Button at Bottom Right ----- */
+/*.modal-footer {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}
+
+.place-cart-btn {
+    background: #184d59;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 12px;
+    margin-bottom: 10px;
+}
+
+    .place-cart-btn:hover {
+        background: darkgreen;
+    }*/
+
+/* ----- Responsive Design ----- */
+/*@media (max-width: 768px) {
+    .modal-content {
+        flex-direction: column;
+        width: 90%;
+        max-height: 90vh;
+        overflow-y: auto;
+        height: 60%;
+    }
+
+    .book-info-container {
+        flex-direction: column;
+        align-items: center;
+    }*/
+
+    /* Adjusted Image Size for Small Screens */
+    /*.book-image img {
+        max-width: 180px;
+        height: 260px;
+    }*/
+
+    /* Adjusted Table Styling for Small Screens */
+    /*.book-details {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .modal-text {
+        max-height: 50vh;
+        margin-bottom: 55px;
+    }
+
+    .modal-footer {
+        position: static;
+        text-align: center;
+        margin-top: 15px;
+    }
+}*/
+
+
+/* ----- Modal Content Layout ----- */
+.modal-content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: stretch;
+    width: 60%;
+    max-width: 1000px;
+    max-height: 85vh;
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+    height: 55%;
+}
+
+/* ----- Book Info Container (Centers Image and Details) ----- */
+.book-info-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+/* ----- Separate Book Image Section ----- */
+.book-image-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 35%; /* Adjusted width for better alignment */
+    margin-right: 20px;
+}
+
+/* ----- Increased Book Image Size ----- */
+.book-image img {
+    max-width: 220px; /* Increased from 200px */
+    height: 320px; /* Increased from 280px */
+    border-radius: 8px;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+/* ----- Book Details (Table Styling) ----- */
+.book-details {
+    width: 100%;
+    background: #f8f8f8;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: left;
+    min-height: 200px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+    /* Table Inside Book Details */
+    .book-details table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    /* Increased Padding in Table Cells */
+    .book-details th, .book-details td {
+        padding: 12px;
+        border-bottom: 1px solid #ddd;
+        font-size: 16px;
+    }
+
+    .book-details th {
+        background-color: #ddd;
+        font-weight: bold;
+    }
+
+/* ----- Text & Details Section ----- */
+.modal-text {
+    flex-grow: 1;
+    max-height: 60vh;
+    overflow-y: auto;
+    padding: 10px;
+    text-align: justify;
+    margin-left: 15px;
+    margin-bottom: 15px;
+}
+
+.formatted-summary {
+    word-wrap: break-word;
+    white-space: pre-line;
+    margin-bottom: 20px;
+}
+
+/* ----- Button at Bottom Right ----- */
+.modal-footer {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}
+
+.place-cart-btn {
+    background: #184d59;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 12px;
+    margin-bottom: 10px;
+}
+
+    .place-cart-btn:hover {
+        background: darkgreen;
+    }
+
+/* ----- Responsive Design Adjustments ----- */
+@media (max-width: 768px) {
+    .modal-content {
+        flex-direction: column;
+        width: 90%;
+        max-height: 90vh;
+        overflow-y: auto;
+        height: 60%;
+    }
+
+    .book-info-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    /* Adjusted Image Size for Small Screens */
+    .book-image img {
+        max-width: 180px;
+        height: 260px;
+    }
+
+    /* Adjusted Table Styling for Small Screens */
+    .book-details {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .modal-text {
+        max-height: 50vh;
+        margin-bottom: 55px;
+    }
+
+    .modal-footer {
+        position: static;
+        text-align: center;
+        margin-top: 15px;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /* ----- Update Modal Styling ----- */
 .modal-overlay-update {
@@ -978,8 +1339,8 @@ section .lead {
 
 /* Book Card */
 .book-card {
-    height: 471px;
-    width: 254px; /* Increase card width */
+    height: 525px;
+    width: 300px; /* Increase card width */
     padding: 0px; /* Add spacing inside */
     border-radius: 2px; /* Smooth corners */
     text-align: center;
@@ -987,6 +1348,8 @@ section .lead {
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding: 20px;
+
     /*   justify-content:center;*/
 }
 
@@ -1073,11 +1436,12 @@ section .lead {
     object-fit: cover; /* Ensures images don't get stretched */
     border-radius: 10px; /* Slight rounding for better look */
     /*padding-top: 40px;*/ /* Center the image */
+    margin-top:30px;
 }
 
     .book-image img {
-        width: 100%; /* Ensures responsiveness */
-        max-width: 300px; /* Sets a reasonable max width */
+        width: 88%; /* Ensures responsiveness */
+        /*max-width: 300px;*/ /* Sets a reasonable max width */
         height: auto; /* Maintains aspect ratio */
         object-fit: cover;
         border-radius: 10px; /* Keeps rounded corners */
@@ -1088,7 +1452,7 @@ section .lead {
 .card-body {
     padding: 10px;
     text-align: center;
-    margin-top: 20px;
+    margin-top: -2px;
 }
 
 .card-title {

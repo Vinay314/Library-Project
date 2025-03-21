@@ -273,7 +273,13 @@ function ProductListingPage() {
         navigate(`/update-book/${product.id}`);
         localStorage.setItem("bookUpdated", "true");
     };
-    useEffect(() => {
+
+
+
+    {/*
+        RIGHT CLICK DISABLED CODE
+
+        useEffect(() => {
         const disableRightClick = (event) => {
             if (selectedBook || isAddBookModalOpen || isUpdateBookModalOpen) {
                 event.preventDefault();
@@ -285,7 +291,17 @@ function ProductListingPage() {
         return () => {
             document.removeEventListener("contextmenu", disableRightClick);
         };
+
+
+
     }, [selectedBook, isAddBookModalOpen, isUpdateBookModalOpen]);
+    
+    
+    */}
+    
+
+
+
 
     useEffect(() => {
         if (localStorage.getItem("bookUpdated") === "true") {
@@ -347,6 +363,10 @@ function ProductListingPage() {
     };
 
 
+
+
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     return (
         <>

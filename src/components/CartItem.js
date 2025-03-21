@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { REMOVE_FROM_CART, INCREASE_QUANTITY, DECREASE_QUANTITY } from '../store/actions';
 import { useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import './CartItem.css';
 
 const CartItem = ({ item }) => {
     const dispatch = useDispatch();
@@ -84,131 +85,145 @@ const CartItem = ({ item }) => {
     };
 
     return (
-        <div
-            style={{ ...styles.cartItem, ...(isHovered ? styles.cartItemHover : {}) }}
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-        >
-            <img src={item.image} alt={item.name} style={styles.cartItemImage} />
+        //<div
+        //    style={{ ...styles.cartItem, ...(isHovered ? styles.cartItemHover : {}) }}
+        //    onMouseEnter={() => setIsHovered(true)}
+        //    onMouseLeave={() => setIsHovered(false)}
+        //>
+        //    <img src={item.image} alt={item.name} style={styles.cartItemImage} />
 
-            <div style={styles.cartItemDetails}>
-                <div style={styles.textContainer}>
-                    <p style={styles.itemName}>{item.name}</p>
-                    <p style={styles.title}>Title: {title}</p>
-                    <p style={styles.author}>Author: {author}</p>
+        //    <div style={styles.cartItemDetails}>
+        //        <div style={styles.textContainer}>
+        //            <p style={styles.itemName}>{item.name}</p>
+        //            <p style={styles.title}>Title: {title}</p>
+        //            <p style={styles.author}>Author: {author}</p>
+        //            <p style={styles.author}>Date of Return: {author}</p>
+        //        </div>
+
+
+
+
+
+        //        <div style={styles.buttonsContainer}>
+        //            <button onClick={handleDecreaseBook} style={styles.button}>-</button>
+        //            <button style={styles.quantityButton}>{item.quantity}</button>
+        //            <button onClick={handleIncreaseBook} style={styles.button}>+</button>
+        //            <button onClick={handleRemoveBook} style={styles.removeButtonBottom}>Remove</button>
+        //        </div>
+        //    </div>
+
+
+        //</div>
+
+        //<div
+        //    className={`inner-cart-item ${isHovered ? 'cart-item-hover' : ''}`} // Apply CSS class for hover effect
+        //    onMouseEnter={() => setIsHovered(true)}
+        //    onMouseLeave={() => setIsHovered(false)}
+        //>
+
+        <div className="inner-cart-item">
+
+
+            {/* Book Image */}
+            <img src={item.image} alt={item.name} className="cart-item-image" />
+
+            <div className="cart-item-details">
+                {/* Book Information */}
+                <div className="text-container">
+                    <p className="item-name">{item.name}</p>
+                    <p className="title">Title: {title}</p>
+                    <p className="author">Author: {author}</p>
+                    <p className="date-info">Date of Return: {author}</p> {/* Applied date-info class */}
                 </div>
-                <div style={styles.buttonsContainer}>
-                    <button onClick={handleDecreaseBook} style={styles.button}>-</button>
-                    <button style={styles.quantityButton}>{item.quantity}</button>
-                    <button onClick={handleIncreaseBook} style={styles.button}>+</button>
-                    <button onClick={handleRemoveBook} style={styles.removeButtonBottom}>Remove</button>
+
+                {/* Action Buttons */}
+                <div className="buttons-container">
+                    <button onClick={handleDecreaseBook} className="button">-</button>
+                    <button className="quantity-button">{item.quantity}</button>
+                    <button onClick={handleIncreaseBook} className="button">+</button>
+                    <button onClick={handleRemoveBook} className="remove-button">Remove</button>
                 </div>
             </div>
 
-            
+
         </div>
     );
 };
 
-const styles = {
+//const styles = {
+//    cartItem: {
+//        display: 'flex',
+//        flexDirection: 'row',
+//        alignItems: 'center',
+//        justifyContent: 'center',
+//        width: '100%', // Changed from 190% to 100% for better layout
+//        padding: '15px', // Kept a single padding definition
+//        marginBottom: '10px', // Unified the marginBottom property
+//        borderRadius: '10px',
+//        height: '100%',
+//        backgroundColor: 'white',
+//        boxShadow: '2px 2px 10px rgba(0, 0, 0, 0.1)', // Soft shadow
+//        border: '1px solid #ddd', // Light border
+//    },
 
-    cartItem: {
-        display: 'flex',
-        flexDirection: 'row', // Horizontal layout
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        width: '100%',
-       /* borderBottom: '1px solid #ddd',*/
-        padding: '10px',  // Reduce padding to decrease height
-        marginBottom: '10px', // Reduce spacing between items
-    },
-    cartItemHover: {
-        borderRadius: '20px',
-        border: '4px solid lightgrey', // Teal border on hover
-    },
-    parentContainer: {
-        display: 'flex',
-        flexDirection: 'column',  // Force each item to be in a new line
-        width: '100%',
-    },
 
-    cartItemImage: {
-        width: '80px',
-        height: 'auto',
-        borderRadius: '5px',
-        marginRight: '15px',
-    },
+  
 
-    cartItemDetails: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'flex-start', // Align text to the left
-        flexGrow: 1, // Take remaining space
-    },
+//    cartItemImage: {
+//        width: '70px', // Reduced image size
+//        height: 'auto',
+//        borderRadius: '5px',
+//        marginRight: '25px', // Increased spacing between image and details
+//    },
+//    cartItemDetails: {
+//        display: 'flex',
+//        flexDirection: 'row',
+//        alignItems: 'center',
+//        justifyContent: 'space-between',
+//        flexGrow: 1,
+//        gap: '30px', // Increased gap between details and buttons
+//    },
+//    textContainer: {
+//        display: 'flex',
+//        flexDirection: 'column',
+//        alignItems: 'flex-start',
+//    },
+//    buttonsContainer: {
+//        display: 'flex',
+//        flexDirection: 'row',
+//        alignItems: 'center',
+//        justifyContent: 'center',
+//        gap: '15px', // Increased spacing between buttons
+//    },
+//    button: {
+//        padding: '8px 12px',
+//        backgroundColor: '#f0f0f0',
+//        color: '#333',
+//        border: '1px solid #ccc',
+//        borderRadius: '5px',
+//        cursor: 'pointer',
+//        fontSize: '16px',
+//        transition: 'background-color 0.3s ease',
+//    },
+//    quantityButton: {
+//        padding: '8px 12px',
+//        backgroundColor: '#f0f0f0',
+//        color: '#333',
+//        border: '1px solid #ccc',
+//        borderRadius: '5px',
+//        fontSize: '16px',
+//    },
+//    removeButtonBottom: {
+//        padding: '8px 12px', // Increased button padding
+//        backgroundColor: '#dc3545',
+//        color: 'white',
+//        border: 'none',
+//        borderRadius: '5px',
+//        cursor: 'pointer',
+//        fontSize: '14px',
+//        marginleft: '62px',
+//    },
+//};
 
-    textContainer: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'flex-start', 
-    },
-
-    itemName: {
-        fontSize: '18px',
-        fontWeight: 'bold',
-        color: '#333',
-    },
-
-    author: {
-        fontSize: '16px',
-        color: '#555',
-        fontWeight: 'bold',
-        marginTop: '4px',
-    },
-
-    title: {
-        fontSize: '16px',
-        color: '#555',
-        fontWeight: 'bold',
-        marginTop: '4px',
-    },
-
-    buttonsContainer: {
-        display: 'flex',
-        gap: '10px',
-        alignItems: 'center',
-        marginLeft: 'auto', // Push to right corner
-        marginBottom: '25px',
-    },
-
-    button: {
-        padding: '8px 12px',
-        backgroundColor: '#f0f0f0',
-        color: '#333',
-        border: '1px solid #ccc',
-        borderRadius: '5px',
-        cursor: 'pointer',
-        fontSize: '16px',
-        transition: 'background-color 0.3s ease',
-    },
-
-    quantityButton: {
-        padding: '8px 12px',
-        backgroundColor: '#f0f0f0',
-        color: '#333',
-        border: '1px solid #ccc',
-        borderRadius: '5px',
-        fontSize: '16px',
-    },
-
-    removeButtonBottom: {
-        padding: '6px 10px',
-        backgroundColor: '#dc3545',
-        color: 'white',
-        border: 'none',
-        borderRadius: '5px',
-        cursor: 'pointer',
-        fontSize: '14px',
-    },
-};
 
 export default CartItem;

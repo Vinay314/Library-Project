@@ -8,7 +8,7 @@ import { useMsal, useMsalAuthentication } from '@azure/msal-react';
 import { InteractionRequiredAuthError, InteractionType } from '@azure/msal-browser';
 
 import axios from 'axios';
-const Header = ({ searchQuery, setSearchQuery, products }) => {
+const Header = ({ searchQuery, setSearchQuery, products ,onOpenAbout}) => {
     const [filteredSuggestions, setFilteredSuggestions] = useState([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [highlightedIndex, setHighlightedIndex] = useState(-1);
@@ -217,7 +217,8 @@ const Header = ({ searchQuery, setSearchQuery, products }) => {
                                     {window.location.pathname === "/about" ? (
                                         <li onClick={() => navigate("/")}>Home</li>
                                     ) : (
-                                        <li onClick={() => navigate("/about")}>About</li>
+                                            <li onClick= { onOpenAbout }>About</li>
+
                                     )}
                                     <li onClick={() => signOutClickHandler(instance)}>Logout</li>
                                 </ul>

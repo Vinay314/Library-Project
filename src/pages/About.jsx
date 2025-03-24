@@ -1,5 +1,5 @@
 import React from "react";
-import img1 from "../pages/atlascopco/R.jpg"
+
 const AboutUs = () => {
     return (
         <div style={styles.container}>
@@ -26,6 +26,7 @@ const AboutUs = () => {
 };
 
 const styles = {
+   
     container: {
         position: "relative",
         width: "100%",
@@ -38,17 +39,22 @@ const styles = {
     backgroundImage: {
         position: "absolute",
         inset: 0,
-        backgroundImage: `url(${img1})`, // Replace with actual image path
+        width: "100%",
+        height: "100%", // Ensure height is explicitly set
+        backgroundImage: `url(${require("../pages/atlascopco/R.jpg")})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
-        zIndex: -2,
+        backgroundRepeat: "no-repeat",
+        zIndex: 0,
     },
     overlay: {
         position: "absolute",
         inset: 0,
+        width: "100%",
+        height: "100%",
         background: "linear-gradient(to right, rgba(0, 100, 100, 0.85), rgba(100, 200, 200, 0.85))",
         clipPath: "polygon(0 0, 100% 0, 100% 100%, 30% 100%)",
-        zIndex: -1,
+        
     },
     content: {
         position: "relative",
@@ -62,9 +68,10 @@ const styles = {
         fontSize: "2.5rem",
         fontWeight: "bold",
         marginBottom: "10px",
+        color:'white',
     },
     highlight: {
-        color: "#e0e0e0",
+        color: "white",
     },
     divider: {
         width: "60px",
@@ -75,7 +82,9 @@ const styles = {
     text: {
         fontSize: "1.2rem",
         lineHeight: "1.6",
+        color:'white'
     },
+
 };
 
 export default AboutUs;

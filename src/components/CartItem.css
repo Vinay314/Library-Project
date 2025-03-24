@@ -303,7 +303,8 @@
     /*color: white;*/ /* Ensure all text inside is white */
 
 /*    background-color: #1C2938;*/
-    background-color: rgba(28, 41, 56, 0.585); /* Dark navy blue for better contrast */
+    /*background-color: rgba(28, 41, 56, 0.585);*/ /* Dark navy blue for better contrast */
+    background-color:#f0f0f0;
     box-shadow: 2px 2px 10px #0396FF rgba(0, 0, 0, 0.1);
     border: 1px solid #2C3E50; /* Subtle contrast */
     color: white; /* Ensure text is clearly visible */
@@ -355,21 +356,21 @@
     font-weight: bold;
     font-size: 17px;
     /*    color: #333;*/
-    color: white;
+    color: black;
 }
 
 .author {
     font-weight: bold;
     font-size: 17px;
     /*    color: #555;*/
-    color: white;
+    color: black;
     font-weight: 600;
 }
 
 .date-info {
     font-weight: bold;
     font-size: 17px;
-    color: white;
+    color: black;
     font-weight: bold;
     margin-top: 5px;
 }
@@ -389,7 +390,7 @@
     padding: 8px 12px;
     background-color: #f0f0f0;
     color: #333;
-    border: 1px solid #ccc;
+    border: 4px solid #008080;
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
@@ -417,6 +418,66 @@
         background: darkred;
     }
 
+.purchase-summary {
+    max-width: 600px; /* Increased width */
+    margin: 50px auto;
+    padding: 30px; /* More padding for better spacing */
+    border: 3px solid teal; /* Thicker teal border */
+    border-radius: 12px;
+    background: #f8f9fa;
+    box-shadow: 0 6px 15px rgba(0, 128, 128, 0.3);
+    text-align: center;
+}
+
+.summary-title {
+    color: teal;
+    font-size: 28px; /* Increased font size */
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.summary-text {
+    font-size: 20px; /* Increased text size */
+    color: #333;
+    margin: 10px 0;
+}
+
+.summary-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 15px 0;
+}
+
+.summary-item {
+    font-size: 18px; /* Increased font size */
+    color: #555;
+    padding: 8px 0;
+    border-bottom: 2px solid teal; /* Slightly thicker separator */
+}
+
+    .summary-item:last-child {
+        border-bottom: none;
+    }
+
+.back-button {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 15px 25px; /* Larger button */
+    background-color: teal;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px; /* Bigger font */
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 5px 10px rgba(0, 128, 128, 0.3);
+}
+
+    .back-button:hover {
+        background-color: #006666;
+        transform: scale(1.08);
+    }
 
 
 

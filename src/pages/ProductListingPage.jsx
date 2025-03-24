@@ -19,6 +19,7 @@ import AddBookPage from '../components/AddBookPage';
 import UpdateBookPage from '../components/UpdateBookPage';
 import Chatbot from './Chatbot';
 import "./Chatbot.css";
+import AboutUs from "./About";
 function ProductListingPage() {
     const [products, setProducts] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
@@ -37,8 +38,14 @@ function ProductListingPage() {
     const [isUpdateBookModalOpen, setIsUpdateBookModalOpen] = useState(false);
     const [bookToUpdate, setBookToUpdate] = useState(null);
     const [isChatOpen, setIsChatOpen] = useState(false);
+    const [isAboutModalOpen, setIsAboutModalOpen] = useState(false);
+    const handleOpenAboutModal = () => {
+        setIsAboutModalOpen(true);
+    };
 
-
+    const handleCloseAboutModal = () => {
+        setIsAboutModalOpen(false);
+    };
 
     const handleSearchChange = (e) => {
         const value = e.target.value;
@@ -74,7 +81,7 @@ function ProductListingPage() {
         
     };
     useEffect(() => {
-        if (isAddBookModalOpen || isUpdateBookModalOpen || selectedBook) {
+        if (isAddBookModalOpen || isUpdateBookModalOpen || selectedBook || isAboutModalOpen) {
             document.body.style.overflow = "hidden";
         } else {
             document.body.style.overflow = "auto";
@@ -83,7 +90,7 @@ function ProductListingPage() {
         return () => {
             document.body.style.overflow = "auto"; // Cleanup function to reset overflow
         };
-    }, [isAddBookModalOpen, isUpdateBookModalOpen, selectedBook]);
+    }, [isAddBookModalOpen, isUpdateBookModalOpen, selectedBook, isAboutModalOpen]);
 
 
     useEffect(() => {
@@ -319,16 +326,15 @@ function ProductListingPage() {
             localStorage.removeItem("bookUpdated");
         }
     }, []);
-    const removeBookByTitle = (title) => {
+    const removeBookByTitle = (title, productId) => {
         Swal.fire({
             title: `Are you sure?`,
             text: `Do you really want to delete "${title}"? This action cannot be undone.`,
             icon: 'warning',
             showCancelButton: true,
             customClass: {
-                confirmButton: "swal-custom-ok-button" // Apply teal color to the OK button
+                confirmButton: "swal-custom-ok-button"
             },
-            
             cancelButtonColor: 'gray',
             confirmButtonText: 'Yes, delete it!',
         }).then((result) => {
@@ -339,15 +345,43 @@ function ProductListingPage() {
                         return response.json();
                     })
                     .then(() => {
-                        setProducts(products.filter(product => product.title.toLowerCase() !== title.toLowerCase()));
+                        // Remove from product list
+                        setProducts((prevProducts) =>
+                            prevProducts.filter(product => product.title.toLowerCase() !== title.toLowerCase())
+                        );
+
+                        // Remove from cart (Redux + LocalStorage)
+                        const storedCart = JSON.parse(localStorage.getItem("cartItems")) || {};
+
+                        // Find the book ID that matches the title in localStorage
+                        const bookToDeleteKey = Object.keys(storedCart).find(
+                            key => storedCart[key]?.title?.toLowerCase() === title.toLowerCase()
+                        );
+
+                        if (bookToDeleteKey) {
+                            delete storedCart[bookToDeleteKey]; // Remove from localStorage
+                            localStorage.setItem("cartItems", JSON.stringify(storedCart));
+
+                            dispatch(removeFromCart(bookToDeleteKey)); // Remove from Redux store
+                        }
+
+                        // **Trigger Re-render by updating state**
+                        setCartItems({ ...storedCart });
+
+                        // Call the function to remove from cart
+                        if (productId) {
+                            handleRemoveFromCart(productId);
+                        }
+
                         Swal.fire({
                             title: 'Deleted!',
                             text: `Book titled "${title}" has been removed successfully.`,
                             icon: 'success',
                             customClass: {
-                                confirmButton: "swal-custom-ok-button" // Apply teal color to the OK button
+                                confirmButton: "swal-custom-ok-button"
                             }
                         });
+
                     })
                     .catch(error => {
                         console.error('Error removing book:', error);
@@ -366,14 +400,16 @@ function ProductListingPage() {
 
 
 
+
+
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     return (
         <>
 
-            <Header searchQuery={searchQuery} setSearchQuery={setSearchQuery} products={products} />
+            <Header searchQuery={searchQuery} setSearchQuery={setSearchQuery} products={products} onOpenAbout={handleOpenAboutModal} />
 
-            <div className={`container-fluid full-page-container ${darkMode ? 'bg-dark text-white' : 'bg-light text-dark'} ${selectedBook ? 'blur-background' : ''} ${isAddBookModalOpen ? 'blur-background' : ''} ${isUpdateBookModalOpen ? 'blur-background' : ''}`}>
+            <div className={`container-fluid full-page-container ${darkMode ? 'bg-dark text-white' : 'bg-light text-dark'} ${selectedBook ? 'blur-background' : ''} ${isAddBookModalOpen ? 'blur-background' : ''} ${isUpdateBookModalOpen ? 'blur-background' : ''} ${isAboutModalOpen ? 'blur-background' : ''}`}>
 
                 {/* Navbar */}
 
@@ -519,7 +555,7 @@ function ProductListingPage() {
                                                     </button>
                                                     
 
-                                                    <button onClick={() => removeBookByTitle(product.title)} className="dropdown-item">
+                                                    <button onClick={() => removeBookByTitle(product.title, product.id)} className="dropdown-item">
                                                         <i className="bi bi-trash3"></i> Delete
                                                     </button>
                                                     <button
@@ -628,6 +664,14 @@ function ProductListingPage() {
                             onClose={handleCloseUpdateBookModal}
                             onBookUpdated={handleBookUpdated}
                         />
+                    </div>
+                </div>
+            )}
+            {isAboutModalOpen && (
+                <div className="modal-overlay" onClick={handleCloseAboutModal}>
+                    <div className="modal-content-about" onClick={(e) => e.stopPropagation()}>
+                        <AboutUs />
+                        <button className="close-button" onClick={handleCloseAboutModal}>&times;</button>
                     </div>
                 </div>
             )}

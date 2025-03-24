@@ -20,8 +20,9 @@ const ShoppingCartPage = () => {
     const navigate = useNavigate();
     const [title, setTitle] = useState('');
     const [bookTitles, setBookTitles] = useState([]);
-    const [isSticky, setIsSticky] = useState(false);
-    const buttonsRef = useRef(null);
+    
+   
+    const validCartItems = cartItems.filter(item => item?.title !== undefined && item?.title !== null);
 
     const { id } = useParams();
     useEffect(() => {
@@ -33,24 +34,10 @@ const ShoppingCartPage = () => {
         }
     }, [id]);
 
+   
     useEffect(() => {
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                setIsSticky(!entry.isIntersecting);
-            },
-            { root: null, threshold: 0 }
-        );
-
-        if (buttonsRef.current) {
-            observer.observe(buttonsRef.current);
-        }
-
-        return () => {
-            if (buttonsRef.current) {
-                observer.unobserve(buttonsRef.current);
-            }
-        };
-    }, []);
+    console.log("Current Cart Items in ShoppingCartPage:", cartItems);
+}, [cartItems]);
 
     const calculateReturnDate = (date) => {
         let returnDate = new Date(date);
@@ -171,7 +158,7 @@ const ShoppingCartPage = () => {
             {/*</div>*/}
 
             {/* Sticky Buttons */}
-            {isSticky && (
+             
                 <div style={styles.stickyButtons}>
                     <Link to="/products">
                         <button style={styles.continueShoppingButton}>Continue Shopping</button>
@@ -180,42 +167,51 @@ const ShoppingCartPage = () => {
                         Checkout
                     </button>
                 </div>
-            )}
+            
           
 
                <div className="cart-container"> {/* Updated class for overall layout */}
             {!checkoutComplete && (
-                <div className="shopping-cart">
-                    {cartItems.length > 0 ? (
-                        <>
-                            {cartItems.map(item => (
-                                <div className="outer-cart-item" key={item.id}> {/* Updated layout */}
+                    <div className="shopping-cart">
+                        {validCartItems.length > 0 ? (
+                            validCartItems.map(item => (
+                                <div className="outer-cart-item" key={item.id}>
                                     <CartItem item={item} />
                                 </div>
-                            ))}
-                        </>
-                    ) : (
-                        <div className="empty-cart">
-                            <img src={emptyCartImage} alt="No Product" className="empty-cart-image" />
-                            <p className="empty-cart-text">Go find the books you like.....</p>
-                        </div>
-                    )}
-                </div>
+                            ))
+                        ) : (
+                            <div className="empty-cart">
+                                    <img
+                                        src={emptyCartImage}
+                                        alt="No Product"
+                                        style={{ width: "150px", height: "auto", display: "block" }}
+                                    />
+
+                                <p className="empty-cart-text">Go find the books you like.....</p>
+                            </div>
+                        )}
+                    </div>
             )}
 
-            {showSummary && (
-                <div className="purchase-summary">
-                    <h2>Summary</h2>
-                    <p>Borrowing Date: {purchaseDate && purchaseDate.toDateString()}</p>
-                    <p>Return Date: {returnDate && returnDate.toDateString()}</p>
-                    <ul>
-                        {bookTitles.map((title, index) => (
-                            <li key={index}>{title}</li>
-                        ))}
-                    </ul>
-                    <button onClick={() => navigate("/products")} className="back-button">Back to Books</button>
-                </div>
-            )}
+                {showSummary && (
+                    <div className="purchase-summary">
+                        <h2 className="summary-title">Summary</h2>
+                        <p className="summary-text">
+                            <strong>Borrowing Date:</strong> {purchaseDate && purchaseDate.toDateString()}
+                        </p>
+                        <p className="summary-text">
+                            <strong>Return Date:</strong> {returnDate && returnDate.toDateString()}
+                        </p>
+                        <ul className="summary-list">
+                            {bookTitles.map((title, index) => (
+                                <li key={index} className="summary-item">{title}</li>
+                            ))}
+                        </ul>
+                        <button onClick={() => navigate("/products")} className="back-button">
+                            Back to Books
+                        </button>
+                    </div>
+                )}
 
             {/* Action buttons for shopping and checkout */}
 
@@ -239,7 +235,7 @@ const styles = {
         justifyContent: 'flex-end',
         gap: '20px',
         marginTop: '20px',
-        marginRight:'-78px',
+        marginRight: '-78px',
     },
     //stickyButtons: {
     //    position: 'fixed',
@@ -275,7 +271,7 @@ const styles = {
     //    transition: 'background-color 0.3s ease',
     //    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',  // Add subtle shadow for depth
     //},
-
+    
     stickyButtons: {
         position: 'fixed',  // Keeps it in the viewport
         bottom: '20px',     // Positions it near the bottom

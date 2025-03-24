@@ -13,9 +13,10 @@ const CartItem = ({ item }) => {
     const cartItems = useSelector(state => state.cart.items);
     const cartItem = cartItems.find(cartItem => cartItem.id === item?.id);
     const [isHovered, setIsHovered] = React.useState(false);
-
+    const [purchaseDate, setPurchaseDate] = useState(null);
+    const [returnDate, setReturnDate] = useState(null);
     const availableCopies = item?.availableCopies - (cartItem ? cartItem.quantity : 0);
-
+    const isValidItem = item.name && title && author && returnDate;
     useEffect(() => {
         fetch(`http://localhost:5198/api/books/${item.id}/title`)
             .then(response => response.text())
@@ -29,6 +30,23 @@ const CartItem = ({ item }) => {
             .then(author => setAuthor(author))
             .catch(error => console.error('Error fetching Author:', error));
     }, [item.id]);
+    useEffect(() => {
+        if (cartItem) {
+            const today = new Date();
+            setPurchaseDate(today);
+
+            const calculateReturnDate = (date) => {
+                let returnDate = new Date(date);
+                returnDate.setDate(returnDate.getDate() + 28);
+                while (returnDate.getDay() === 0 || returnDate.getDay() === 6) {
+                    returnDate.setDate(returnDate.getDate() + 1);
+                }
+                return returnDate;
+            };
+
+            setReturnDate(calculateReturnDate(today));
+        }
+    }, [cartItem]);
 
     const handleRemoveBook = () => {
         dispatch({
@@ -120,7 +138,7 @@ const CartItem = ({ item }) => {
         //    onMouseEnter={() => setIsHovered(true)}
         //    onMouseLeave={() => setIsHovered(false)}
         //>
-
+        
         <div className="inner-cart-item">
 
 
@@ -131,10 +149,13 @@ const CartItem = ({ item }) => {
                 {/* Book Information */}
                 <div className="text-container">
                     <p className="item-name">{item.name}</p>
-                    <p className="title">Title: {title}</p>
-                    <p className="author">Author: {author}</p>
-                    <p className="date-info">Date of Return: {author}</p> {/* Applied date-info class */}
+                    {title && <p className="title">Title: {title}</p>}
+                    {author && <p className="author">Author: {author}</p>}
+                    <p className="date-info">
+                        Date of Return: {returnDate ? returnDate.toDateString() : "Not Set"}
+                    </p>
                 </div>
+
 
                 {/* Action Buttons */}
                 <div className="buttons-container">
@@ -146,8 +167,10 @@ const CartItem = ({ item }) => {
             </div>
 
 
-        </div>
-    );
+            </div>
+
+        );
+
 };
 
 //const styles = {

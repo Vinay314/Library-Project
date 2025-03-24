@@ -493,6 +493,11 @@ section .lead {
     text-align: justify;
     margin-left: 15px;
     margin-bottom: 15px;
+    background: white;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+/*New changes   */
+    padding:28px;
+    margin-bottom:57px;
 }
 
 .formatted-summary {
@@ -556,9 +561,13 @@ section .lead {
     }
 
     .modal-footer {
-        position: static;
+/*        position: static;*/
         text-align: center;
         margin-top: 15px;
+        margin-right:22px;
+        margin-bottom:10px;
+        
+        
     }
 }
 
@@ -961,7 +970,9 @@ section .lead {
 .hero-section {
     /*background: url('C:\Users\a90011879\OneDrive - ONEVIRTUALOFFICE\Desktop\E-Book Store\src\pages\assets\atlas-copco.jpg') no-repeat center center/cover;*/
     background-color: #184d59 !important;
-    height: 430px; /* Adjust height as needed */
+    /*    background: linear-gradient(#184d59,#084b47);*/
+    /*height: 430px;*/ /* Adjust height as needed */
+    height: 500px;
     width: auto;
     display: flex;
     align-items: center;
@@ -969,7 +980,7 @@ section .lead {
     text-align: center;
     position: relative;
     color: white;
-
+    border-radius: 10px;
 }
 /* Sticky Add book Button */
 

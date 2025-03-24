@@ -742,10 +742,15 @@ function ProductListingPage() {
                                 <button
                                     type="button"
                                     className="btn btn-sm btn-danger removecart"
+                                    style={{
+                                        marginRight: "22px",
+                                        marginBottom: "7px"
+                                    }}
                                     onClick={() => handleRemoveFromCart(selectedBook.id)}
                                 >
                                     Remove from Cart
                                 </button>
+
                             ) : (
                                 <button
                                     onClick={() => handleAddToCart(selectedBook)}

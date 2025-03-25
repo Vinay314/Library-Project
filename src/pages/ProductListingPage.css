@@ -453,18 +453,19 @@ section .lead {
 /* ----- Modal Content Layout ----- */
 .modal-content {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: space-between;
-    align-items: stretch;
+    align-items: center;
     width: 60%;
     max-width: 1000px;
     max-height: 85vh;
     background: white;
-    padding: 30px;
+    padding: 35px;
     border-radius: 10px;
     position: relative;
     overflow: hidden;
     height: 88%;
+    overflow-y:scroll;
 }
 
 /* ----- Book Info Container (Centers Image and Details) ----- */
@@ -498,7 +499,7 @@ section .lead {
 /* ----- Book Details (Table Styling) ----- */
 .book-details {
     width: 100%;
-    background: #f8f8f8;
+    background: #f5f5f5;
     padding: 15px;
     border-radius: 8px;
     text-align: left;
@@ -507,13 +508,13 @@ section .lead {
 }
 
     /* Table Inside Book Details */
-    .book-details table {
+    /*.book-details table {
         width: 100%;
         border-collapse: collapse;
-    }
+    }*/
 
     /* Increased Padding in Table Cells */
-    .book-details th, .book-details td {
+    /*.book-details th, .book-details td {
         padding: 12px;
         border-bottom: 1px solid #ddd;
         font-size: 16px;
@@ -522,8 +523,51 @@ section .lead {
     .book-details th {
         background-color: #ddd;
         font-weight: bold;
+    }*/
+    /* Table Styling */
+    .book-details table {
+        width: 100%;
+        border-collapse: collapse;
+        border-spacing: 0;
+        border: 1px solid #ddd; /* Light gray border around the table */
     }
 
+    /* Header Styling */
+    .book-details th {
+        background-color: #f4f7f8; /* Light grayish-blue */
+        font-weight: bold;
+        padding: 12px;
+        text-align: left;
+        border-bottom: 2px solid #2c6b74; /* Darker border under headers */
+        border-right: 1px dashed #2c6b74; /* Dashed vertical border */
+    }
+
+        /* Last header column should not have a right border */
+        .book-details th:last-child {
+            border-right: none;
+        }
+
+    /* Cell Styling */
+    .book-details td {
+        padding: 12px;
+        font-size: 16px;
+        border-bottom: 1px solid #ddd; /* Light border between rows */
+    }
+
+    /* Alternating Row Colors */
+    .book-details tr:nth-child(even) {
+        background-color: #f9f9f9; /* Light gray background for alternating rows */
+    }
+
+    /* Dashed vertical border between columns */
+    .book-details td, .book-details th {
+        border-right: 1px dashed #2c6b74;
+    }
+
+        /* Last column should not have a right border */
+        .book-details td:last-child {
+            border-right: none;
+        }
 /* ----- Text & Details Section ----- */
 .modal-text {
     flex-grow: 1;
@@ -544,6 +588,7 @@ section .lead {
     margin-bottom:57px;
     min-width:584px;
     min-height:459px;
+    margin-top:35px;
 }
 
 .formatted-summary {
@@ -1211,6 +1256,24 @@ section .lead {
         max-width: 25%;
     }
 }
+.out-of-stock-badge {
+    position: absolute;
+    top: 470px;
+    right: 93px;
+    /*background: linear-gradient(135deg, #008080, #20B2AA);*/
+    background: linear-gradient(135deg, #D32F2F, #FF6B6B);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: bold;
+    /*box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);*/
+    text-transform: uppercase; /* Gives it a more label-like appearance */
+    letter-spacing: 1px;
+    box-shadow: none; /* Remove shadow to avoid button-like appearance */
+    display: inline-block; /* Makes it look more like a badge */
+    border: 2px solid white; /* Optional: Adds a border for a crisp look */
+}
 
 
 .search-bar {
@@ -1218,7 +1281,7 @@ section .lead {
     bottom: 50px; /* Sticks to bottom */
     left: 50%;
     transform: translateX(-50%);
-    width: 90%;
+    width: 51%;
     max-width: 30000vw;
     display: flex;
     align-items: center;
@@ -1233,7 +1296,8 @@ section .lead {
     top: 100%;
     left: 0;
     width: 100%;
-    background-color:lightgray;
+    background-color:white;
+    border-color:gray;
     border-radius: 15px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     max-height: 100px;
@@ -1272,6 +1336,12 @@ section .lead {
     background: #f5f5f5;
     padding: 10px;
     border-radius: 8px;
+    margin-left: 49px;
+    height: 95%;
+    display: flex;
+    text-align: left;
+    min-height: 200px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
 }
 
     .book-details table {
@@ -1290,8 +1360,8 @@ section .lead {
     }
         /* Hover effect */
         .suggestions-list li:hover {
-            background-color:#184d59;
-            color: white;
+            background-color:lightgray;
+            color: black;
             font-weight: 500;
         }
 
@@ -1485,7 +1555,7 @@ section .lead {
 /* Book Image */
 .book-image {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
     justify-content: center;
     width: 84%; /* Adjust width to make it proportional */

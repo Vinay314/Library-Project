@@ -16,10 +16,13 @@ const AboutUs = () => {
                 </h1>
                 <div style={styles.divider}></div>
                 <p style={styles.text}>
-                    This is a sample text. Insert your desired text here. This is a sample
-                    text. Insert your desired text here. This is a sample text. Insert
-                    your desired text here.
+                    Welcome to BrainBank Library, your go-to digital hub for knowledge and learning.
+                    Our platform provides a vast collection of books across various genres, making it easy for readers, students, and researchers to access valuable resources.<br />
+                    <br></br>
+                    Whether you're looking for academic materials, fiction, or industry insights, BrainBank Library is designed to support your intellectual growth.
+                    With a user-friendly interface and seamless browsing experience, we aim to make reading and learning more accessible than ever.
                 </p>
+
             </div>
         </div>
     );
@@ -74,7 +77,7 @@ const styles = {
         color: "white",
     },
     divider: {
-        width: "60px",
+        width: "160px",
         height: "4px",
         backgroundColor: "white",
         marginBottom: "20px",
@@ -82,7 +85,8 @@ const styles = {
     text: {
         fontSize: "1.2rem",
         lineHeight: "1.6",
-        color:'white'
+        color: 'white',
+        textAlign:'justify',
     },
 
 };

@@ -547,30 +547,37 @@ function ProductListingPage() {
                                 filteredProducts.map(product => (
                                     <div key={product.id} className="col">
                                         <div className={`book-card ${darkMode ? 'bg-secondary text-white' : ''}`}>
+                                            {/* Out of Stock Badge */}
+                                            {product.availableCopies === 0 && (
+                                                <div className="out-of-stock-badge">Out of Stock</div>
+                                            )}
                                             <div className="settings-container">
                                                 <i className="bi bi-three-dots-vertical settings-icon"></i>
                                                 <div className="dropdown-menu">
                                                     <button onClick={() => handleEditBook1(product)} className="dropdown-item">
                                                         <i className="bi bi-pencil"></i> Edit
                                                     </button>
-                                                    
 
                                                     <button onClick={() => removeBookByTitle(product.title, product.id)} className="dropdown-item">
                                                         <i className="bi bi-trash3"></i> Delete
                                                     </button>
+
+                                                    {/* Disable 'Place in Cart' if out of stock */}
                                                     <button
                                                         onClick={() => {
-                                                            cartItems[product.id]
-                                                                ? handleRemoveFromCart(product.id)
-                                                                : handleAddToCart(product);
+                                                            if (product.availableCopies > 0) {
+                                                                cartItems[product.id] ? handleRemoveFromCart(product.id) : handleAddToCart(product);
+                                                            }
                                                         }}
-                                                        className="dropdown-item"
+                                                        className={`dropdown-item ${product.availableCopies === 0 ? 'disabled' : ''}`}
+                                                        disabled={product.availableCopies === 0}
                                                     >
                                                         <i className="bi bi-cart"></i>
                                                         {cartItems[product.id] ? " Remove from Cart" : " Place in Cart"}
                                                     </button>
                                                 </div>
                                             </div>
+
                                             
                                             {/* Button Container in Top Right */}
                                             {/*<div className="button-container">*/}
@@ -767,7 +774,7 @@ function ProductListingPage() {
                                         </tr>
                                         <tr>
                                             <th>Copies:</th>
-                                            <td>{selectedBook.availableCopies || 'N/A'}</td>
+                                            <td>{selectedBook.availableCopies || '0'}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -782,28 +789,43 @@ function ProductListingPage() {
 
                         {/* Add to Cart Button at Bottom Right */}
                         <div className="modal-footer">
-                            {cartItems[selectedBook?.id] ? (
+                            {/* If the book is out of stock, disable the button */}
+                            {selectedBook.availableCopies === 0 ? (
+                                <button
+                                    type="button"
+                                    className="btn btn-sm btn-secondary disabled-cart-btn"
+                                    disabled
+                                >
+                                    Out of Stock
+                                </button>
+                            ) : cartItems[selectedBook?.id] ? (
                                 <button
                                     type="button"
                                     className="btn btn-sm btn-danger removecart"
-                                    style={{
-                                        marginRight: "22px",
-                                        marginBottom: "7px"
-                                    }}
+                                        style={{
+                                            marginRight: "25px",
+                                            marginBottom: "77px",
+                                            position: "fixed"
+                                        }}
                                     onClick={() => handleRemoveFromCart(selectedBook.id)}
                                 >
                                     Remove from Cart
                                 </button>
-
                             ) : (
                                 <button
                                     onClick={() => handleAddToCart(selectedBook)}
-                                    className="place-cart-btn"
+                                            className="place-cart-btn"
+                                            style={{
+                                                marginRight: "25px",
+                                                marginBottom: "77px",
+                                                position: "fixed"
+                                            }}
                                 >
                                     Add to Cart
                                 </button>
                             )}
                         </div>
+
 
                         {/* Close Button */}
                         <span className="close-button" onClick={handleCloseModal}>&times;</span>

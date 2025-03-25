@@ -159,6 +159,15 @@ const ShoppingCartPage = () => {
 
             {/* Sticky Buttons */}
              
+                {/*<div style={styles.stickyButtons}>*/}
+                {/*    <Link to="/products">*/}
+                {/*        <button style={styles.continueShoppingButton}>Continue Shopping</button>*/}
+                {/*    </Link>*/}
+                {/*    <button style={styles.checkoutButton} onClick={checkout}>*/}
+                {/*        Checkout*/}
+                {/*    </button>*/}
+                {/*</div>*/}
+            {!showSummary && (
                 <div style={styles.stickyButtons}>
                     <Link to="/products">
                         <button style={styles.continueShoppingButton}>Continue Shopping</button>
@@ -167,7 +176,8 @@ const ShoppingCartPage = () => {
                         Checkout
                     </button>
                 </div>
-            
+            )}
+
           
 
                <div className="cart-container"> {/* Updated class for overall layout */}
@@ -184,10 +194,10 @@ const ShoppingCartPage = () => {
                                     <img
                                         src={emptyCartImage}
                                         alt="No Product"
-                                        style={{ width: "150px", height: "auto", display: "block" }}
+                                        style={{ width: "310px", height: "auto", display: "block", marginTop: "150px"}}
                                     />
 
-                                <p className="empty-cart-text">Go find the books you like.....</p>
+                                    <p className="empty-cart-text" style={{ marginLeft: "73px", marginTop: "32px", fontSize:"22px" }}>Go find the books you like.....</p>
                             </div>
                         )}
                     </div>

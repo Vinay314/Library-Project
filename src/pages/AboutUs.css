@@ -59,7 +59,7 @@
         border-radius: 50%;
         margin-bottom: 10px;
     }
-.modal-overlay {
+/*.modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -90,4 +90,4 @@
     cursor: pointer;
     background: none;
     border: none;
-}
+}*/

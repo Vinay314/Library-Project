@@ -269,8 +269,8 @@
     /* Cool Hover Effect */
     .outer-cart-item:hover {
         transform: scale(1.05); /* Slight scaling effect */
-        box-shadow: 0px 0px 20px 5px rgba(0, 206, 209, 0.8); /* Teal glow effect */
-        border: 1px solid #00CED1; /* Brighter teal border */
+       /* box-shadow: 0px 0px 20px 5px rgba(0, 206, 209, 0.8);*/ /* Teal glow effect */
+       /* border: 1px solid #00CED1;*/ /* Brighter teal border */
         background: linear-gradient(to right, #127A85, #5EC7C2); /* Slightly brighter teal gradient */
     }
 

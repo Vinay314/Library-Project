@@ -139,11 +139,11 @@ const Header = ({ searchQuery, setSearchQuery, products ,onOpenAbout}) => {
             </div>
             <div
                 style={{
-                    display: 'flex',
+                    /*display: 'flex',*/
                     justifyContent: 'center',
                     fontSize: '20px', // Increased size
                     fontWeight: 'bold',
-                    paddingLeft: '9%', // Moves it more to the right
+                    paddingLeft: '0%', // Moves it more to the right
                     width: '100%',
                 }}
             >

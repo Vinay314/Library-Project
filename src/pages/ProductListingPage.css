@@ -525,49 +525,94 @@ section .lead {
         font-weight: bold;
     }*/
     /* Table Styling */
-    .book-details table {
+    /* Table Headers (Left Column) */
+    .book-details th {
+        width: 30%;
+        padding: 14px;
+        text-align: left;
+        font-weight: bold;
+        background-color: #82A7AD; /* Primary Teal */
+        color: #ffffff; /* White text for contrast */
+        border-right: 1px solid #ccc;
+        border-bottom: 2px solid #ffffff; /* Subtle separator */
+        border-top-left-radius: 8px;
+        border-bottom-left-radius: 8px;
+        color: black;
+    }
+
+    /* Alternate background for th rows */
+    .book-details tr:nth-child(even) th {
+        background-color: #A3BDC2; /* Slightly lighter teal */
+    }
+
+    /* Table Data (Right Column) */
+    .book-details td {
+        padding: 14px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+        background-color: #f9f9f9; /* Light gray background for rows */
+        border-top-right-radius: 8px;
+        border-bottom-right-radius: 8px;
+    }
+
+    /* Alternating row colors for better readability */
+    .book-details tr:nth-child(odd) td {
+        background-color: #ffffff; /* White for contrast */
+    }
+
+    /* Last row bottom border removal */
+    .book-details tr:last-child td {
+        border-bottom: none;
+    }
+
+    /* Hover effect for interactive feel */
+    .book-details tr:hover td {
+        background-color: #eaf2f4;
+        transition: 0.3s ease-in-out;
+    }
+    /*.book-details table {
         width: 100%;
         border-collapse: collapse;
         border-spacing: 0;
-        border: 1px solid #ddd; /* Light gray border around the table */
-    }
+        border: 1px solid #ddd;*/ /* Light gray border around the table */
+    /*}*/
 
     /* Header Styling */
-    .book-details th {
-        background-color: #f4f7f8; /* Light grayish-blue */
-        font-weight: bold;
+    /*.book-details th {
+        background-color: #f4f7f8;*/ /* Light grayish-blue */
+        /*font-weight: bold;
         padding: 12px;
         text-align: left;
-        border-bottom: 2px solid #2c6b74; /* Darker border under headers */
-        border-right: 1px dashed #2c6b74; /* Dashed vertical border */
-    }
+        border-bottom: 2px solid #2c6b74;*/ /* Darker border under headers */
+        /*border-right: 1px dashed #2c6b74;*/ /* Dashed vertical border */
+    /*}*/
 
         /* Last header column should not have a right border */
-        .book-details th:last-child {
+        /*.book-details th:last-child {
             border-right: none;
-        }
+        }*/
 
     /* Cell Styling */
-    .book-details td {
+    /*.book-details td {
         padding: 12px;
         font-size: 16px;
-        border-bottom: 1px solid #ddd; /* Light border between rows */
-    }
+        border-bottom: 1px solid #ddd;*/ /* Light border between rows */
+    /*}*/
 
     /* Alternating Row Colors */
-    .book-details tr:nth-child(even) {
-        background-color: #f9f9f9; /* Light gray background for alternating rows */
-    }
+    /*.book-details tr:nth-child(even) {
+        background-color: #f9f9f9;*/ /* Light gray background for alternating rows */
+    /*}*/
 
     /* Dashed vertical border between columns */
-    .book-details td, .book-details th {
+    /*.book-details td, .book-details th {
         border-right: 1px dashed #2c6b74;
-    }
+    }*/
 
         /* Last column should not have a right border */
-        .book-details td:last-child {
+        /*.book-details td:last-child {
             border-right: none;
-        }
+        }*/
 /* ----- Text & Details Section ----- */
 .modal-text {
     flex-grow: 1;
@@ -605,7 +650,7 @@ section .lead {
 }
 
 .place-cart-btn {
-    background: #184d59;
+    background: linear-gradient(to right, #184d59, #257d77);
     color: white;
     padding: 10px 15px;
     border: none;

@@ -163,6 +163,16 @@ namespace YourNamespace.Controllers
             }
             return Ok(book.Category);
         }
+        [HttpGet("{id}/image")]
+        public IActionResult GetBookImage(Guid id)
+        {
+            var book = BookStore.Books.FirstOrDefault(b => b.Id == id);
+            if (book == null)
+            {
+                return NotFound();
+            }
+            return Ok(book.Image);
+        }
 
         [HttpPost("update-available-copies")]
         public IActionResult UpdateAvailableCopies([FromBody] UpdateCopiesRequest request)

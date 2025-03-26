@@ -837,7 +837,7 @@ function ProductListingPage() {
 
 
             {/* Footer (Always Same in Light/Dark Mode) */}
-            {/* <Footer />*/}
+            { <Footer />}
 
             {/* Sticky Dark Mode Toggle Button */}
             {/*<button onClick={toggleDarkMode} className="dark-mode-toggle">*/}

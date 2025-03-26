@@ -84,8 +84,9 @@ const CartItem = ({ item }) => {
                 title: 'Oops!',
                 text: 'No more available copies',
                 confirmButtonText: 'OK',
-                timer: 3000,  // Auto-close after 3 seconds
-                timerProgressBar: true
+                confirmButtonColor: "#008080",
+                /*timer: 3000,*/  // Auto-close after 3 seconds
+                /*timerProgressBar: true*/
             });
         }
     };

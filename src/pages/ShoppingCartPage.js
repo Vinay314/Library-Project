@@ -20,7 +20,7 @@ const ShoppingCartPage = () => {
     const navigate = useNavigate();
     const [title, setTitle] = useState('');
     const [bookTitles, setBookTitles] = useState([]);
-    
+    const [image, setImage] = useState([]);
    
     const validCartItems = cartItems.filter(item => item?.title !== undefined && item?.title !== null);
 
@@ -33,7 +33,15 @@ const ShoppingCartPage = () => {
                 .catch(error => console.error('Error fetching title:', error));
         }
     }, [id]);
-
+    const { id1 } = useParams();
+    useEffect(() => {
+        if (id1) {
+            fetch(`http://localhost:5198/api/books/${id}/image`)
+                .then(response => response.text())
+                .then(image => setImage(image))
+                .catch(error => console.error('Error fetching Image:', error));
+        }
+    }, [id1]);
    
     useEffect(() => {
     console.log("Current Cart Items in ShoppingCartPage:", cartItems);
@@ -47,6 +55,7 @@ const ShoppingCartPage = () => {
         }
         return returnDate;
     };
+   
 
     const checkout = async () => {
         if (!cartItems || cartItems.length === 0) {
@@ -58,24 +67,94 @@ const ShoppingCartPage = () => {
         setPurchaseDate(today);
         const returnDate = calculateReturnDate(today);
         setReturnDate(returnDate);
-        setShowSummary(true);
         setCheckoutComplete(true);
 
         try {
-            // Fetch titles for all books in the cart
-            const titles = await Promise.all(
+            // Fetch titles and images for all books in the cart
+            const bookDetails = await Promise.all(
                 cartItems.map(async (item) => {
-                    if (item.id) {  // Check if item.id exists and is not undefined
-                        const response = await fetch(`http://localhost:5198/api/books/${item.id}/title`);
-                        const title = await response.text();
-                        return title;
+                    if (item.id) {
+                        const [titleRes, imageRes] = await Promise.all([
+                            fetch(`http://localhost:5198/api/books/${item.id}/title`),
+                            fetch(`http://localhost:5198/api/books/${item.id}/image`)
+                        ]);
+
+                        const title = await titleRes.text();
+                        const image = await imageRes.text();
+
+                        return { title, image, quantity: item.quantity };
                     } else {
-                        return 'Unknown Title';  // Default value if id is missing
+                        return { title: 'Unknown Title', image: '/default-book.jpg', quantity: item.quantity };
                     }
                 })
             );
 
-            setBookTitles(titles);  // Store the fetched titles
+            setBookTitles(bookDetails);
+
+            // Generate the Swal popup with book images
+            Swal.fire({
+                title: "Borrow Summary",
+                width: "950px", // Reduced width for better structure
+                html: `
+<div style="
+    max-width: 900px; 
+    max-height: 300px; 
+    overflow-y: auto; 
+    padding: 20px;
+">
+    <p><strong>Borrowing Date:</strong> ${today.toDateString()}</p>
+    <p><strong>Return Date:</strong> ${returnDate.toDateString()}</p>
+    <hr style="border: 0; height: 1px; background: #008080; margin: 10px 0;">
+
+    <!-- Table Header -->
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 10px;">
+        <thead>
+            <tr style="background-color: #008080; color: white;">
+                <th style="padding: 10px; width: 10%; text-align: center;">Sr No.</th>
+                <th style="padding: 10px; width: 20%; text-align: center;">Image</th>
+                <th style="padding: 10px; width: 50%; text-align: left;">Book Name</th>
+                <th style="padding: 10px; width: 20%; text-align: center;">Quantity</th>
+            </tr>
+        </thead>
+        <tbody>
+            ${bookDetails.map((book, index) => `
+                <tr style="border-bottom: 1px solid #ddd;">
+                    <td style="padding: 10px; text-align: center; font-weight: bold;">${index + 1}</td>
+                    <td style="padding: 10px; text-align: center;">
+                        <img src="http://localhost:5198${book.image}" alt="Book Image" 
+                            style="width: 60px; height: 80px; border-radius: 6px; display: block; margin: 0 auto;">
+                    </td>
+                    <td style="padding: 10px; text-align: left; font-size: 16px;">${book.title}</td>
+                    <td style="padding: 10px; text-align: center;">
+                        <span style="
+                            background-color: teal;
+                            color: white;
+                            font-size: 14px;
+                            font-weight: bold;
+                            padding: 6px 12px;
+                            border-radius: 4px;
+                            display: inline-block;
+                        ">x${book.quantity}</span>
+                    </td>
+                </tr>
+            `).join('')}
+        </tbody>
+    </table>
+
+    <p style="margin-top: 10px; font-size: 16px;">Thank you for borrowing!</p>
+</div>
+`,
+                icon: "success",
+                confirmButtonText: "OK",
+                confirmButtonColor: "#008080",
+            }).then(() => {
+                navigate("/products");
+            });
+
+
+
+
+
 
             // Handle available copies update
             await Promise.all(cartItems.map(async (item) => {
@@ -84,38 +163,20 @@ const ShoppingCartPage = () => {
                     bookId: item.id,
                     availableCopies: newAvailableCopies,
                 });
+
                 const storedCart = JSON.parse(localStorage.getItem("cartItems")) || {};
-
-                // Remove the item from cart
-                delete storedCart[item.id];
-
-                // Update localStorage
+                delete storedCart[item.id]; // Remove item from cart
                 localStorage.setItem("cartItems", JSON.stringify(storedCart));
             }));
 
-            // Alert the user with a summary before navigating
-            /*const summaryMessage = `Purchase Summary:\n\nBorrowing Date: ${today.toDateString()}\nReturn Date: ${returnDate.toDateString()}\n\nThank you for your purchase!`;*/
-
-            Swal.fire({
-                title: "Purchase Summary",
-                html: `<p><strong>Borrowing Date:</strong> ${today.toDateString()}</p>
-           <p><strong>Return Date:</strong> ${returnDate.toDateString()}</p>
-           <p>Thank you for your purchase!</p>`,
-                icon: "success",
-                confirmButtonText: "OK",
-                confirmButtonColor:"#008080"
-            });
-
-
-            // Clear the cart on successful checkout
             dispatch(clearCart());
 
-            // Navigate back to the products page
-            //navigate("/products");
         } catch (error) {
             console.error('Failed to fetch book titles or update available copies:', error);
         }
     };
+
+
 
 
 
@@ -166,8 +227,26 @@ const ShoppingCartPage = () => {
                 {/*    <button style={styles.checkoutButton} onClick={checkout}>*/}
                 {/*        Checkout*/}
                 {/*    </button>*/}
-                {/*</div>*/}
-            {!showSummary && (
+            {/*</div>*/}
+            {/*{!showSummary && (*/}
+            {/*    <div style={styles.stickyButtons}>*/}
+            {/*        <Link to="/products">*/}
+            {/*            <button style={styles.continueShoppingButton}>Continue Shopping</button>*/}
+            {/*        </Link>*/}
+            {/*        <button style={styles.checkoutButton} onClick={checkout}>*/}
+            {/*            Checkout*/}
+            {/*        </button>*/}
+            {/*    </div>*/}
+            {/*)}*/}
+            {(validCartItems.length === 0 && !showSummary) && (
+                <div style={styles.stickyButtons}>
+                    <Link to="/products">
+                        <button style={styles.continueShoppingButton}>Continue Shopping</button>
+                    </Link>
+                </div>
+            )}
+
+            {!showSummary && validCartItems.length > 0 && (
                 <div style={styles.stickyButtons}>
                     <Link to="/products">
                         <button style={styles.continueShoppingButton}>Continue Shopping</button>
@@ -178,7 +257,6 @@ const ShoppingCartPage = () => {
                 </div>
             )}
 
-          
 
                <div className="cart-container"> {/* Updated class for overall layout */}
             {!checkoutComplete && (
@@ -213,15 +291,20 @@ const ShoppingCartPage = () => {
                             <strong>Return Date:</strong> {returnDate && returnDate.toDateString()}
                         </p>
                         <ul className="summary-list">
-                            {bookTitles.map((title, index) => (
-                                <li key={index} className="summary-item">{title}</li>
+                            {bookTitles.map((book, index) => (
+                                <li key={index} className="summary-item">
+                                    <strong>{book.title}</strong> - {book.quantity} {book.quantity > 1 ? "copies" : "copy"}
+                                </li>
                             ))}
                         </ul>
-                        <button onClick={() => navigate("/products")} className="back-button">
+                        <button onClick={() => navigate("/products")} className="back-button" style={{
+                            background: 'linear-gradient(to right, #184d59, #257d77)'
+                        }} >
                             Back to Books
                         </button>
                     </div>
                 )}
+
 
             {/* Action buttons for shopping and checkout */}
 
@@ -297,7 +380,8 @@ const styles = {
 
     continueShoppingButton: {
         padding: '12px 20px',
-        backgroundColor: 'teal',
+        background: 'linear-gradient(to right, #184d59, #257d77)',
+
         color: 'white',
         border: 'none',
         borderRadius: '5px',
@@ -309,7 +393,7 @@ const styles = {
 
     checkoutButton: {
         padding: '12px 20px',
-        backgroundColor: 'teal',
+        background: 'linear-gradient(to right, #184d59, #257d77)',
         color: 'white',
         border: 'none',
         borderRadius: '5px',

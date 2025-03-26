@@ -7,7 +7,11 @@
     justify-content: space-between;
     align-items: center;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    
+    /*Header made sticky    */
+    position: sticky;
+    top: 0;
+    width: 100%;
+    z-index: 1000; /* Ensures it stays above other elements */
 }
 
 .home-link {
@@ -122,7 +126,8 @@
         }
 
             .navbar-dropdown ul li:hover {
-                background-color: teal;
+                background: linear-gradient(to right, #184d59, #257d77);
+                color:white;
             }
 
 .navbar-dropdown {

@@ -1101,7 +1101,7 @@ section .lead {
         color: white;
     }
 
-/*Typed functionality*/
+
 
 .hero-section {
     /*background: url('C:\Users\a90011879\OneDrive - ONEVIRTUALOFFICE\Desktop\E-Book Store\src\pages\assets\atlas-copco.jpg') no-repeat center center/cover;*/
@@ -1115,7 +1115,7 @@ section .lead {
     justify-content: center;
     text-align: center;
     position: relative;
-    color: white;
+    color: white !important;
     border-radius: 10px;
 }
 /* Sticky Add book Button */

@@ -20,6 +20,10 @@ import UpdateBookPage from '../components/UpdateBookPage';
 import Chatbot from './Chatbot';
 import "./Chatbot.css";
 import AboutUs from "./About";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import { ArrowUp } from "lucide-react";
 function ProductListingPage() {
     const [products, setProducts] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
@@ -39,10 +43,29 @@ function ProductListingPage() {
     const [bookToUpdate, setBookToUpdate] = useState(null);
     const [isChatOpen, setIsChatOpen] = useState(false);
     const [isAboutModalOpen, setIsAboutModalOpen] = useState(false);
+    const [showButton, setShowButton] = useState(false);
+    
     const handleOpenAboutModal = () => {
         setIsAboutModalOpen(true);
     };
+    useEffect(() => {
+        const handleScroll = () => {
+            if (window.scrollY > 100) {
+                setShowButton(true);
+            } else {
+                setShowButton(false);
+            }
+        };
 
+        window.addEventListener("scroll", handleScroll);
+        return () => {
+            window.removeEventListener("scroll", handleScroll);
+        };
+    }, []);
+
+    const scrollToTop = () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    };
     const handleCloseAboutModal = () => {
         setIsAboutModalOpen(false);
     };
@@ -274,7 +297,7 @@ function ProductListingPage() {
 
         return () => typed.destroy();
     }, []);
-
+    
 
     const handleEditBook = (product) => {
         navigate(`/update-book/${product.id}`);
@@ -436,12 +459,14 @@ function ProductListingPage() {
                 {/* Hero Section with Search Bar */}
                 {/* Hero Section with Search Bar */}
                 <section className="hero-section d-flex flex-column align-items-center mt-4"> {/* Added mt-4 for spacing */}
-                    <div className="hero-overlay text-center w-100 d-flex flex-column align-items-center justify-content-center">
+                    
+
+                    {/*<div className="hero-overlay text-center w-100 d-flex flex-column align-items-center justify-content-center">*/}
                         <h1 className="hero-title">
                             Atlas Copco Group's Space to <span className="typed-text"></span>
                         </h1>
                         <p className="hero-subtitle">Technology that transforms the future.</p>
-                    </div>
+                   {/* </div>*/}
 
                     <div className="search-bar w-85">
                         <input
@@ -655,6 +680,29 @@ function ProductListingPage() {
             <button className="chat-button" onClick={() => setIsChatOpen(!isChatOpen)} >
                 <BotMessageSquare size={30} />
             </button>
+            {showButton && (
+               
+                    <button
+                        onClick={scrollToTop}
+                        style={{
+                            position: 'fixed',
+                            bottom: '122px',
+                            right: '120px',
+                            padding: '10px 20px',
+                            fontSize: '16px',
+                            backgroundColor: '#184d59',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '5px',
+                            cursor: 'pointer',
+                            boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
+                            zIndex: 1000,
+                        }}
+                    >
+                        Go to Top
+                    </button>
+                )}
+      )}
             {isChatOpen && <Chatbot onClose={() => setIsChatOpen(false)}/>}
             {isAddBookModalOpen && (
                 <div className="modal-overlay-add" onClick={handleCloseAddBookModal}>

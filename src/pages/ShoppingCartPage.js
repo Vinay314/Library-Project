@@ -8,7 +8,101 @@ import { useParams } from 'react-router-dom';
 import Header from "../components/Header";
 import emptyCartImage from './assets/shopping.png';
 import Swal from 'sweetalert2';
+import "./Tabs.css";
+const Tabs = ({ activeTab, setActiveTab }) => {
+    const tabs = [
+        { id: "borrowed", label: "Borrowed Books" },
+        { id: "current", label: "Books With You" },
+        { id: "cart", label: "Cart" },
+    ];
+    const [currentBooks, setCurrentBooks] = useState([]);
+    const [borrowedBooks, setBorrowedBooks] = useState([]);
+    useEffect(() => {
+        let checkedOutBooks = JSON.parse(localStorage.getItem("checkedOutBooks")) || [];
 
+        let today = new Date();
+
+        let current = checkedOutBooks.filter(book => new Date(book.returnDate) >= today);
+        let borrowed = checkedOutBooks.filter(book => new Date(book.returnDate) < today);
+
+        setCurrentBooks(current);
+        setBorrowedBooks(borrowed);
+    }, []);
+    return (
+        <div>
+            {/* Tabs for Navigation */}
+            <div className="tabs-container">
+                {tabs.map((tab) => (
+                    <button
+                        key={tab.id}
+                        className={`tab-button ${activeTab === tab.id ? "active" : ""}`}
+                        onClick={() => setActiveTab(tab.id)}
+                    >
+                        {tab.label}
+                    </button>
+                ))}
+            </div>
+
+            {/* Display Books Based on Active Tab */}
+            {activeTab === "current" && (
+                <div>
+                    <h2>Current Books</h2>
+                    {currentBooks.length > 0 ? (
+                        currentBooks.map((book) => (
+                            <div key={book.id} className="inner-cart-item">
+                                {/* Book Image */}
+                                <img src={book.image} alt={book.title} className="cart-item-image" />
+
+                                <div className="cart-item-details">
+                                    {/* Book Information */}
+                                    <div className="text-container">
+                                        <p className="item-name">{book.title}</p>
+                                        {book.author && <p className="author">Author: {book.author}</p>}
+                                        <p className="date-info">
+                                            Date of Return: {book.returnDate ? new Date(book.returnDate).toDateString() : "Not Set"}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        ))
+                    ) : (
+                        <p>No books currently checked out.</p>
+                    )}
+
+                </div>
+            )}
+
+            {activeTab === "borrowed" && (
+                <div>
+                    <h2>Borrowed Books</h2>
+                    {borrowedBooks.length > 0 ? (
+                        borrowedBooks.map((book) => (
+                            <div key={book.id} className="inner-cart-item">
+                                {/* Book Image */}
+                                <img src={book.image} alt={book.title} className="cart-item-image" />
+
+                                <div className="cart-item-details">
+                                    {/* Book Information */}
+                                    <div className="text-container">
+                                        <p className="item-name">{book.title}</p>
+                                        {book.author && <p className="author">Author: {book.author}</p>}
+                                        <p className="date-info">
+                                            Date of Return: {book.returnDate ? new Date(book.returnDate).toDateString() : "Not Set"}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        ))
+                    ) : (
+                        <p>No books currently in history.</p>
+                    )}
+
+                </div>
+            )}
+        </div>
+    );
+
+};
 const ShoppingCartPage = () => {
     const cartItems = useSelector(state => state.cart.items);
     const totalCost = useSelector(state => state.cart.totalCost);
@@ -21,9 +115,14 @@ const ShoppingCartPage = () => {
     const [title, setTitle] = useState('');
     const [bookTitles, setBookTitles] = useState([]);
     const [image, setImage] = useState([]);
-   
-    const validCartItems = cartItems.filter(item => item?.title !== undefined && item?.title !== null);
+    const [activeTab, setActiveTab] = useState("borrowed");
 
+    const validCartItems = cartItems.filter(item => item?.title !== undefined && item?.title !== null);
+    const tabs = [
+        { id: "borrowed", label: "Borrowed Books" },
+        { id: "current", label: "Books With You" },
+        { id: "cart", label: "Cart" },
+    ];
     const { id } = useParams();
     useEffect(() => {
         if (id) {
@@ -59,8 +158,25 @@ const ShoppingCartPage = () => {
 
     const checkout = async () => {
         if (!cartItems || cartItems.length === 0) {
-            console.error('No items in cart to checkout.');
+            console.error("No items in cart to checkout.");
             return;
+        }
+
+        // Show confirmation popup before proceeding
+        const confirmCheckout = await Swal.fire({
+            title: "Confirm Checkout",
+            text: "Are you sure you want to proceed with checkout?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#008080",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, Checkout",
+            cancelButtonText: "Cancel",
+        });
+
+        if (!confirmCheckout.isConfirmed) {
+            console.log("Checkout cancelled by user.");
+            return; // Stop execution if user cancels
         }
 
         const today = new Date();
@@ -76,32 +192,39 @@ const ShoppingCartPage = () => {
                     if (item.id) {
                         const [titleRes, imageRes] = await Promise.all([
                             fetch(`http://localhost:5198/api/books/${item.id}/title`),
-                            fetch(`http://localhost:5198/api/books/${item.id}/image`)
+                            fetch(`http://localhost:5198/api/books/${item.id}/image`),
                         ]);
 
                         const title = await titleRes.text();
                         const image = await imageRes.text();
 
-                        return { title, image, quantity: item.quantity };
+                        return { id: item.id, title, image, quantity: item.quantity };
                     } else {
-                        return { title: 'Unknown Title', image: '/default-book.jpg', quantity: item.quantity };
+                        return { id: item.id, title: "Unknown Title", image: "/default-book.jpg", quantity: item.quantity };
                     }
                 })
             );
 
             setBookTitles(bookDetails);
 
+            // Store checked-out books in localStorage
+            let checkedOutBooks = JSON.parse(localStorage.getItem("checkedOutBooks")) || [];
+
+            bookDetails.forEach((book) => {
+                checkedOutBooks.push({
+                    ...book,
+                    returnDate: returnDate.toISOString(), // Save due date
+                });
+            });
+
+            localStorage.setItem("checkedOutBooks", JSON.stringify(checkedOutBooks));
+
             // Generate the Swal popup with book images
             Swal.fire({
                 title: "Borrow Summary",
-                width: "950px", // Reduced width for better structure
+                width: "950px",
                 html: `
-<div style="
-    max-width: 900px; 
-    max-height: 300px; 
-    overflow-y: auto; 
-    padding: 20px;
-">
+<div style="max-width: 900px; max-height: 300px; overflow-y: auto; padding: 20px;">
     <p><strong>Borrowing Date:</strong> ${today.toDateString()}</p>
     <p><strong>Return Date:</strong> ${returnDate.toDateString()}</p>
     <hr style="border: 0; height: 1px; background: #008080; margin: 10px 0;">
@@ -117,7 +240,9 @@ const ShoppingCartPage = () => {
             </tr>
         </thead>
         <tbody>
-            ${bookDetails.map((book, index) => `
+            ${bookDetails
+                        .map(
+                            (book, index) => `
                 <tr style="border-bottom: 1px solid #ddd;">
                     <td style="padding: 10px; text-align: center; font-weight: bold;">${index + 1}</td>
                     <td style="padding: 10px; text-align: center;">
@@ -137,7 +262,9 @@ const ShoppingCartPage = () => {
                         ">x${book.quantity}</span>
                     </td>
                 </tr>
-            `).join('')}
+            `
+                        )
+                        .join("")}
         </tbody>
     </table>
 
@@ -147,34 +274,32 @@ const ShoppingCartPage = () => {
                 icon: "success",
                 confirmButtonText: "OK",
                 confirmButtonColor: "#008080",
-            }).then(() => {
+            }).then(async () => {
+                // Handle available copies update AFTER confirmation
+                await Promise.all(
+                    cartItems.map(async (item) => {
+                        const newAvailableCopies = Math.max(item.availableCopies - item.quantity, 0);
+                        await axios.post("/api/books/update-available-copies", {
+                            bookId: item.id,
+                            availableCopies: newAvailableCopies,
+                        });
+
+                        // Remove the item from local storage cart
+                        const storedCart = JSON.parse(localStorage.getItem("cartItems")) || {};
+                        delete storedCart[item.id];
+                        localStorage.setItem("cartItems", JSON.stringify(storedCart));
+                    })
+                );
+
+                dispatch(clearCart());
                 navigate("/products");
             });
-
-
-
-
-
-
-            // Handle available copies update
-            await Promise.all(cartItems.map(async (item) => {
-                const newAvailableCopies = Math.max(item.availableCopies - item.quantity, 0);
-                await axios.post('/api/books/update-available-copies', {
-                    bookId: item.id,
-                    availableCopies: newAvailableCopies,
-                });
-
-                const storedCart = JSON.parse(localStorage.getItem("cartItems")) || {};
-                delete storedCart[item.id]; // Remove item from cart
-                localStorage.setItem("cartItems", JSON.stringify(storedCart));
-            }));
-
-            dispatch(clearCart());
-
         } catch (error) {
-            console.error('Failed to fetch book titles or update available copies:', error);
+            console.error("Failed to fetch book titles or update available copies:", error);
         }
     };
+
+
 
 
 
@@ -195,8 +320,10 @@ const ShoppingCartPage = () => {
             window.removeEventListener('popstate', handleNavigation); // Cleanup the listener on unmount
         };
     }, [dispatch]);
-
+    <Tabs activeTab={activeTab} setActiveTab={setActiveTab} />
     return (
+        <>
+            <Tabs activeTab={activeTab} setActiveTab={setActiveTab} />
         <div>
             
             {/* Updated styles for the top-right buttons */}
@@ -246,7 +373,7 @@ const ShoppingCartPage = () => {
                 </div>
             )}
 
-            {!showSummary && validCartItems.length > 0 && (
+                {activeTab === "cart" && !showSummary && validCartItems.length > 0 && (
                 <div style={styles.stickyButtons}>
                     <Link to="/products">
                         <button style={styles.continueShoppingButton}>Continue Shopping</button>
@@ -259,7 +386,7 @@ const ShoppingCartPage = () => {
 
 
                <div className="cart-container"> {/* Updated class for overall layout */}
-            {!checkoutComplete && (
+                    {activeTab === "cart" && !checkoutComplete && (
                     <div className="shopping-cart">
                         {validCartItems.length > 0 ? (
                             validCartItems.map(item => (
@@ -281,7 +408,7 @@ const ShoppingCartPage = () => {
                     </div>
             )}
 
-                {showSummary && (
+                    {activeTab === "cart" && showSummary && (
                     <div className="purchase-summary">
                         <h2 className="summary-title">Summary</h2>
                         <p className="summary-text">
@@ -310,8 +437,10 @@ const ShoppingCartPage = () => {
 
         </div>
 
-        </div>
-    );
+            </div>
+        </>
+            );
+    
 };
 
 const styles = {

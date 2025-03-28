@@ -8,7 +8,9 @@ import RemoveBookPage from './components/RemoveBookPage';
 import BookDescriptionPage from './pages/BookDescriptionPage';
 import UpdateBookPage from './components/UpdateBookPage';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import AboutUs from './pages/About'
+import AboutUs from './pages/About';
+
+
 const App = () => {
     const [userString, setUserString] = useState(""); // State to manage userString
     const [searchQuery, setSearchQuery] = useState("");
@@ -37,6 +39,7 @@ const App = () => {
                 <Route path="/books/:id" element={<BookDescriptionPage />} />
                 <Route path="/update-book/:id" element={<UpdateBookPage />} />
                 <Route path="/about" element={<AboutUs />} />
+                <Route path="/cart" element={<ShoppingCartPage />} />
             </Routes>
             {/* Global About Us Modal */}
             {isAboutModalOpen && (

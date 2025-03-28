@@ -1,6 +1,30 @@
+using Microsoft.Extensions.Options;
+using MongoDB.Driver;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Configure MongoDB
+builder.Services.Configure<MongoDbSettings>(
+    builder.Configuration.GetSection("DatabaseSettings"));
+
+builder.Services.AddSingleton<IMongoClient>(s =>
+    new MongoClient(builder.Configuration.GetValue<string>("ConnectionStrings:MongoDb")));
+
+builder.Services.AddScoped<IMongoDatabase>(s =>
+{
+    var settings = s.GetRequiredService<IOptions<MongoDbSettings>>().Value;
+    var client = s.GetRequiredService<IMongoClient>();
+    return client.GetDatabase(settings.DatabaseName);
+});
+
+builder.Services.AddScoped<IMongoCollection<Book>>(s =>
+{
+    var settings = s.GetRequiredService<IOptions<MongoDbSettings>>().Value;
+    var database = s.GetRequiredService<IMongoDatabase>();
+    return database.GetCollection<Book>(settings.BooksCollectionName);
+});
+
+// Add services to the container
 builder.Services.AddControllers();
 builder.Services.AddCors(options =>
 {
@@ -15,7 +39,7 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();

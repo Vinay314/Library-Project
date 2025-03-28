@@ -1,0 +1,602 @@
+.tabs-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+    background: white;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.tab-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    margin: 0 10px;
+    border-bottom: 2px solid transparent;
+}
+
+    .tab-button:hover {
+        color: #007bff;
+    }
+
+    .tab-button.active {
+        color: #007bff;
+        border-bottom: 2px solid #007bff;
+    }
+/* Parent container to stack books vertically */
+/*.cart-container {
+    display: flex;
+    flex-direction: column;*/ /* Stack items vertically */
+/*align-items: center;
+    width: 100%;
+}*/
+
+/* Each book in a row format */
+/*.cart-item {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: white;
+    padding: 15px;
+    border-bottom: 2px solid #0a3d5e;*/ /* Dark blue bottom border */
+/*}*/
+
+/* Book Image */
+/*.cart-item-image {
+    width: 50px;*/ /* Smaller size for consistency */
+/*height: auto;
+    margin-right: 20px;
+}*/
+
+/* Book Details */
+/*.cart-item-details {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}*/
+
+/* Title Styling */
+/*.item-title {
+    font-weight: bold;
+    font-size: 16px;
+    color: black;
+    margin-bottom: 2px;
+}*/
+
+/* Author Styling */
+/*.author {
+    font-size: 14px;
+    color: gray;
+    margin-bottom: 2px;
+}*/
+
+/* Status (Wink) */
+/*.status {
+    font-size: 14px;
+    color: #0a3d5e;
+    font-weight: bold;
+}*/
+
+
+/* Parent container to stack books vertically */
+.cart-container {
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    align-items: center;
+    width: 100%;
+    padding: 20px;
+    padding-bottom: 10%; /* Adjust this value as needed */
+}
+
+.shopping-cart {
+    width: 80%; /* Increased width for better spacing */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+/* Each book in a row format */
+/*.cart-item {
+    width: 141%;*/ /*      Adjusted for better layout */
+/*height: 11%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    Ensures proper spacing background-color: white;
+    padding: 15px;
+    margin-bottom: 10px;
+    Added spacing between items border-radius: 10px;
+    Slightly rounded corners box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    Soft shadow border: 1px solid #ddd;*/
+/*    Light border*/
+/*}*/
+
+/* Book Image */
+/*.cart-item-image img {
+    width: 100px;*/ /* Increased size for better visibility */
+/*height: 100px;*/ /* Maintain aspect ratio */
+/*height: auto;*/ /* Maintain aspect ratio */
+/*border-radius: 5px;
+    object-fit: cover;
+    margin-right: 95px;
+}*/
+
+/* Book Details */
+/*.cart-item-details {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}*/
+
+/* Title Styling */
+/*.item-title {
+    font-weight: bold;
+    font-size: 18px;*/ /* Increased size */
+/*color: black;
+    margin-bottom: 5px;
+}*/
+
+/* Author Styling */
+/*.author {
+    font-size: 14px;
+    color: #555;*/ /* Slightly darker gray */
+/*font-weight: 600;
+}*/
+
+/* Date Information */
+/*.date-info {
+    font-size: 14px;
+    color: red;
+    font-weight: bold;
+    margin-top: 5px;
+}*/
+
+/* Quantity Selector */
+/*.cart-quantity {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+    .cart-quantity button {
+        width: 25px;
+        height: 25px;
+        border: none;
+        background: #ddd;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 3px;
+    }
+
+    .cart-quantity input {
+        width: 35px;
+        text-align: center;
+        border: 1px solid #ccc;
+        padding: 5px;
+        border-radius: 3px;
+    }*/
+
+/* Remove Button */
+/*.remove-button {
+    background: red;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+    .remove-button:hover {
+        background: darkred;
+    }*/
+
+/* Checkout & Continue Shopping Buttons */
+/*.cart-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+    .cart-actions button {
+        padding: 10px 15px;
+        font-size: 16px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+.continue-shopping {
+    background: #0a3d5e;
+    color: white;
+}
+
+.checkout {
+    background: #008000;
+    color: white;
+}
+
+.cart-item-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+    .cart-item-controls button {
+        padding: 5px 10px;
+        border: none;
+        background-color: #ddd;
+        cursor: pointer;
+        font-size: 16px;
+        border-radius: 5px;
+    }
+
+    .cart-item-controls .remove-btn {
+        background-color: red;
+        color: white;
+        padding: 5px 15px;
+    }*/
+
+
+
+
+/* Cart Item Styles */
+/*.cart-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 175%;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    height: 100%;
+    background-color: white;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ddd;
+}*/
+
+
+
+/* Outer Cart Item - Same Styling as Cart Item */
+.outer-cart-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 175%;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    height: 100%;
+    /*    background-color: white;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ddd;*/
+    /*background-color: rgba(0, 128, 128, 0.9);*/ /* Teal with slight transparency */
+    /*box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+    border: 1px solid #006666;*/ /* Darker teal border for contrast */
+    /*background: linear-gradient(135deg, #80CBC4, #26A69A);*/ /* Light to dark teal gradient */
+    /*box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+    border: 1px solid #1E857B;*/ /* Darker teal border */
+    /*background: linear-gradient(135deg, #ABDCFF, #0396FF);*/ /* SKY BLUE gradient from image */
+
+    background: linear-gradient(to right, #14557B, #7FCEC5);
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+    border: 1px solid #0396FF; /* Border to match darker blue tone */
+
+    transition: all 0.3s ease-in-out;
+}
+
+    /* Cool Hover Effect */
+    .outer-cart-item:hover {
+        transform: scale(1.05); /* Slight scaling effect */
+        /* box-shadow: 0px 0px 20px 5px rgba(0, 206, 209, 0.8);*/ /* Teal glow effect */
+        /* border: 1px solid #00CED1;*/ /* Brighter teal border */
+        background: linear-gradient(to right, #127A85, #5EC7C2); /* Slightly brighter teal gradient */
+    }
+
+/*
+ Inner Cart Item - Same Styling as Outer */
+.inner-cart-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 145%;
+    padding: 15px;
+    border-radius: 10px;
+    /*    background-color: white;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ddd;
+        */
+    /*background-color: rgba(0, 0, 0, 0.5);*/ /* Black with 50% transparency */
+    /*box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ddd;
+    backdrop-filter: blur(5px);*/ /* Optional: Adds a slight blur effect */
+    /*background-color: rgba(20, 20, 20, 0.7);*/ /* Dark shade with transparency */
+    /*box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+    border: 1px solid #333;*/ /* Dark gray border for definition */
+    /*backdrop-filter: blur(5px);*/ /* Optional: Slight blur effect */
+    /*background-color: rgba(30, 30, 30, 0.85);*/ /* Dark gray with reduced transparency */
+    /*box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+    border: 1px solid #444;*/ /* Slightly lighter border for contrast */
+    /*backdrop-filter: blur(3px);*/ /* Subtle blur effect */
+    /*color: white;*/ /* Ensure all text inside is white */
+    /*    background-color: #1C2938;*/
+    /*background-color: rgba(28, 41, 56, 0.585);*/ /* Dark navy blue for better contrast */
+    background-color: #f0f0f0;
+    box-shadow: 2px 2px 10px #0396FF rgba(0, 0, 0, 0.1);
+    border: 1px solid #2C3E50; /* Subtle contrast */
+    color: white; /* Ensure text is clearly visible */
+}
+
+/* Hover Effect */
+.cart-item-hover {
+    background-color: #f9f9f9;
+}
+
+/* Cart Item Image */
+.cart-item-image {
+    width: 95px;
+    height: auto;
+    border-radius: 5px;
+    margin-right: 25px;
+    object-fit: cover;
+    margin-left: 12px;
+}
+
+/* Cart Item Details */
+.cart-item-details {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    flex-grow: 1;
+    gap: 30px;
+}
+
+/* Text Container */
+.text-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-left: 30px;
+}
+
+/* Typography */
+.item-name {
+    font-weight: bold;
+    font-size: 18px;
+    color: black;
+    margin-bottom: 5px;
+}
+
+.title {
+    font-weight: bold;
+    font-size: 17px;
+    /*    color: #333;*/
+    color: black;
+}
+
+.author {
+    font-weight: bold;
+    font-size: 17px;
+    /*    color: #555;*/
+    color: black;
+    font-weight: 600;
+}
+
+.date-info {
+    font-weight: bold;
+    font-size: 17px;
+    color: black;
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+/* Buttons Container */
+.buttons-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+/* General Button Styling */
+.button,
+.quantity-button {
+    padding: 8px 12px;
+    background-color: #f0f0f0;
+    color: #333;
+    border: 4px solid #008080;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+    .button:hover {
+        background-color: #ddd;
+    }
+
+/* Remove Button */
+.remove-button {
+    padding: 8px 12px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-left: 62px;
+    margin-right: 20px;
+}
+
+    .remove-button:hover {
+        background: darkred;
+    }
+
+.purchase-summary {
+    max-width: 600px; /* Increased width */
+    margin: 50px auto;
+    padding: 30px; /* More padding for better spacing */
+    border: 3px solid teal; /* Thicker teal border */
+    border-radius: 12px;
+    background: #f8f9fa;
+    box-shadow: 0 6px 15px rgba(0, 128, 128, 0.3);
+    text-align: center;
+}
+
+.summary-title {
+    color: teal;
+    font-size: 28px; /* Increased font size */
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.summary-text {
+    font-size: 20px; /* Increased text size */
+    color: #333;
+    margin: 10px 0;
+}
+
+.summary-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 15px 0;
+}
+
+.summary-item {
+    font-size: 18px; /* Increased font size */
+    color: #555;
+    padding: 8px 0;
+    border-bottom: 2px solid teal; /* Slightly thicker separator */
+}
+
+    .summary-item:last-child {
+        border-bottom: none;
+    }
+
+.back-button {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 15px 25px; /* Larger button */
+    background-color: teal;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px; /* Bigger font */
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 5px 10px rgba(0, 128, 128, 0.3);
+}
+
+    .back-button:hover {
+        background-color: #006666;
+        transform: scale(1.08);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* CART ITEM INLINE CSS DONE BY VINAY
+    
+    const styles = {
+
+  
+};
+
+    cartItem: {
+    display: 'flex', flexDirection: 'row', // Horizontal layout alignItems: 'center', justifyContent: 'space-between', width: '100%',*/
+/* borderBottom: '1px solid #ddd',*/
+/*padding: '10px', // Reduce padding to decrease height marginBottom: '10px', // Reduce spacing between items
+}
+
+,
+cartItemHover: {
+    borderRadius: '20px', border: '4px solid lightgrey', // Teal border on hover
+}
+
+,
+parentContainer: {
+    display: 'flex', flexDirection: 'column', // Force each item to be in a new line width: '100%',
+}
+
+,
+cartItemImage: {
+    width: '80px', height: 'auto', borderRadius: '5px', marginRight: '15px',
+}
+
+,
+cartItemDetails: {
+    display: 'flex', flexDirection: 'column', alignItems: 'flex-start', // Align text to the left flexGrow: 1, // Take remaining space
+}
+
+,
+textContainer: {
+    display: 'flex', flexDirection: 'column', alignItems: 'flex-start',
+}
+
+,
+itemName: {
+    fontSize: '18px', fontWeight: 'bold', color: '#333',
+}
+
+,
+author: {
+    fontSize: '16px', color: '#555', fontWeight: 'bold', marginTop: '4px',
+}
+
+,
+title: {
+    fontSize: '16px', color: '#555', fontWeight: 'bold', marginTop: '4px',
+}
+
+,
+buttonsContainer: {
+    display: 'flex', gap: '10px', alignItems: 'center', marginLeft: 'auto', // Push to right corner marginBottom: '25px',
+}
+
+,
+button: {
+    padding: '8px 12px', backgroundColor: '#f0f0f0', color: '#333', border: '1px solid #ccc', borderRadius: '5px', cursor: 'pointer', fontSize: '16px', transition: 'background-color 0.3s ease',
+}
+
+,
+quantityButton: {
+    padding: '8px 12px', backgroundColor: '#f0f0f0', color: '#333', border: '1px solid #ccc', borderRadius: '5px', fontSize: '16px',
+}
+
+,
+removeButtonBottom: {
+    padding: '6px 10px', backgroundColor: '#dc3545', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontSize: '14px',
+}
+
+,*/

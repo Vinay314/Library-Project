@@ -86,72 +86,72 @@ const UpdateBookPage = ({ book, onClose, onBookUpdated }) => {
     const [isbn, setIsbn] = useState('');
     // Fetch the current book data from the API when the component mounts
     useEffect(() => {
+        console.log("Received book:", book); 
         if (book) {
-            setTitle(book.title);
-            setAuthor(book.author);
-            setCategory(book.category);
-            setDescription(book.description);
-            setAvailableCopies(book.availableCopies);
-            setIsbn(book.isbn);
-            
+            setTitle(book.title || "");
+            setAuthor(book.author || "");
+            setCategory(book.category || "");
+            setDescription(book.description || "");
+            setAvailableCopies(book.availableCopies || 1);
+            setIsbn(book.isbn || "");
         }
-    }, [book]);  // ? Runs only when book data is received
+    }, [book]);
 
 
-    const handleUpdateBook = async (e) => {
-        e.preventDefault();
+
+    const handleUpdateBook = async (event, bookId) => {
+        event.preventDefault();
+
+        console.log("Updating book with ID:", bookId);
+
+        if (!bookId || typeof bookId !== "string") {
+            console.error("Invalid bookId:", bookId);
+            return;
+        }
 
         const formData = new FormData();
-        formData.append('title', title);
-        formData.append('author', author);
-        formData.append('category', category);
-        formData.append('description', description);
-        formData.append('availableCopies', parseInt(availableCopies, 10));
-        formData.append('isbn', isbn);
-
-        if (image) {
-            formData.append('file', image);
-        }
+        formData.append("title", title);
+        formData.append("author", author);
+        formData.append("category", category);
+        formData.append("description", description);
+        formData.append("isbn", isbn);
+        formData.append("availableCopies", availableCopies);
+        if (image) formData.append("file", image);
 
         try {
-            const response = await fetch(`http://localhost:5198/api/books/${book.id}`, {
-                method: 'PUT',
+            const response = await fetch(`http://localhost:5198/api/books/${bookId}`, {
+                method: "PUT",
                 body: formData,
             });
 
             if (response.ok) {
-                const updatedBook = await response.json();
+                console.log("Book updated successfully!");
+                onBookUpdated(); // Refresh book list
 
-                onBookUpdated(updatedBook); 
-                onClose(); 
-
+                // Show success message with Swal
                 Swal.fire({
-                    title: "Success",
-                    text: "Book updated successfully!",
+                    title: "Success!",
+                    text: "Book updated successfully.",
                     icon: "success",
-                    confirmButtonText: "OK",
-                    confirmButtonColor: "#008080" // Teal color
+                    confirmButtonColor: "#008080", // Teal color
+                }).then(() => {
+                    // Navigate to the cart page and immediately return after Swal confirmation
+                    navigate('/cart', { replace: true });
+                    setTimeout(() => navigate('/products', { replace: true }), 50);
                 });
+
             } else {
-                Swal.fire({
-                    title: "Error",
-                    text: "Failed to update the book!",
-                    icon: "error",
-                    confirmButtonText: "OK",
-                    confirmButtonColor: "#008080" // Red color for errors
-                });
+                console.error("Failed to update book:", await response.text());
             }
         } catch (error) {
-            console.error('Error updating the book:', error);
-            Swal.fire({
-                title: "Error",
-                text: "Something went wrong!",
-                icon: "error",
-                confirmButtonText: "OK",
-                confirmButtonColor: "#d33" // Red color for errors
-            });
+            console.error("Error updating book:", error);
         }
     };
+
+
+
+
+
 
 
 
@@ -198,7 +198,7 @@ const UpdateBookPage = ({ book, onClose, onBookUpdated }) => {
     };
 
     return (
-        <form onSubmit={handleUpdateBook} style={styles.form}>
+        <form onSubmit={(e) => handleUpdateBook(e, book.id)} style={styles.form}>
             <button type="button" onClick={handleClose1} style={styles.closeButton}>
                 <X size={18} />
             </button>
@@ -235,7 +235,16 @@ const UpdateBookPage = ({ book, onClose, onBookUpdated }) => {
             </div>
             <div style={styles.formGroup}>
                 <BookCopy size={18} style={styles.icon} />
-                <input type="number" value={availableCopies} onChange={(e) => setAvailableCopies(e.target.value)} style={styles.input} required />
+                <input
+                    type="number"
+                    value={availableCopies}
+                    onChange={(e) => {
+                        const value = Math.max(0, Number(e.target.value)); // Ensures value is 0 or greater
+                        setAvailableCopies(value);
+                    }}
+                    style={styles.input}
+                    required
+                />
             </div>
 
             <div style={styles.formGroup}>

@@ -24,6 +24,9 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { ArrowUp } from "lucide-react";
+import axios from "axios";
+import { motion } from "framer-motion";
+import FlippableImage from "./FlippableImage";
 function ProductListingPage() {
     const [products, setProducts] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
@@ -44,13 +47,25 @@ function ProductListingPage() {
     const [isChatOpen, setIsChatOpen] = useState(false);
     const [isAboutModalOpen, setIsAboutModalOpen] = useState(false);
     const [showButton, setShowButton] = useState(false);
-    
+    const [books, setBooks] = useState([]); 
+    const [showModal, setShowModal] = useState(false);
+    const [isAnimating, setIsAnimating] = useState(false);
+
+    const handleBookClick = (book) => {
+        setSelectedBook(book);
+        setIsAnimating(true);
+
+        setTimeout(() => {
+            setShowModal(true);
+            setIsAnimating(false);
+        }, 800); // Duration matches animation time
+    };
     const handleOpenAboutModal = () => {
         setIsAboutModalOpen(true);
     };
     useEffect(() => {
         const handleScroll = () => {
-            if (window.scrollY > 100) {
+            if (window.scrollY > 200) {
                 setShowButton(true);
             } else {
                 setShowButton(false);
@@ -62,7 +77,43 @@ function ProductListingPage() {
             window.removeEventListener("scroll", handleScroll);
         };
     }, []);
+    const fetchBooks = async () => {
+        try {
+            const response = await fetch("http://localhost:5198/api/books");
+            const data = await response.json();
 
+            if (!Array.isArray(data.books)) {
+                console.error("Invalid data format:", data);
+                return;
+            }
+
+           
+            setBooks(data.books); // Ensure state updates
+
+        } catch (error) {
+            console.error("Error fetching books:", error);
+        }
+    };
+
+    useEffect(() => {
+        fetchBooks();
+    }, []);
+
+  
+
+    const handleBookUpdate = () => {
+        fetchBooks(); // Call this function after update
+    };
+
+
+    const addBook = async (newBook) => {
+        try {
+            await axios.post("http://localhost:5198/api/books", newBook);
+            fetchBooks(); // Re-fetch books after adding a new one
+        } catch (error) {
+            console.error("Error adding book:", error);
+        }
+    };
     const scrollToTop = () => {
         window.scrollTo({ top: 0, behavior: "smooth" });
     };
@@ -86,9 +137,17 @@ function ProductListingPage() {
         }
     };
     const handleBookAdded = (newBook) => {
-        setProducts(prevBooks => [...prevBooks, newBook]); 
+        setProducts(prevBooks => Array.isArray(prevBooks) ? [...prevBooks, newBook] : [newBook]);
+    };
+    const openUpdateBookModal = (book) => {
+        setBookToUpdate(book);
+        setIsUpdateBookModalOpen(true);
     };
 
+
+    useEffect(() => {
+        fetchBooks();
+    }, [books]); // This ensures it refreshes when books change
 
 
 
@@ -141,11 +200,16 @@ function ProductListingPage() {
         
     };
 
-    const handleBookUpdated = (updatedBook) => {
-        setProducts((prevBooks) =>
-            prevBooks.map((book) => (book.id === updatedBook.id ? updatedBook : book))
-        );
+    
+
+    const handleBookUpdated = async () => {
+        await fetchBooks(); // Ensure data is updated
+        setIsUpdateBookModalOpen(false);
+        forceUpdate(n => n + 1); // Force React to refresh component
     };
+
+
+
     useEffect(() => {
         window.clearSearch = () => {
             setSearchQuery(""); // Clear searchQuery first
@@ -365,37 +429,26 @@ function ProductListingPage() {
                 fetch(`http://localhost:5198/api/books/remove-by-title/${encodeURIComponent(title)}`, { method: 'DELETE' })
                     .then(response => {
                         if (!response.ok) throw new Error('Failed to remove book');
-                        return response.json();
+                        return response.text();  
                     })
                     .then(() => {
-                        // Remove from product list
-                        setProducts((prevProducts) =>
-                            prevProducts.filter(product => product.title.toLowerCase() !== title.toLowerCase())
+                        
+                        setProducts(prevProducts =>
+                            [...prevProducts.filter(product => product.title.toLowerCase() !== title.toLowerCase())]
                         );
 
-                        // Remove from cart (Redux + LocalStorage)
-                        const storedCart = JSON.parse(localStorage.getItem("cartItems")) || {};
+                        
+                        dispatch(removeFromCart(productId));
 
-                        // Find the book ID that matches the title in localStorage
-                        const bookToDeleteKey = Object.keys(storedCart).find(
-                            key => storedCart[key]?.title?.toLowerCase() === title.toLowerCase()
-                        );
+                        
+                        setCartItems(prevCart => {
+                            const updatedCart = { ...prevCart };
+                            delete updatedCart[productId];
+                            localStorage.setItem("cartItems", JSON.stringify(updatedCart));
+                            return updatedCart;
+                        });
 
-                        if (bookToDeleteKey) {
-                            delete storedCart[bookToDeleteKey]; // Remove from localStorage
-                            localStorage.setItem("cartItems", JSON.stringify(storedCart));
-
-                            dispatch(removeFromCart(bookToDeleteKey)); // Remove from Redux store
-                        }
-
-                        // **Trigger Re-render by updating state**
-                        setCartItems({ ...storedCart });
-
-                        // Call the function to remove from cart
-                        if (productId) {
-                            handleRemoveFromCart(productId);
-                        }
-
+                        
                         Swal.fire({
                             title: 'Deleted!',
                             text: `Book titled "${title}" has been removed successfully.`,
@@ -572,6 +625,7 @@ function ProductListingPage() {
                                 filteredProducts.map(product => (
                                     <div key={product.id} className="col">
                                         <div className={`book-card ${darkMode ? 'bg-secondary text-white' : ''}`}>
+
                                             {/* Out of Stock Badge */}
                                             {product.availableCopies === 0 && (
                                                 <div className="out-of-stock-badge">Out of Stock</div>
@@ -681,28 +735,31 @@ function ProductListingPage() {
                 <BotMessageSquare size={30} />
             </button>
             {showButton && (
-               
-                    <button
-                        onClick={scrollToTop}
-                        style={{
-                            position: 'fixed',
-                            bottom: '122px',
-                            right: '120px',
-                            padding: '10px 20px',
-                            fontSize: '16px',
-                            backgroundColor: '#184d59',
-                            color: 'white',
-                            border: 'none',
-                            borderRadius: '5px',
-                            cursor: 'pointer',
-                            boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
-                            zIndex: 1000,
-                        }}
-                    >
-                        Go to Top
-                    </button>
-                )}
-      )}
+                <button
+                    onClick={scrollToTop}
+                    style={{
+                        position: 'fixed',
+                        bottom: '30px', // Adjusted for better placement
+                        left: '50%', // Moves the button to the center of the screen
+                        transform: 'translateX(-50%)', // Ensures it's centered correctly
+                        padding: '10px 20px',
+                        fontSize: '16px',
+                        backgroundColor: '#184d59',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '90px',
+                        cursor: 'pointer',
+                        boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
+                        zIndex: 1000,
+                        width: 'auto',
+                        minWidth: '50px',
+                    }}
+                >
+                    <ArrowUp />
+                </button>
+            )}
+s
+     
             {isChatOpen && <Chatbot onClose={() => setIsChatOpen(false)}/>}
             {isAddBookModalOpen && (
                 <div className="modal-overlay-add" onClick={handleCloseAddBookModal}>
@@ -843,6 +900,11 @@ function ProductListingPage() {
                                     type="button"
                                     className="btn btn-sm btn-secondary disabled-cart-btn"
                                     disabled
+                                    style={{
+                                        marginRight: "25px",
+                                        marginBottom: "77px",
+                                        position: "fixed"
+                                    }}
                                 >
                                     Out of Stock
                                 </button>

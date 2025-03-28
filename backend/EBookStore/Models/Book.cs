@@ -1,12 +1,33 @@
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+
 public class Book
 {
-	public Guid Id { get; set; }
-	public string Title { get; set; } = string.Empty; 
-	public string Author { get; set; } = string.Empty; // Initialize with default value
-	public string Category { get; set; } = string.Empty; // Initialize with default value
-	//public decimal Price { get; set; }
-	public string Image { get; set; } = string.Empty; // Initialize with default value
-	public int AvailableCopies { get; set; } = 3; // Initialize with default value of 3
-	public string Description {get; set; }=string.Empty;
-	public string ISBN { get; set; } = string.Empty;
+    [BsonId]
+    [BsonRepresentation(BsonType.ObjectId)]
+    public string Id { get; set; } // Remove manual assignment
+
+    [BsonElement("title")]
+    public required string Title { get; set; }
+
+    [BsonElement("author")]
+    public required string Author { get; set; }
+
+    [BsonElement("category")]
+    public required string Category { get; set; }
+
+    [BsonElement("price")]
+    public decimal Price { get; set; }
+
+    [BsonElement("description")]
+    public required string Description { get; set; }
+
+    [BsonElement("ISBN")]
+    public required string ISBN { get; set; }
+
+    [BsonElement("availableCopies")]
+    public int AvailableCopies { get; set; }
+
+    [BsonElement("image")]
+    public string? Image { get; set; }
 }

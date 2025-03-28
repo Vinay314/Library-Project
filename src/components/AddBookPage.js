@@ -92,56 +92,62 @@ const AddBookPage = ({onClose ,onBookAdded}) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const navigate = useNavigate();
     const [isSubmitting, setIsSubmitting] = useState(false); 
-    const handleAddBook = async (e) => {
-        e.preventDefault();
-        if (isSubmitting) return;
-        setIsSubmitting(true);
-        if (!image) {
-            Swal.fire("Error", "Please upload an image!", "error");
-            return;
-        }
+    const handleAddBook = async (event) => {
+        event.preventDefault();
 
         const formData = new FormData();
-        formData.append('file', image);
-        formData.append('title', title);
-        formData.append('author', author);
-        formData.append('category', category);
-        formData.append('availableCopies', availableCopies);
-        formData.append('description', description);
-        formData.append('isbn', isbn);
+        formData.append("file", image);
+        formData.append("title", title);
+        formData.append("author", author);
+        formData.append("category", category);
+        formData.append("description", description);
+        formData.append("ISBN", isbn);
+        formData.append("availableCopies", availableCopies);
 
         try {
-            const response = await fetch('http://localhost:5198/api/books', {
-                method: 'POST',
+            const response = await fetch("http://localhost:5198/api/books", {
+                method: "POST",
                 body: formData,
             });
 
-            if (response.ok) {
-                const newBook = await response.json();
-
-                onClose();  
-                onBookAdded(newBook); 
-
-                setTimeout(() => {  
-                    Swal.fire({
-                        title: "Success",
-                        text: "Book added successfully!",
-                        icon: "success",
-                        confirmButtonText: "OK",
-                        confirmButtonColor: "#008080" // Teal color
-                    });
-                }, 300);
-
-            } else {
-                Swal.fire("Error", "Failed to add book", "error");
+            if (!response.ok) {
+                throw new Error(`Failed to add book: ${await response.text()}`);
             }
+
+            const newBook = await response.json(); // Get added book details
+
+            
+            if (onBookAdded) {
+                onBookAdded(newBook);
+            }
+
+            
+            if (onClose) {
+                onClose();
+            }
+
+            
+            setTimeout(() => {
+                Swal.fire({
+                    title: "Success!",
+                    text: "Book added successfully!",
+                    icon: "success",
+                    confirmButtonColor: "#008080",
+                });
+            }, 100); // Slight delay ensures modal closes first
+
         } catch (error) {
-            console.error("Error adding book:", error);
-            Swal.fire("Error", "Something went wrong!", "error");
-        } finally {
-            setIsSubmitting(false);
+            console.error("Error adding book:", error.message);
+            Swal.fire({
+                title: "Error",
+                text: error.message,
+                icon: "error"
+            });
         }
     };
+
+
+
 
 
     const handleImageUpload = (e) => {

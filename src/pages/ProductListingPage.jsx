@@ -669,17 +669,7 @@ function ProductListingPage() {
                                             {/*</div>*/}
 
                                             {/* Clickable Image moved slightly down */}
-                                            <img
-
-                                                src={product.image || "https://via.placeholder.com/300x200"}
-
-                                                className="book-image clickable-image mt-4"
-
-                                                alt={product.title}
-
-                                                onClick={() => handleOpenModal(product)}
-
-                                            />
+                                            <FlippableImage product={product} handleOpenModal={handleOpenModal} />
 
                                             <div className="card-body">
                                                 <strong><h1 className="fw-bold card-title">{product.title}</h1></strong>

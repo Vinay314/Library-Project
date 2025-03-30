@@ -9,6 +9,8 @@ import Header from "../components/Header";
 import emptyCartImage from './assets/shopping.png';
 import Swal from 'sweetalert2';
 import "./Tabs.css";
+import Loader from './Loader.jsx'
+
 const Tabs = ({ activeTab, setActiveTab }) => {
     const tabs = [
         { id: "borrowed", label: "Borrowed Books" },
@@ -45,10 +47,13 @@ const Tabs = ({ activeTab, setActiveTab }) => {
 
             {/* Display Books Based on Active Tab */}
             {activeTab === "current" && (
-                <div>
+                <div className ="current-books">
                     <h2>Current Books</h2>
                     {currentBooks.length > 0 ? (
                         currentBooks.map((book) => (
+
+                            <div className="shopping-cart">
+                                <div className="outer-cart-item">
                             <div key={book.id} className="inner-cart-item">
                                 {/* Book Image */}
                                 <img src={book.image} alt={book.title} className="cart-item-image" />
@@ -63,6 +68,8 @@ const Tabs = ({ activeTab, setActiveTab }) => {
                                         </p>
                                     </div>
                                 </div>
+                                    </div>
+                                </div>
                             </div>
                         ))
                     ) : (
@@ -73,10 +80,12 @@ const Tabs = ({ activeTab, setActiveTab }) => {
             )}
 
             {activeTab === "borrowed" && (
-                <div>
+                <div className = "borrowed-books">
                     <h2>Borrowed Books</h2>
                     {borrowedBooks.length > 0 ? (
                         borrowedBooks.map((book) => (
+                            <div className ="shopping-cart">
+                            <div className ="outer-cart-item">
                             <div key={book.id} className="inner-cart-item">
                                 {/* Book Image */}
                                 <img src={book.image} alt={book.title} className="cart-item-image" />
@@ -89,6 +98,8 @@ const Tabs = ({ activeTab, setActiveTab }) => {
                                         <p className="date-info">
                                             Date of Return: {book.returnDate ? new Date(book.returnDate).toDateString() : "Not Set"}
                                         </p>
+                                    </div>
+                                </div>
                                     </div>
                                 </div>
                             </div>
@@ -116,7 +127,8 @@ const ShoppingCartPage = () => {
     const [bookTitles, setBookTitles] = useState([]);
     const [image, setImage] = useState([]);
     const [activeTab, setActiveTab] = useState("borrowed");
-
+    const [isTransitioning, setIsTransitioning] = useState(false);
+    const [loading, setLoading] = useState(true);
     const validCartItems = cartItems.filter(item => item?.title !== undefined && item?.title !== null);
     const tabs = [
         { id: "borrowed", label: "Borrowed Books" },
@@ -141,7 +153,13 @@ const ShoppingCartPage = () => {
                 .catch(error => console.error('Error fetching Image:', error));
         }
     }, [id1]);
-   
+    useEffect(() => {
+        if (isTransitioning) {
+            setTimeout(() => {
+                navigate("/products"); // Redirect to products after transition
+            }, 500); // Ensure it matches transition duration
+        }
+    }, [isTransitioning, navigate]);
     useEffect(() => {
     console.log("Current Cart Items in ShoppingCartPage:", cartItems);
 }, [cartItems]);
@@ -274,7 +292,21 @@ const ShoppingCartPage = () => {
                 icon: "success",
                 confirmButtonText: "OK",
                 confirmButtonColor: "#008080",
-            }).then(async () => {
+            }).then(() => {
+                navigate("/loader"); // Navigate to Loader component first
+                setTimeout(() => {
+                    navigate("/products"); // Navigate to products after 2s
+                }, 2000);
+            });  
+            const transitionStyle = isTransitioning
+                ? {
+                    opacity: 0,
+                    transform: "scale(0.95)",
+                    transition: "opacity 0.5s ease-out, transform 0.5s ease-out",
+                }
+                : {};
+
+
                 // Handle available copies update AFTER confirmation
                 await Promise.all(
                     cartItems.map(async (item) => {
@@ -292,8 +324,8 @@ const ShoppingCartPage = () => {
                 );
 
                 dispatch(clearCart());
-                navigate("/products");
-            });
+                
+            
         } catch (error) {
             console.error("Failed to fetch book titles or update available copies:", error);
         }

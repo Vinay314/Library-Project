@@ -9,6 +9,7 @@ import BookDescriptionPage from './pages/BookDescriptionPage';
 import UpdateBookPage from './components/UpdateBookPage';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import AboutUs from './pages/About';
+import Loader from './pages/Loader';
 
 
 const App = () => {
@@ -40,6 +41,7 @@ const App = () => {
                 <Route path="/update-book/:id" element={<UpdateBookPage />} />
                 <Route path="/about" element={<AboutUs />} />
                 <Route path="/cart" element={<ShoppingCartPage />} />
+                <Route path="/loader" element={<Loader/>}/>
             </Routes>
             {/* Global About Us Modal */}
             {isAboutModalOpen && (

@@ -10,6 +10,8 @@ import emptyCartImage from './assets/shopping.png';
 import Swal from 'sweetalert2';
 import "./Tabs.css";
 import Loader from './Loader.jsx'
+import { REMOVE_FROM_CART, INCREASE_QUANTITY, DECREASE_QUANTITY } from '../store/actions';
+
 
 const Tabs = ({ activeTab, setActiveTab }) => {
     const tabs = [
@@ -29,6 +31,9 @@ const Tabs = ({ activeTab, setActiveTab }) => {
 
         setCurrentBooks(current);
         setBorrowedBooks(borrowed);
+
+        let objs = localStorage.getItem("cartItems");
+
     }, []);
     return (
         <div>
@@ -115,7 +120,9 @@ const Tabs = ({ activeTab, setActiveTab }) => {
 
 };
 const ShoppingCartPage = () => {
-    const cartItems = useSelector(state => state.cart.items);
+    const cartItems = JSON.parse(localStorage.getItem("cartItems"));
+
+
     const totalCost = useSelector(state => state.cart.totalCost);
     const [showSummary, setShowSummary] = useState(false);
     const [checkoutComplete, setCheckoutComplete] = useState(false);
@@ -126,10 +133,90 @@ const ShoppingCartPage = () => {
     const [title, setTitle] = useState('');
     const [bookTitles, setBookTitles] = useState([]);
     const [image, setImage] = useState([]);
-    const [activeTab, setActiveTab] = useState("borrowed");
+    const [activeTab, setActiveTab] = useState("cart");
     const [isTransitioning, setIsTransitioning] = useState(false);
     const [loading, setLoading] = useState(true);
-    const validCartItems = cartItems.filter(item => item?.title !== undefined && item?.title !== null);
+    
+    let validCartItemsArray = [];// cartItems.filter(item => item?.title !== undefined && item?.title !== null);
+    for (let key in cartItems) {
+        if (cartItems[key].title) {
+            validCartItemsArray.push(cartItems[key]);
+        }
+    }
+    const [validCartItems, setValidCartItems] = useState(validCartItemsArray);
+
+    const handleRemoveBook = (item, isDelete) => {
+        dispatch({
+            type: REMOVE_FROM_CART,
+            payload: { id: item.id },
+        });
+
+        // Retrieve current cart from localStorage
+        const storedCart = JSON.parse(localStorage.getItem("cartItems")) || {};
+        if (storedCart[item.id].quantity > 1 && !isDelete) {
+            storedCart[item.id].quantity--;
+        }
+        else {
+            // Remove the item from cart
+            delete storedCart[item.id];
+        }
+
+        // Update localStorage
+        localStorage.setItem("cartItems", JSON.stringify(storedCart));
+
+        console.log("Updated Cart in handleRemoveBook:", storedCart);
+
+        let validCartItemsArray1 = [];// cartItems.filter(item => item?.title !== undefined && item?.title !== null);
+        for (let key in storedCart) {
+            if (storedCart[key].title) {
+                validCartItemsArray1.push(storedCart[key]);
+            }
+        }
+
+        setValidCartItems(validCartItemsArray1);
+    };
+
+    const handleIncreaseBook = (item) => {
+        if (item.quantity < item.availableCopies) {
+            dispatch({
+                type: INCREASE_QUANTITY,
+                payload: { id: item.id }
+            });
+
+            // Retrieve current cart from localStorage
+            const storedCart = JSON.parse(localStorage.getItem("cartItems")) || {};
+
+            // Remove the item from cart
+            storedCart[item.id].quantity = storedCart[item.id].quantity + 1;
+
+            // Update localStorage
+            localStorage.setItem("cartItems", JSON.stringify(storedCart));
+
+            console.log("Updated Cart in handleRemoveBook:", storedCart);
+
+
+            let validCartItemsArray1 = [];// cartItems.filter(item => item?.title !== undefined && item?.title !== null);
+            for (let key in storedCart) {
+                if (storedCart[key].title) {
+                    validCartItemsArray1.push(storedCart[key]);
+                }
+            }
+
+            setValidCartItems(validCartItemsArray1);
+
+        } else {
+            Swal.fire({
+                icon: 'warning',  // Warning icon
+                title: 'Oops!',
+                text: 'No more available copies',
+                confirmButtonText: 'OK',
+                confirmButtonColor: "#008080",
+                //timer: 3000,  // Auto-close after 3 seconds
+                //timerProgressBar: true
+            });
+        }
+    };
+   
     const tabs = [
         { id: "borrowed", label: "Borrowed Books" },
         { id: "current", label: "Books With You" },
@@ -206,7 +293,7 @@ const ShoppingCartPage = () => {
         try {
             // Fetch titles and images for all books in the cart
             const bookDetails = await Promise.all(
-                cartItems.map(async (item) => {
+                validCartItems.map(async (item) => {
                     if (item.id) {
                         const [titleRes, imageRes] = await Promise.all([
                             fetch(`http://localhost:5198/api/books/${item.id}/title`),
@@ -236,7 +323,7 @@ const ShoppingCartPage = () => {
             });
 
             localStorage.setItem("checkedOutBooks", JSON.stringify(checkedOutBooks));
-
+            localStorage.removeItem("cartItems");
             // Generate the Swal popup with book images
             Swal.fire({
                 title: "Borrow Summary",
@@ -309,7 +396,7 @@ const ShoppingCartPage = () => {
 
                 // Handle available copies update AFTER confirmation
                 await Promise.all(
-                    cartItems.map(async (item) => {
+                    validCartItems.map(async (item) => {
                         const newAvailableCopies = Math.max(item.availableCopies - item.quantity, 0);
                         await axios.post("/api/books/update-available-copies", {
                             bookId: item.id,
@@ -419,11 +506,11 @@ const ShoppingCartPage = () => {
 
                <div className="cart-container"> {/* Updated class for overall layout */}
                     {activeTab === "cart" && !checkoutComplete && (
-                    <div className="shopping-cart">
+                        <div className="shopping-cart">
                         {validCartItems.length > 0 ? (
                             validCartItems.map(item => (
                                 <div className="outer-cart-item" key={item.id}>
-                                    <CartItem item={item} />
+                                    <CartItem item={item} handleRemoveBook={(isDelete) => { handleRemoveBook(item, isDelete) }} handleIncreaseBook={() => { handleIncreaseBook(item) }} />
                                 </div>
                             ))
                         ) : (

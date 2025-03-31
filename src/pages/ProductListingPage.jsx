@@ -50,7 +50,11 @@ function ProductListingPage() {
     const [books, setBooks] = useState([]); 
     const [showModal, setShowModal] = useState(false);
     const [isAnimating, setIsAnimating] = useState(false);
-
+    const [isFlipped, setIsFlipped] = useState(false);
+    const handleFlip = () => {
+        setIsFlipped(true);
+        setTimeout(() => setIsFlipped(false), 600); // Reset flip after animation
+    };
     const handleBookClick = (book) => {
         setSelectedBook(book);
         setIsAnimating(true);
@@ -248,8 +252,10 @@ function ProductListingPage() {
             dispatch(addToCart(book));
 
             setCartItems((prevCartItems) => {
-                const updatedCart = { ...prevCartItems, [book.id]: true };
-
+                //const updatedCart = { ...cartItems, [selectedBook.id]: selectedBook }
+                const updatedCart = {
+                    ...prevCartItems, [book.id]: { ...book, quantity: 1 } };
+                //updatedCart.Push(book);
                 localStorage.setItem("cartItems", JSON.stringify(updatedCart));
                 console.log("Cart before update:", cartItems);
                 console.log("Updated Cart:", updatedCart);
@@ -622,63 +628,10 @@ function ProductListingPage() {
 
                             {filteredProducts.length > 0 ? (
 
-                                filteredProducts.map(product => (
-                                    <div key={product.id} className="col">
-                                        <div className={`book-card ${darkMode ? 'bg-secondary text-white' : ''}`}>
+                                filteredProducts.map(product => 
+                                    < FlippableImage product = { product } cartItems = { cartItems } handleOpenModal = { handleOpenModal } handleEditBook1 = { handleEditBook1 } removeBookByTitle = { removeBookByTitle } handleRemoveFromCart = { handleRemoveFromCart } handleAddToCart = { handleAddToCart } />
 
-                                            {/* Out of Stock Badge */}
-                                            {product.availableCopies === 0 && (
-                                                <div className="out-of-stock-badge">Out of Stock</div>
-                                            )}
-                                            <div className="settings-container">
-                                                <i className="bi bi-three-dots-vertical settings-icon"></i>
-                                                <div className="dropdown-menu">
-                                                    <button onClick={() => handleEditBook1(product)} className="dropdown-item">
-                                                        <i className="bi bi-pencil"></i> Edit
-                                                    </button>
-
-                                                    <button onClick={() => removeBookByTitle(product.title, product.id)} className="dropdown-item">
-                                                        <i className="bi bi-trash3"></i> Delete
-                                                    </button>
-
-                                                    {/* Disable 'Place in Cart' if out of stock */}
-                                                    <button
-                                                        onClick={() => {
-                                                            if (product.availableCopies > 0) {
-                                                                cartItems[product.id] ? handleRemoveFromCart(product.id) : handleAddToCart(product);
-                                                            }
-                                                        }}
-                                                        className={`dropdown-item ${product.availableCopies === 0 ? 'disabled' : ''}`}
-                                                        disabled={product.availableCopies === 0}
-                                                    >
-                                                        <i className="bi bi-cart"></i>
-                                                        {cartItems[product.id] ? " Remove from Cart" : " Place in Cart"}
-                                                    </button>
-                                                </div>
-                                            </div>
-
-                                            
-                                            {/* Button Container in Top Right */}
-                                            {/*<div className="button-container">*/}
-                                            {/*    <button onClick={() => handleEditBook(product)} className="edit-btn">*/}
-                                            {/*        <i className="bi bi-pencil"></i>*/}
-                                            {/*    </button>*/}
-                                            {/*    <button onClick={() => removeBookByTitle(product.title)} className="btn btn-sm btn-danger remove-btn">*/}
-                                            {/*        <i className="bi bi-trash3"></i>*/}
-                                            {/*    </button>*/}
-                                            {/*</div>*/}
-
-                                            {/* Clickable Image moved slightly down */}
-                                            <FlippableImage product={product} handleOpenModal={handleOpenModal} />
-
-                                            <div className="card-body">
-                                                <strong><h1 className="fw-bold card-title">{product.title}</h1></strong>
-                                                <h4 className="card-author">{product.author}</h4>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                ))
+                                )
 
                             ) : (
                                     <div style={{
@@ -902,27 +855,41 @@ s
                                 <button
                                     type="button"
                                     className="btn btn-sm btn-danger removecart"
-                                        style={{
-                                            marginRight: "25px",
-                                            marginBottom: "77px",
-                                            position: "fixed"
-                                        }}
-                                    onClick={() => handleRemoveFromCart(selectedBook.id)}
+                                    style={{
+                                        marginRight: "25px",
+                                        marginBottom: "77px",
+                                        position: "fixed"
+                                    }}
+                                    onClick={() => {
+                                        handleRemoveFromCart(selectedBook.id);
+
+                                        // Update localStorage
+                                        const updatedCart = { ...cartItems };
+                                        delete updatedCart[selectedBook.id];
+                                        localStorage.setItem("cartItems", JSON.stringify(updatedCart));
+                                    }}
                                 >
                                     Remove from Cart
                                 </button>
                             ) : (
                                 <button
-                                    onClick={() => handleAddToCart(selectedBook)}
-                                            className="place-cart-btn"
-                                            style={{
-                                                marginRight: "25px",
-                                                marginBottom: "77px",
-                                                position: "fixed"
-                                            }}
+                                    onClick={() => {
+                                        handleAddToCart(selectedBook);
+
+                                        // Update localStorage
+                                        //const updatedCart = { ...cartItems, [selectedBook.id]: selectedBook };
+                                        //localStorage.setItem("cartItems", JSON.stringify(updatedCart));
+                                    }}
+                                    className="place-cart-btn"
+                                    style={{
+                                        marginRight: "25px",
+                                        marginBottom: "77px",
+                                        position: "fixed"
+                                    }}
                                 >
                                     Add to Cart
                                 </button>
+                            
                             )}
                         </div>
 

@@ -20,10 +20,12 @@ const Header = ({ searchQuery, setSearchQuery, products ,onOpenAbout}) => {
 
     const [user, setUser] = React.useState("");
     const [imageUrl, setImageUrl] = React.useState();
-    const totalQuantity = useSelector((state) =>
+
+    let totalQuantity = useSelector((state) =>
         state.cart.items.reduce((total, item) => total + item.quantity, 0)
 
     );
+
     const signOutClickHandler = (instance) => {
         const logoutRequest = {
             // account: instance.getAccountByHomeId('homeId'),

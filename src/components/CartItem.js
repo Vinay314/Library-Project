@@ -6,12 +6,12 @@ import { useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import './CartItem.css';
 
-const CartItem = ({ item }) => {
+const CartItem = ({ item, handleRemoveBook, handleIncreaseBook }) => {
     const dispatch = useDispatch();
     const [title, setTitle] = useState('');
     const [author, setAuthor] = useState('');
-    const cartItems = useSelector(state => state.cart.items);
-    const cartItem = cartItems.find(cartItem => cartItem.id === item?.id);
+    //const cartItems = useSelector(state => state.cart.items);
+    const cartItem = item; //cartItems.find(cartItem => cartItem.id === item?.id);
     const [isHovered, setIsHovered] = React.useState(false);
     const [purchaseDate, setPurchaseDate] = useState(null);
     const [returnDate, setReturnDate] = useState(null);
@@ -47,7 +47,7 @@ const CartItem = ({ item }) => {
             setReturnDate(calculateReturnDate(today));
         }
     }, [cartItem]);
-
+    /*
     const handleRemoveBook = () => {
         dispatch({
             type: REMOVE_FROM_CART,
@@ -71,13 +71,15 @@ const CartItem = ({ item }) => {
         }, 100);
     };
 
-
+    
     const handleIncreaseBook = () => {
         if (item.quantity < item.availableCopies) {
             dispatch({
                 type: INCREASE_QUANTITY,
                 payload: { id: item.id }
             });
+
+
         } else {
             Swal.fire({
                 icon: 'warning',  // Warning icon
@@ -85,12 +87,12 @@ const CartItem = ({ item }) => {
                 text: 'No more available copies',
                 confirmButtonText: 'OK',
                 confirmButtonColor: "#008080",
-                /*timer: 3000,*/  // Auto-close after 3 seconds
-                /*timerProgressBar: true*/
+                //timer: 3000,  // Auto-close after 3 seconds
+                //timerProgressBar: true
             });
         }
     };
-
+    */
 
     const handleDecreaseBook = () => {
         if (item.quantity > 1) {
@@ -98,6 +100,7 @@ const CartItem = ({ item }) => {
                 type: DECREASE_QUANTITY,
                 payload: { id: item.id }
             });
+            handleRemoveBook();
         } else {
             handleRemoveBook();
         }
@@ -163,7 +166,7 @@ const CartItem = ({ item }) => {
                     <button onClick={handleDecreaseBook} className="button">-</button>
                     <button className="quantity-button">{item.quantity}</button>
                     <button onClick={handleIncreaseBook} className="button">+</button>
-                    <button onClick={handleRemoveBook} className="remove-button">Remove</button>
+                    <button onClick={() => { handleRemoveBook(true) }} className="remove-button">Remove</button>
                 </div>
             </div>
 

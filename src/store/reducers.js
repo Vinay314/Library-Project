@@ -1,5 +1,13 @@
 import { ADD_TO_CART, REMOVE_FROM_CART, INCREASE_QUANTITY, DECREASE_QUANTITY, CLEAR_CART } from './actions';
 
+
+const storedCart = JSON.parse(localStorage.getItem("cartItems")) || {};
+let validCartItemsArray = [];// cartItems.filter(item => item?.title !== undefined && item?.title !== null);
+for (let key in storedCart) {
+    if (storedCart[key].title) {
+        validCartItemsArray.push(storedCart[key]);
+    }
+}
 const initialState = {
     products: [
         { id: 1, name: 'Sara Donati', price: '$20', image: 'sara-donati.jpg', category: 'Comedy' },
@@ -10,7 +18,7 @@ const initialState = {
         { id: 6, name: 'Anthony', price: '$16', image: 'anthony.jpg', category: 'Fictional' },
     ],
     cart: {
-        items: [],
+        items: validCartItemsArray,
         totalCost: 0,
     },
 };

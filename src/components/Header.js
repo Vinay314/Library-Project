@@ -21,6 +21,8 @@ const Header = ({ searchQuery, setSearchQuery, products ,onOpenAbout}) => {
     const [user, setUser] = React.useState("");
     const [imageUrl, setImageUrl] = React.useState();
 
+ 
+ 
     let totalQuantity = useSelector((state) =>
         state.cart.items.reduce((total, item) => total + item.quantity, 0)
 

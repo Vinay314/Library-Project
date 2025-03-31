@@ -644,9 +644,16 @@ section .lead {
 
 /* ----- Button at Bottom Right ----- */
 .modal-footer {
-    position: absolute;
+    /*    position: absolute;
     bottom: 10px;
+    right: 10px;*/
+    bottom: -35px;
     right: 10px;
+    background: white;
+    height: 12%;
+    width: 117%;
+    position: sticky
+
 }
 
 .place-cart-btn {
@@ -697,13 +704,16 @@ section .lead {
     }
 
     .modal-footer {
-/*        position: static;*/
+        /*        position: static;*/
+        /*        position: static;*/
         text-align: center;
         margin-top: 15px;
-        margin-right:22px;
-        margin-bottom:10px;
-        
-        
+        margin-right: 22px;
+        margin-bottom: 10px;
+        background: white;
+        height: 15%;
+        width: 128%;
+        position: sticky;
     }
 }
 

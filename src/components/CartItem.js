@@ -102,7 +102,7 @@ const CartItem = ({ item, handleRemoveBook, handleIncreaseBook }) => {
             });
             handleRemoveBook();
         } else {
-            handleRemoveBook();
+            handleRemoveBook(true);
         }
     };
 

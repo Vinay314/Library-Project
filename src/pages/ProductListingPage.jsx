@@ -844,9 +844,9 @@ s
                                     className="btn btn-sm btn-secondary disabled-cart-btn"
                                     disabled
                                     style={{
-                                        marginRight: "25px",
-                                        marginBottom: "77px",
-                                        position: "fixed"
+                                        marginRight: "77px",
+                                        marginBottom: "0px",
+                                        //position: "fixed"
                                     }}
                                 >
                                     Out of Stock
@@ -855,11 +855,11 @@ s
                                 <button
                                     type="button"
                                     className="btn btn-sm btn-danger removecart"
-                                    style={{
-                                        marginRight: "25px",
-                                        marginBottom: "77px",
-                                        position: "fixed"
-                                    }}
+                                        style={{
+                                            marginRight: "77px",
+                                            marginBottom: "0px",
+                                            //position: "fixed"
+                                        }}
                                     onClick={() => {
                                         handleRemoveFromCart(selectedBook.id);
 
@@ -881,11 +881,11 @@ s
                                         //localStorage.setItem("cartItems", JSON.stringify(updatedCart));
                                     }}
                                     className="place-cart-btn"
-                                    style={{
-                                        marginRight: "25px",
-                                        marginBottom: "77px",
-                                        position: "fixed"
-                                    }}
+                                            style={{
+                                                marginRight: "77px",
+                                                marginBottom: "0px",
+                                                //position: "fixed"
+                                            }}
                                 >
                                     Add to Cart
                                 </button>

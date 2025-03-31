@@ -146,6 +146,7 @@ const ShoppingCartPage = () => {
     const [validCartItems, setValidCartItems] = useState(validCartItemsArray);
 
     const handleRemoveBook = (item, isDelete) => {
+        if (isDelete)
         dispatch({
             type: REMOVE_FROM_CART,
             payload: { id: item.id },

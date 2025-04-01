@@ -8,6 +8,7 @@
     justify-content: center;
     padding: 20px;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    
 }
 
 .navbar {
@@ -717,23 +718,6 @@ section .lead {
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* ----- Update Modal Styling ----- */
 .modal-overlay-update {
     position: fixed;
@@ -1313,7 +1297,7 @@ section .lead {
 }
 .out-of-stock-badge {
     position: absolute;
-    top: 470px;
+    top: 444px;
     right: 93px;
     /*background: linear-gradient(135deg, #008080, #20B2AA);*/
     background: linear-gradient(135deg, #D32F2F, #FF6B6B);
@@ -1333,7 +1317,7 @@ section .lead {
 
 .search-bar {
     position: absolute;
-    bottom: 50px; /* Sticks to bottom */
+    bottom: 59px; /* Sticks to bottom */
     left: 50%;
     transform: translateX(-50%);
     width: 51%;
@@ -1344,6 +1328,7 @@ section .lead {
     border-radius: 20px;
     padding: 10px;
     backdrop-filter: blur(10px);
+    height:12%;
 }
 
 .suggestions-list {
@@ -1516,9 +1501,146 @@ section .lead {
     flex-wrap: wrap;
     justify-content: flex-start;
     align-items: flex-start;
-    gap: -13px; /* Slight gap for better spacing */
+    gap: 20px; /* Slight gap for better spacing */
+    margin-left:50px;
+}
+.date-filter {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top:75px;
+    z-index:10;
 }
 
+    .date-filter label {
+        font-size: 16px;
+        font-weight: 800;
+        color: teal;
+    }
+
+    .date-filter input {
+        padding: 8px 12px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 14px;
+        outline: none;
+        
+    }
+
+        .date-filter input:focus {
+            border-color: #184d59;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+        }
+
+.search-filter-container {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Space between search and filter */
+    margin-bottom: 10px;
+    position: relative;
+    width: 100%;
+}
+
+    /* Search input (matches search bar style) */
+    .search-filter-container input {
+        flex-grow: 1;
+        padding: 10px;
+        font-size: 16px;
+        border: none; /* Remove border to match search-bar */
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.2);
+       
+        outline: none; /* Remove outline for cleaner look */
+        background-color: #184d59; /* Adjust text color for contrast */
+    }
+
+    /* Filter dropdown - Match search bar styling */
+    .search-filter-container select {
+        padding: 10px;
+        font-size: 16px;
+        border: none;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.2);
+        color: white; /* Adjust text color */
+        cursor: pointer;
+        margin-left: auto; /* Push it right */
+        transform: translate(-347px, 112px); /* Moves it left and down */
+        width: 8%;
+    }
+        .search-filter-container select option {
+            background-color: white; /* Background color */
+            color: black; /* Text color */
+            
+        }
+
+/* Adjust for medium screens (tablets) */
+@media (max-width: 1590px) {
+    .search-filter-container select {
+        transform: translate(-160px, 112px); /* Less shift for medium screens */
+    }
+}
+
+/* Adjust for smaller screens (mobile) */
+@media (max-width: 768px) {
+    .search-filter-container select {
+        transform: translate(-1000px, 1000px); /* Closer to input */
+    }
+}
+
+/* Adjust for very small screens */
+@media (max-width: 600px) {
+    .search-filter-container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+        .search-filter-container select {
+            width: 100%; /* Full width */
+            margin-left: 0;
+            transform: translate(0, 0); /* Reset positioning */
+        }
+}
+
+
+
+/* Book list styling */
+.book-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.book-item {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+}
+
+.book-title {
+    margin: 0;
+    font-size: 18px;
+}
+
+.book-details {
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+.book-stock {
+    font-weight: bold;
+}
+
+    .book-stock.out-of-stock {
+        color: red;
+    }
+
+    .book-stock.in-stock {
+        color: green;
+    }
 /* Book Card */
 .book-card {
     height: 525px;

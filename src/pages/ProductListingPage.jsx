@@ -51,6 +51,7 @@ function ProductListingPage() {
     const [showModal, setShowModal] = useState(false);
     const [isAnimating, setIsAnimating] = useState(false);
     const [isFlipped, setIsFlipped] = useState(false);
+    const [filterBy, setFilterBy] = useState("title");
     const handleFlip = () => {
         setIsFlipped(true);
         setTimeout(() => setIsFlipped(false), 600); // Reset flip after animation
@@ -134,12 +135,20 @@ function ProductListingPage() {
             setSearchQuery("");
         } else {
             const filteredSuggestions = products
-                .filter(product => product.title.toLowerCase().includes(value.toLowerCase()))
-                .map(product => product.title);
+                .filter(product => {
+                    if (filterBy === "title") {
+                        return product.title.toLowerCase().includes(value.toLowerCase());
+                    } else if (filterBy === "author") {
+                        return product.author.toLowerCase().includes(value.toLowerCase());
+                    }
+                    return false;
+                })
+                .map(product => product[filterBy]); // Map only the selected field for suggestions
 
             setSuggestions(filteredSuggestions);
         }
     };
+
     const handleBookAdded = (newBook) => {
         setProducts(prevBooks => Array.isArray(prevBooks) ? [...prevBooks, newBook] : [newBook]);
     };
@@ -330,9 +339,42 @@ function ProductListingPage() {
         document.body.style.overflow = "auto"; // Restore scrolling
     };
 
-    const handleSearch = () => {
-        setSearchQuery(searchTerm);
+    const handleSearch = (event) => {
+        const value = searchTerm; // Ensure value is a string
+        //setSearchTerm(value);
+        //ttt
+        if (value.length >= 3) {
+            const filteredSuggestions = books
+                .filter(book => book[filterBy] && book[filterBy].toLowerCase().includes(value.toLowerCase()))
+                .map(book => book[filterBy]) // Only map after filtering
+                .slice(0, 5); // Limit to 5 suggestions
+
+            setSuggestions(filteredSuggestions);
+        } else {
+            setSuggestions([]);
+        }
     };
+
+
+
+    const handleFilterChange = (event) => {
+        setFilterBy(event.target.value);
+    };
+
+    const filteredBooks = books.filter((book) => {
+        if (filterBy === "title") {
+            return book.title.toLowerCase().includes(searchTerm.toLowerCase());
+        } else if (filterBy === "author") {
+            return book.author.toLowerCase().includes(searchTerm.toLowerCase());
+        } else if (filterBy === "region") {
+            return book.category.toLowerCase().includes(searchTerm.toLowerCase());
+        } else if (filterBy === "stock") {
+            return book.availableCopies === 0;
+        }
+        return true;
+    });
+
+
 
     useEffect(() => {
         fetch('http://localhost:5198/api/books')
@@ -552,6 +594,20 @@ function ProductListingPage() {
                             </ul>
                         )}
                     </div>
+                    <div className="search-filter-container">
+                    {/*<input*/}
+                    {/*    type="text"*/}
+                    {/*    placeholder={`Search by ${filterBy}`}*/}
+                    {/*    value={searchTerm}*/}
+                    {/*    onChange={handleSearch}*/}
+                    {/*/>*/}
+                    <select onChange={handleFilterChange} value={filterBy}>
+                        <option value="title">Title</option>
+                        <option value="author">Author</option>
+                        <option value="region">Region</option>
+                        <option value="stock">Out of stock</option>
+                    </select>
+            </div>
                 </section>
 
 
@@ -626,9 +682,9 @@ function ProductListingPage() {
                     <div className="container">
                         <div className="book-grid">
 
-                            {filteredProducts.length > 0 ? (
+                            {filteredBooks.length > 0 ? (
 
-                                filteredProducts.map(product => 
+                                filteredBooks.map(product => 
                                     < FlippableImage product = { product } cartItems = { cartItems } handleOpenModal = { handleOpenModal } handleEditBook1 = { handleEditBook1 } removeBookByTitle = { removeBookByTitle } handleRemoveFromCart = { handleRemoveFromCart } handleAddToCart = { handleAddToCart } />
 
                                 )
@@ -682,12 +738,12 @@ function ProductListingPage() {
                     onClick={scrollToTop}
                     style={{
                         position: 'fixed',
-                        bottom: '30px', // Adjusted for better placement
-                        left: '50%', // Moves the button to the center of the screen
-                        transform: 'translateX(-50%)', // Ensures it's centered correctly
+                        bottom: '200px', // Adjusted for better placement
+                        right: '0.8%', // Default for small screens, aligns to the right
+                        transform: 'translateX(0)', // Default for small screens
                         padding: '10px 20px',
                         fontSize: '16px',
-                        backgroundColor: '#184d59',
+                        background:'linear-gradient(#257d77,#184d59)',
                         color: 'white',
                         border: 'none',
                         borderRadius: '90px',
@@ -696,10 +752,19 @@ function ProductListingPage() {
                         zIndex: 1000,
                         width: 'auto',
                         minWidth: '50px',
+                        '@media (max-width: 768px)': {
+                            left: '10px', // Adjusts for smaller screens
+                            transform: 'translateX(0)',
+                        },
+                        '@media (min-width: 769px)': {
+                            left: '50%', // Centers the button on larger screens
+                            transform: 'translateX(-50%)',
+                        },
                     }}
                 >
                     <ArrowUp />
                 </button>
+
             )}
 s
      

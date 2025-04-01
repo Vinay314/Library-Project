@@ -22,11 +22,11 @@
 }
 
     .tab-button:hover {
-        color: #007bff;
+        color: #008080;
     }
 
     .tab-button.active {
-        color: #007bff;
+        color: #008080;
         border-bottom: 2px solid #007bff;
     }
 /* Parent container to stack books vertically */

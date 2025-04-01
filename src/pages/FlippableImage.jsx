@@ -53,7 +53,10 @@ const FlippableImage = ({ product, cartItems, handleOpenModal, handleEditBook1, 
                 transition={{ duration: 0.5, ease: "easeInOut" }}
             />
             <div key={product.id} className="col">
-                <div className={`book-card `}>
+                
+                    <div className="book-card">
+                        
+
 
                     {/* Out of Stock Badge */}
                     {product.availableCopies === 0 && (
@@ -115,7 +118,8 @@ const FlippableImage = ({ product, cartItems, handleOpenModal, handleEditBook1, 
                 <h4 className="card-author">{product.author}</h4>
             </div>
         </div>
-                                    </div >
+                </div >
+                                   
         </motion.div>
     );
 };

@@ -16,11 +16,19 @@ import { REMOVE_FROM_CART, INCREASE_QUANTITY, DECREASE_QUANTITY } from '../store
 const Tabs = ({ activeTab, setActiveTab }) => {
     const tabs = [
         { id: "borrowed", label: "Borrowed Books" },
-        { id: "current", label: "Books With You" },
+        /*{ id: "current", label: "Books With You" },*/
         { id: "cart", label: "Cart" },
     ];
     const [currentBooks, setCurrentBooks] = useState([]);
     const [borrowedBooks, setBorrowedBooks] = useState([]);
+    const [filterDate, setFilterDate] = useState("");
+    const allBooks = [...currentBooks, ...borrowedBooks];
+    const filteredBooks = allBooks.filter((book) =>
+        filterDate ? book.returnDate && book.returnDate.includes(filterDate) : true
+    );
+
+
+
     useEffect(() => {
         let checkedOutBooks = JSON.parse(localStorage.getItem("checkedOutBooks")) || [];
 
@@ -54,8 +62,17 @@ const Tabs = ({ activeTab, setActiveTab }) => {
             {activeTab === "current" && (
                 <div className ="current-books">
                     <h2>Current Books</h2>
-                    {currentBooks.length > 0 ? (
-                        currentBooks.map((book) => (
+                    <div className="date-filter">
+                        <label htmlFor="filter-date">Filter by Date:</label>
+                        <input
+                            type="date"
+                            id="filter-date"
+                            value={filterDate}
+                            onChange={(e) => setFilterDate(e.target.value)}
+                        />
+                    </div>
+                    {filteredBooks.length > 0 ? (
+                        filteredBooks.map((book) => (
 
                             <div className="shopping-cart">
                                 <div className="outer-cart-item">
@@ -86,9 +103,18 @@ const Tabs = ({ activeTab, setActiveTab }) => {
 
             {activeTab === "borrowed" && (
                 <div className = "borrowed-books">
-                    <h2>Borrowed Books</h2>
-                    {borrowedBooks.length > 0 ? (
-                        borrowedBooks.map((book) => (
+                    
+                    <div className="date-filter">
+                        <label htmlFor="filter-date">Filter by Date:</label>
+                        <input
+                            type="date"
+                            id="filter-date"
+                            value={filterDate}
+                            onChange={(e) => setFilterDate(e.target.value)}
+                        />
+                    </div>
+                    {filteredBooks.length > 0 ? (
+                        filteredBooks.map((book) => (
                             <div className ="shopping-cart">
                             <div className ="outer-cart-item">
                             <div key={book.id} className="inner-cart-item">

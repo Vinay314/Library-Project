@@ -593,8 +593,16 @@ function ProductListingPage() {
                                 ))}
                             </ul>
                         )}
+
+
+
+
+
                     </div>
-                    <div className="search-filter-container">
+                   
+
+                    
+                         <div className="search-filter-container">
                     {/*<input*/}
                     {/*    type="text"*/}
                     {/*    placeholder={`Search by ${filterBy}`}*/}
@@ -608,6 +616,7 @@ function ProductListingPage() {
                         <option value="stock">Out of stock</option>
                     </select>
             </div>
+
                 </section>
 
 

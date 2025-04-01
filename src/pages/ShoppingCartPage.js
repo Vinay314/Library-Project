@@ -11,7 +11,7 @@ import Swal from 'sweetalert2';
 import "./Tabs.css";
 import Loader from './Loader.jsx'
 import { REMOVE_FROM_CART, INCREASE_QUANTITY, DECREASE_QUANTITY } from '../store/actions';
-
+import emptyhistory from './assets/emptyhistory1.png';
 
 const Tabs = ({ activeTab, setActiveTab }) => {
     const tabs = [
@@ -136,7 +136,29 @@ const Tabs = ({ activeTab, setActiveTab }) => {
                             </div>
                         ))
                     ) : (
-                        <p>No books currently in history.</p>
+                        <div
+    style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+        flexDirection: "column", // Stack items vertically
+        textAlign: "center" // Center the text
+    }}
+>
+<img
+        src={emptyhistory}
+        alt="No history illustration"
+        style={{
+            maxWidth: "15%",
+            height: "auto",
+            opacity: 0.8
+        }}
+    />
+<p style={{ marginTop: "10px", fontSize: "18px", color: "#555" }}>
+        No books to show in history...
+</p>
+</div>
                     )}
 
                 </div>

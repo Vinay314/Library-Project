@@ -1097,12 +1097,12 @@ section .lead {
 
 
 
-.hero-section {
+/*.hero-section {*/
     /*background: url('C:\Users\a90011879\OneDrive - ONEVIRTUALOFFICE\Desktop\E-Book Store\src\pages\assets\atlas-copco.jpg') no-repeat center center/cover;*/
-    background-color: #184d59 !important;
+    /*background-color: #184d59 !important;*/
     /*    background: linear-gradient(#184d59,#084b47);*/
     /*height: 430px;*/ /* Adjust height as needed */
-    height: 500px;
+    /*height: 500px;
     width: auto;
     display: flex;
     align-items: center;
@@ -1111,7 +1111,41 @@ section .lead {
     position: relative;
     color: white !important;
     border-radius: 10px;
+}*/
+
+
+
+
+
+.hero-section {
+    position: relative;
+    width: auto;
+    height: 500px; /* Adjust height as needed */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white !important;
+    border-radius: 10px;
+    background: url('./atlascopco/LibraryImage.jpg') no-repeat center center/cover;
 }
+
+    .hero-section::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 128, 128, 0.75); /* Teal overlay */
+        border-radius: 10px;
+    }
+
+    .hero-section * {
+        position: relative;
+        z-index: 1; /* Ensures text and content stay above the overlay */
+    }
+
 /* Sticky Add book Button */
 
 .add-book-button {
@@ -1146,8 +1180,9 @@ section .lead {
 }
 
 .hero-title {
-    font-size: 3.5rem;
+    font-size: 3.8rem;
     font-weight: bold;
+    margin-top:54px
 }
 
 .hero-subtitle {
@@ -1575,18 +1610,37 @@ section .lead {
             color: black; /* Text color */
             
         }
-
 /* Adjust for medium screens (tablets) */
-@media (max-width: 1590px) {
+
+@media (max-width: 3000px) {
     .search-filter-container select {
-        transform: translate(-160px, 112px); /* Less shift for medium screens */
+        transform: translate(-300px, 112px); /* Less shift for medium screens */
     }
 }
 
+
+
+@media (max-width: 1590px) {
+    .search-filter-container select {
+        transform: translate(-220px, 112px); /* Less shift for medium screens */
+    }
+}
+
+@media (max-width: 1398px) {
+    .search-filter-container select {
+        transform: translate(-200px, 112px); /* Less shift for medium screens */
+    }
+}
+
+@media (max-width: 1146px) {
+    .search-filter-container select {
+        transform: translate(-90px, 112px); /* Less shift for medium screens */
+    }
+}
 /* Adjust for smaller screens (mobile) */
 @media (max-width: 768px) {
     .search-filter-container select {
-        transform: translate(-1000px, 1000px); /* Closer to input */
+        transform: translate(-84px, 45px); /* Closer to input */
     }
 }
 
@@ -1600,10 +1654,9 @@ section .lead {
         .search-filter-container select {
             width: 100%; /* Full width */
             margin-left: 0;
-            transform: translate(0, 0); /* Reset positioning */
+            transform: translate(0,0); /* Reset positioning */
         }
 }
-
 
 
 /* Book list styling */

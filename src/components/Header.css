@@ -64,7 +64,7 @@
     font-size: 16px;
     margin-top: 5px;
     max-width: 150px; /* Prevents name from overflowing */
-    overflow: hidden;
+    /*overflow: hidden;*/
     white-space: nowrap;
     text-overflow: ellipsis;
     display: inline-block; /* Ensure it's not flex/grid */
@@ -123,7 +123,7 @@
             cursor: pointer;
             text-align: center;
             display: block; /* Ensures full width hover effect */
-            width: 100%; /* Makes hover effect apply to entire width */
+            width: 150px; /* Makes hover effect apply to entire width */
         }
 
             .navbar-dropdown ul li:hover {

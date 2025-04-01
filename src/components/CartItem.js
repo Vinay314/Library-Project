@@ -151,14 +151,15 @@ const CartItem = ({ item, handleRemoveBook, handleIncreaseBook }) => {
 
             <div className="cart-item-details">
                 {/* Book Information */}
-                <div className="text-container">
-                    <p className="item-name">{item.name}</p>
-                    {title && <p className="title">Title: {title}</p>}
-                    {author && <p className="author">Author: {author}</p>}
-                    <p className="date-info">
-                        Date of Return: {returnDate ? returnDate.toDateString() : "Not Set"}
-                    </p>
-                </div>
+               <div className="text-container">
+    <p className="item-name">{item.name}</p>
+    {title && <p className="title"><span className="label">Title:</span> {title}</p>}
+    {author && <p className="author"><span className="label">Author:</span> {author}</p>}
+    <p className="date-info">
+        <span className="label">Date of Return:</span> {returnDate ? returnDate.toDateString() : "Not Set"}
+    </p>
+</div>
+
 
 
                 {/* Action Buttons */}

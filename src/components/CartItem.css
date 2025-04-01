@@ -70,6 +70,7 @@
     flex-direction: column;
     align-items: center;
     gap: 20px;
+   padding: 0.7rem;
 }
 
 /* Each book in a row format */
@@ -244,7 +245,7 @@
     align-items: center;
     justify-content: center;
     width: 175%;
-    padding: 15px;
+    padding: 8px;
     margin-bottom: 10px;
     border-radius: 10px;
     height: 100%;
@@ -345,22 +346,28 @@
 }
 
 /* Typography */
+
+.label {
+    font-weight: bold; /* Make labels bold */
+    color: #333; /* Optional: Adjust color */
+}
+
 .item-name {
-    font-weight: bold;
-    font-size: 18px;
+    font-weight:normal;
+    font-size: 17px;
     color: white;
     margin-bottom: 5px;
 }
 
 .title {
-    font-weight: bold;
+    font-weight: normal;
     font-size: 17px;
     /*    color: #333;*/
     color: black;
 }
 
 .author {
-    font-weight: bold;
+    font-weight: normal;
     font-size: 17px;
     /*    color: #555;*/
     color: black;
@@ -368,7 +375,7 @@
 }
 
 .date-info {
-    font-weight: bold;
+    font-weight: normal;
     font-size: 17px;
     color: black;
     font-weight: bold;

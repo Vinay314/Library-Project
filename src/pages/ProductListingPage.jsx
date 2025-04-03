@@ -27,6 +27,7 @@ import { ArrowUp } from "lucide-react";
 import axios from "axios";
 import { motion } from "framer-motion";
 import FlippableImage from "./FlippableImage";
+import { ChevronDown, ChevronUp, Settings } from "lucide-react";
 function ProductListingPage() {
     const [products, setProducts] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
@@ -52,6 +53,22 @@ function ProductListingPage() {
     const [isAnimating, setIsAnimating] = useState(false);
     const [isFlipped, setIsFlipped] = useState(false);
     const [filterBy, setFilterBy] = useState("title");
+    const [sortOrder, setSortOrder] = useState("");
+    const [isOpen, setIsOpen] = useState(false);
+    const [showInStock, setShowInStock] = useState(false);
+
+
+    const handleToggleInStock = (event) => {
+        event.preventDefault();
+        setShowInStock(prevState => !prevState);
+    };
+
+    const handleReset = () => {
+        setSortOrder('');
+        setFilterBy('');
+        setShowInStock(false);
+    };
+
     const handleFlip = () => {
         setIsFlipped(true);
         setTimeout(() => setIsFlipped(false), 600); // Reset flip after animation
@@ -361,7 +378,7 @@ function ProductListingPage() {
         setFilterBy(event.target.value);
     };
 
-    const filteredBooks = books.filter((book) => {
+    let filteredBooks = books.filter((book) => {
         if (filterBy === "title") {
             return book.title.toLowerCase().includes(searchTerm.toLowerCase());
         } else if (filterBy === "author") {
@@ -374,6 +391,34 @@ function ProductListingPage() {
         return true;
     });
 
+    if (sortOrder) { 
+    filteredBooks.sort((a, b) => {
+        const getSortableValue = (book, key) => book[key].toLowerCase();
+
+        let valueA = getSortableValue(a, sortOrder);
+        let valueB = getSortableValue(b, sortOrder);
+
+        return valueA.localeCompare(valueB, undefined, { numeric: true });
+    });
+    }
+
+    if (showInStock) {
+        filteredBooks=filteredBooks.filter(book => book.availableCopies!==0);
+    }
+    //useEffect(() => {
+    //    let sortedBooks = [...filteredBooks]; // Sort filtered books, not the original list
+
+    //    sortedBooks.sort((a, b) => {
+    //        const getSortableValue = (book, key) => book[key].toLowerCase();
+
+    //        let valueA = getSortableValue(a, sortOrder);
+    //        let valueB = getSortableValue(b, sortOrder);
+
+    //        return valueA.localeCompare(valueB, undefined, { numeric: true });
+    //    });
+
+    //    filteredBooks = sortedBooks;
+    //}, [ sortOrder]);
 
 
     useEffect(() => {
@@ -582,6 +627,7 @@ function ProductListingPage() {
                                 }
                             }}
                         />
+
                         <i className="bi bi-search search-icon" onClick={handleSearch}></i>
 
                         {suggestions.length > 0 && (
@@ -599,27 +645,16 @@ function ProductListingPage() {
 
 
                     </div>
-                   
+                    
+
+
 
                     
-                         <div className="search-filter-container">
-                    {/*<input*/}
-                    {/*    type="text"*/}
-                    {/*    placeholder={`Search by ${filterBy}`}*/}
-                    {/*    value={searchTerm}*/}
-                    {/*    onChange={handleSearch}*/}
-                    {/*/>*/}
-                    <select onChange={handleFilterChange} value={filterBy}>
-                        <option value="title">Title</option>
-                        <option value="author">Author</option>
-                        <option value="region">Region</option>
-                        <option value="stock">Out of stock</option>
-                    </select>
-            </div>
+                    
 
                 </section>
 
-
+                
 
 
                 {/* Dynamic Typing Section */}
@@ -643,7 +678,45 @@ function ProductListingPage() {
                 {/*        Add a New Book*/}
                 {/*    </button>*/}
                 {/*</div>*/}
+                <div className="collapsible-container">
+                    <div className="collapsible-header" onClick={() => setIsOpen(!isOpen)}>
+                        <span>Settings</span>
+                        <span className="arrow">
+                            {isOpen ? <ChevronUp size={20} className="arrow-icon" /> : <ChevronDown size={20} className="arrow-icon" />}
+                        </span>
+                    </div>
+                    {isOpen && (
+                        <form className="controls-form">
+                            <div className="form-group">
+                                <label htmlFor="filter">Filter By:</label>
+                                <select id="filter" onChange={handleFilterChange} value={filterBy}>
+                                    <option value="title">Title</option>
+                                    <option value="author">Author</option>
+                                    <option value="region">Region</option>
+                                    <option value="stock">Out of stock</option>
+                                </select>
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="sort">Sort By:</label>
+                                <select id="sort" value={sortOrder} onChange={(e) => setSortOrder(e.target.value)}>
+                                    <option value="title">Title</option>
+                                    <option value="author">Author</option>
+                                </select>
+                            </div>
 
+                            {/* Toggle Switch for In Stock */}
+                            <div className="toggle-container">
+                                <label className="toggle-label">Show In Stock:</label>
+                                <div className="toggle-switch" onClick={handleToggleInStock}>
+                                    <div className={`slider ${showInStock ? "active" : ""}`}></div>
+                                </div>
+                            </div>
+
+                            {/* Reset Button */}
+                            <button className="reset-btn" onClick={handleReset}>Reset All</button>
+                        </form>
+                    )}
+                </div>
                 {/* Product Listing Section */}
                 <div className="album py-5">
                     {/*<div className="container">*/}

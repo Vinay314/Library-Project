@@ -351,7 +351,9 @@
     font-weight: bold; /* Make labels bold */
     color: #333; /* Optional: Adjust color */
 }
-
+.value{
+    font-weight:normal;
+}
 .item-name {
     font-weight:normal;
     font-size: 17px;

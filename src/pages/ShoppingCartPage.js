@@ -185,6 +185,7 @@ const ShoppingCartPage = () => {
     const [isTransitioning, setIsTransitioning] = useState(false);
     const [loading, setLoading] = useState(true);
     
+    
     let validCartItemsArray = [];// cartItems.filter(item => item?.title !== undefined && item?.title !== null);
     for (let key in cartItems) {
         if (cartItems[key].title) {
@@ -289,6 +290,7 @@ const ShoppingCartPage = () => {
                 .catch(error => console.error('Error fetching Image:', error));
         }
     }, [id1]);
+    
     useEffect(() => {
         if (isTransitioning) {
             setTimeout(() => {
@@ -344,17 +346,18 @@ const ShoppingCartPage = () => {
             const bookDetails = await Promise.all(
                 validCartItems.map(async (item) => {
                     if (item.id) {
-                        const [titleRes, imageRes] = await Promise.all([
+                        const [titleRes, imageRes, regionRes] = await Promise.all([
                             fetch(`http://localhost:5198/api/books/${item.id}/title`),
                             fetch(`http://localhost:5198/api/books/${item.id}/image`),
+                            fetch(`http://localhost:5198/api/books/${item.id}/category`),
                         ]);
 
                         const title = await titleRes.text();
                         const image = await imageRes.text();
-
-                        return { id: item.id, title, image, quantity: item.quantity };
+                        const region = await regionRes.text();
+                        return { id: item.id, title, image,region, quantity: item.quantity };
                     } else {
-                        return { id: item.id, title: "Unknown Title", image: "/default-book.jpg", quantity: item.quantity };
+                        return { id: item.id, title: "Unknown Title", image: "/default-book.jpg",region : "N/A", quantity: item.quantity };
                     }
                 })
             );
@@ -381,16 +384,18 @@ const ShoppingCartPage = () => {
 <div style="max-width: 900px; max-height: 300px; overflow-y: auto; padding: 20px;">
     <p><strong>Borrowing Date:</strong> ${today.toDateString()}</p>
     <p><strong>Return Date:</strong> ${returnDate.toDateString()}</p>
+    
     <hr style="border: 0; height: 1px; background: #008080; margin: 10px 0;">
 
     <!-- Table Header -->
     <table style="width: 100%; border-collapse: collapse; margin-bottom: 10px;">
         <thead>
             <tr style="background-color: #008080; color: white;">
-                <th style="padding: 10px; width: 10%; text-align: center;">Sr No.</th>
-                <th style="padding: 10px; width: 20%; text-align: center;">Image</th>
-                <th style="padding: 10px; width: 50%; text-align: left;">Book Name</th>
-                <th style="padding: 10px; width: 20%; text-align: center;">Quantity</th>
+                <th style="padding: 10px; width: 8%; text-align: center;">Sr No.</th>
+                <th style="padding: 10px; width: 15%; text-align: center;">Image</th>
+                <th style="padding: 10px; width: 37%; text-align: left;">Book Name</th>
+                <th style="padding: 10px; width: 15%; text-align: center;">Region</th>
+                <th style="padding: 10px; width: 15%; text-align: center;">Quantity</th>
             </tr>
         </thead>
         <tbody>
@@ -404,6 +409,7 @@ const ShoppingCartPage = () => {
                             style="width: 60px; height: 80px; border-radius: 6px; display: block; margin: 0 auto;">
                     </td>
                     <td style="padding: 10px; text-align: left; font-size: 16px;">${book.title}</td>
+                    <td style="padding: 10px; text-align: center; font-size: 14px; font-weight: bold;">${book.region}</td>
                     <td style="padding: 10px; text-align: center;">
                         <span style="
                             background-color: teal;

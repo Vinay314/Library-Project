@@ -1137,7 +1137,8 @@ section .lead {
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(0, 128, 128, 0.75); /* Teal overlay */
+        background: rgba(24, 77, 89, 0.75);
+        /*        Darker Teal Overlay */
         border-radius: 10px;
     }
 
@@ -1541,7 +1542,7 @@ section .lead {
 }
 .date-filter {
     position: absolute;
-    top: 10px;
+    top: 3px;
     right: 20px;
     display: flex;
     align-items: center;
@@ -1569,6 +1570,26 @@ section .lead {
             border-color: #184d59;
             box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
         }
+
+.filter-sort-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+    .filter-sort-container label {
+        font-weight: bold;
+        
+    }
+
+    .filter-sort-container select {
+        padding: 5px 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
 
 .search-filter-container {
     display: flex;
@@ -1657,6 +1678,281 @@ section .lead {
             transform: translate(0,0); /* Reset positioning */
         }
 }
+
+
+/* Collapsible Container */
+/* Collapsible Container */
+.collapsible-container {
+    width: 100%;
+    background: #184d59; /* Teal gradient */
+    color: white;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Keeps text centered & arrow on the right */
+    border-radius: 5px;
+    user-select: none;
+    margin-top:13px;
+}
+
+/* Inner wrapper to center the text & settings icon */
+.collapsible-header-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: auto; /* Ensures center alignment */
+}
+
+/* Settings Icon */
+.settings-icon1 {
+    color: white;
+}
+
+/* Arrow stays on the right */
+.arrow-icon {
+    margin-left: auto;
+}
+
+
+/* Filter and Sort Form */
+.controls-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 0 0 10px 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: fit-content;
+    margin: auto;
+    margin-top: -1px;
+}
+
+/* Form Group */
+.form-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: 10px;
+}
+
+    /* Labels */
+    .form-group label {
+        font-weight: bold;
+        white-space: nowrap;
+        color: black; /* Ensure labels are visible */
+    }
+
+    /* Select Dropdowns */
+    .form-group select {
+        padding: 8px 12px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+        min-width: 150px;
+    }
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .controls-form {
+        width: 90%;
+    }
+
+    .form-group {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+        .form-group select {
+            width: 100%;
+        }
+}
+
+
+/* Arrow animation */
+.arrow {
+    margin-left: 10px;
+    font-size: 16px;
+}
+
+/* Filter and Sort Form */
+.controls-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 0 0 10px 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: fit-content;
+    margin: auto;
+    margin-top: -1px;
+}
+
+/* Form Group */
+.form-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: 10px;
+}
+
+    /* Labels */
+    .form-group label {
+        font-weight: bold;
+        white-space: nowrap;
+    }
+
+    /* Select Dropdowns */
+    .form-group select {
+        padding: 8px 12px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+        min-width: 150px;
+    }
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .controls-form {
+        width: 90%;
+    }
+
+    .form-group {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+        .form-group select {
+            width: 100%;
+        }
+}
+
+
+
+
+
+
+.controls-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center the form */
+    justify-content: center;
+    gap: 15px;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    /*box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);*/
+    width: fit-content; /* Adjust width based on content */
+    margin: auto; /* Center the form on the page */
+}
+
+.form-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: 10px;
+}
+
+    .form-group label {
+        font-weight: bold;
+        white-space: nowrap;
+    }
+
+    .form-group select {
+        padding: 8px 12px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+        min-width: 150px;
+    }
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .controls-form {
+        width: 90%;
+    }
+
+    .form-group {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+        .form-group select {
+            width: 100%;
+        }
+}
+
+/* Toggle Switch */
+.toggle-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.toggle-label {
+    font-weight: bold;
+    color: #333;
+}
+
+.toggle-switch {
+    width: 45px;
+    height: 22px;
+    background: #ccc;
+    border-radius: 50px;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.slider {
+    width: 18px;
+    height: 18px;
+    background: white;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 3px;
+    transform: translateY(-50%);
+    transition: all 0.3s ease;
+}
+
+    .slider.active {
+        left: calc(100% - 21px);
+        background: #4CAF50;
+    }
+
+.toggle-switch.active {
+    background: #4CAF50;
+}
+
+/* Reset Button */
+.reset-btn {
+    padding: 8px 12px;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    margin-top: 10px;
+}
+
+    .reset-btn:hover {
+        background-color: #d32f2f;
+    }
 
 
 /* Book list styling */

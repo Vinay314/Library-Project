@@ -10,6 +10,7 @@ const CartItem = ({ item, handleRemoveBook, handleIncreaseBook }) => {
     const dispatch = useDispatch();
     const [title, setTitle] = useState('');
     const [author, setAuthor] = useState('');
+    const [region, setRegion] = useState('');
     //const cartItems = useSelector(state => state.cart.items);
     const cartItem = item; //cartItems.find(cartItem => cartItem.id === item?.id);
     const [isHovered, setIsHovered] = React.useState(false);
@@ -22,6 +23,13 @@ const CartItem = ({ item, handleRemoveBook, handleIncreaseBook }) => {
             .then(response => response.text())
             .then(title => setTitle(title))
             .catch(error => console.error('Error fetching title:', error));
+    }, [item.id]);
+
+    useEffect(() => {
+        fetch(`http://localhost:5198/api/books/${item.id}/category`)
+            .then(response => response.text())
+            .then(region => setRegion(region))
+            .catch(error => console.error('Error fetching Region:', error));
     }, [item.id]);
 
     useEffect(() => {
@@ -152,11 +160,12 @@ const CartItem = ({ item, handleRemoveBook, handleIncreaseBook }) => {
             <div className="cart-item-details">
                 {/* Book Information */}
                <div className="text-container">
-    <p className="item-name">{item.name}</p>
-    {title && <p className="title"><span className="label">Title:</span> {title}</p>}
-    {author && <p className="author"><span className="label">Author:</span> {author}</p>}
-    <p className="date-info">
-        <span className="label">Date of Return:</span> {returnDate ? returnDate.toDateString() : "Not Set"}
+                    <p className="item-name">{item.name}</p>
+                    {title && <p className="title"><span className="label">Title:</span><span className="value"> {title}</span></p>}
+                    {author && <p className="author"><span className="label">Author:</span> <span className="value">{author}</span></p>}
+                    {region && <p className="author"><span className="label"> Pick up and drop location:</span> <span className="value">{region}</span></p>}
+                    <p className="date-info">
+                        <span className="label">Date of Return:</span> <span className="value">{returnDate ? returnDate.toDateString() : "Not Set"}</span>
     </p>
 </div>
 

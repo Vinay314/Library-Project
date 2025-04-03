@@ -8,54 +8,53 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: radial-gradient(circle, #004d40, #00796b, #26a69a);
+    background: #ffffff; /* Clean white background */
     overflow: hidden;
     z-index: 9999;
-    perspective: 2000px; /* Increased for depth */
+    perspective: 2000px; /* For realistic 3D depth */
 }
 
-/* Enlarged 3D Cube */
+/* 3D Rotating Cube */
 .cube {
-    width: 250px;
-    height: 250px;
+    width: 80px;
+    height: 80px;
     position: relative;
     transform-style: preserve-3d;
-    animation: rotateCube 6s infinite linear; /* Slower rotation for cinematic effect */
+    animation: rotateCube 6s infinite linear;
 }
 
-/* Cube Faces */
+/* Cube Faces (NO GLOW, Clean and Sharp) */
 .face {
     position: absolute;
-    width: 250px;
-    height: 250px;
-    background: rgba(0, 150, 136, 0.85);
-    border: 3px solid rgba(224, 242, 241, 0.9);
-    box-shadow: 0px 0px 20px rgba(38, 166, 154, 0.6);
+    width: 80px;
+    height: 80px;
+    background: transparent; /* No fill */
+    border: 3px solid #009688; /* Solid teal outline */
 }
 
 /* Positioning Cube Faces */
 .front {
-    transform: translateZ(125px);
+    transform: translateZ(40px);
 }
 
 .back {
-    transform: rotateY(180deg) translateZ(125px);
+    transform: rotateY(180deg) translateZ(40px);
 }
 
 .left {
-    transform: rotateY(-90deg) translateZ(125px);
+    transform: rotateY(-90deg) translateZ(40px);
 }
 
 .right {
-    transform: rotateY(90deg) translateZ(125px);
+    transform: rotateY(90deg) translateZ(40px);
 }
 
 .top {
-    transform: rotateX(90deg) translateZ(125px);
+    transform: rotateX(90deg) translateZ(40px);
 }
 
 .bottom {
-    transform: rotateX(-90deg) translateZ(125px);
+    transform: rotateX(-90deg) translateZ(40px);
 }
 
 /* Rotating Animation */
@@ -81,12 +80,12 @@
     }
 }
 
-/* Enlarged Loading Text */
+/* Loading Text */
 .loader-text {
-    color: #e0f2f1;
-    font-size: 2rem;
+    color: #00796b; /* Dark teal for contrast */
+    font-size: 1.8rem;
     font-weight: bold;
-    letter-spacing: 3px;
+    letter-spacing: 2px;
     position: absolute;
     bottom: 10%;
     text-align: center;

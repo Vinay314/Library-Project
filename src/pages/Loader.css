@@ -11,6 +11,7 @@
     padding: 20px;
     z-index: 1;
     position: absolute; /* Changed from absolute to relative for better control */
+    margin-top:50px;
     overflow: hidden; /* Prevents scrollbars due to animation */
 }
 

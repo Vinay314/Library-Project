@@ -6,20 +6,38 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
+using System.Runtime.ConstrainedExecution;
 
 [Route("api/[controller]")]
 [ApiController]
 public class BooksController : ControllerBase
 {
     private readonly IMongoCollection<Book> _booksCollection;
-
-    public BooksController(IMongoCollection<Book> booksCollection)
+    private readonly UserService _userService;
+    private readonly IConfiguration _configuration;
+    public BooksController(IMongoCollection<Book> booksCollection, UserService userService, IConfiguration configuration)
     {
         _booksCollection = booksCollection;
+        _userService = userService;
+        _configuration= configuration;
+    }
+    [HttpPost("register")]
+    public async Task<IActionResult> Register([FromBody] RegisterRequest request)
+    {
+        var result = await _userService.RegisterUser(request.Email, request.Password);
+        var user = await _userService.GetUserByEmail(request.Email);
+        return Ok(new { message = result, role = user?.Role });
     }
 
-    // GET: api/books
-    [HttpGet]
+
+
+    public class RegisterRequest
+{
+    public string Email { get; set; }
+    public string Password { get; set; }
+}
+// GET: api/books
+[HttpGet]
     public async Task<IActionResult> GetAllBooks()
     {
         var books = await _booksCollection.Find(book => true).ToListAsync();
@@ -28,7 +46,8 @@ public class BooksController : ControllerBase
         return Ok(new
         {
             Books = books,
-            TotalPurchasedBooks = totalPurchasedBooks
+            TotalPurchasedBooks = totalPurchasedBooks,
+            AdminUsers= _configuration.GetSection("AdminUsers").Get<string[]>()?.ToList()
         });
     }
 
@@ -41,12 +60,48 @@ public class BooksController : ControllerBase
         return Ok(book);
     }
 
-    // POST: api/books
-    [HttpPost]
-    public async Task<IActionResult> AddBook([FromForm] IFormFile file, [FromForm] string title, [FromForm] string author, [FromForm] string category, [FromForm] decimal price, [FromForm] string description, [FromForm] string ISBN, [FromForm] int availableCopies = 3)
-    {
-        Console.WriteLine($"Received: Title={title}, Author={author}, Price={price}, ISBN={ISBN}");
+    //// POST: api/books
+    //[HttpPost]
+    //public async Task<IActionResult> AddBook([FromForm] IFormFile file, [FromForm] string title, [FromForm] string author, [FromForm] string category, [FromForm] decimal price, [FromForm] string description, [FromForm] string ISBN, [FromForm] int availableCopies = 3)
+    //{
+    //    Console.WriteLine($"Received: Title={title}, Author={author}, Price={price}, ISBN={ISBN}");
 
+    //    if (file == null || file.Length == 0)
+    //        return BadRequest("No file provided.");
+
+    //    var filePath = Path.Combine("wwwroot/assets", file.FileName);
+    //    using (var stream = new FileStream(filePath, FileMode.Create))
+    //    {
+    //        await file.CopyToAsync(stream);
+    //    }
+
+    //    var newBook = new Book
+    //    {
+    //        Title = title,
+    //        Author = author,
+    //        Category = category,
+    //        Price = price,
+    //        Image = "/assets/" + file.FileName,
+    //        AvailableCopies = availableCopies,
+    //        Description = description,
+    //        ISBN = ISBN
+    //    };
+
+    //    await _booksCollection.InsertOneAsync(newBook);
+    //    return CreatedAtAction(nameof(GetBook), new { id = newBook.Id }, newBook);
+    //}
+
+    [HttpPost]
+    public async Task<IActionResult> AddBook([FromForm] IFormFile file,
+                                           [FromForm] string title,
+                                           [FromForm] string author,
+                                           [FromForm] string category,
+                                           [FromForm] decimal price,
+                                           [FromForm] string description,
+                                           [FromForm] string ISBN,
+                                           [FromForm] int availableCopies
+                                           )
+    {
         if (file == null || file.Length == 0)
             return BadRequest("No file provided.");
 
@@ -56,6 +111,7 @@ public class BooksController : ControllerBase
             await file.CopyToAsync(stream);
         }
 
+  
         var newBook = new Book
         {
             Title = title,
@@ -65,21 +121,73 @@ public class BooksController : ControllerBase
             Image = "/assets/" + file.FileName,
             AvailableCopies = availableCopies,
             Description = description,
-            ISBN = ISBN
+            ISBN = ISBN,
+            
         };
 
         await _booksCollection.InsertOneAsync(newBook);
-        return CreatedAtAction(nameof(GetBook), new { id = newBook.Id }, newBook);
+
+        // Return book + user role
+        return CreatedAtAction(nameof(GetBook), new { id = newBook.Id }, new
+        {
+            Book = newBook,
+        });
     }
 
 
+
     // PUT: api/books/{id}
+    //[HttpPut("{id:length(24)}")]
+    //public async Task<IActionResult> UpdateBook(string id, [FromForm] IFormFile file, [FromForm] string title, [FromForm] string author, [FromForm] string category, [FromForm] string description, [FromForm] string isbn, [FromForm] int availableCopies)
+    //{
+    //    var book = await _booksCollection.Find(b => b.Id == id).FirstOrDefaultAsync();
+    //    if (book == null)
+    //        return NotFound();
+
+    //    if (file != null && file.Length > 0)
+    //    {
+    //        var oldFilePath = Path.Combine("wwwroot/assets", Path.GetFileName(book.Image));
+    //        if (System.IO.File.Exists(oldFilePath))
+    //            System.IO.File.Delete(oldFilePath);
+
+    //        var newFilePath = Path.Combine("wwwroot/assets", file.FileName);
+    //        using (var stream = new FileStream(newFilePath, FileMode.Create))
+    //        {
+    //            await file.CopyToAsync(stream);
+    //        }
+
+    //        book.Image = "/assets/" + file.FileName;
+    //    }
+
+    //    book.Title = title;
+    //    book.Author = author;
+    //    book.Category = category;
+    //    book.Description = description;
+    //    book.AvailableCopies = availableCopies;
+    //    book.ISBN = isbn;
+
+    //    var result = await _booksCollection.ReplaceOneAsync(b => b.Id == id, book);
+    //    if (result.MatchedCount == 0) return NotFound();
+
+    //    return Ok(book);
+    //}
+
+
     [HttpPut("{id:length(24)}")]
-    public async Task<IActionResult> UpdateBook(string id, [FromForm] IFormFile file, [FromForm] string title, [FromForm] string author, [FromForm] string category, [FromForm] string description, [FromForm] string isbn, [FromForm] int availableCopies)
+    public async Task<IActionResult> UpdateBook(string id, [FromForm] string title, [FromForm] string author, [FromForm] string category, [FromForm] string description, [FromForm] string isbn, [FromForm] int availableCopies, [FromForm] IFormFile file = null)
     {
         var book = await _booksCollection.Find(b => b.Id == id).FirstOrDefaultAsync();
         if (book == null)
             return NotFound();
+
+
+        Console.WriteLine(book);
+        //var user = await _userService.GetUserByEmail(userEmail);
+        //if (user == null)
+        //    return Unauthorized("User not found.");
+
+        //if (user.Role != "admin" && book.CreatedBy != userEmail)
+        //    return Forbid("You can only edit your own books.");
 
         if (file != null && file.Length > 0)
         {
@@ -102,7 +210,7 @@ public class BooksController : ControllerBase
         book.Description = description;
         book.AvailableCopies = availableCopies;
         book.ISBN = isbn;
-
+       
         var result = await _booksCollection.ReplaceOneAsync(b => b.Id == id, book);
         if (result.MatchedCount == 0) return NotFound();
 
@@ -110,11 +218,30 @@ public class BooksController : ControllerBase
     }
 
     // DELETE: api/books/{id}
+    //[HttpDelete("{id:length(24)}")]
+    //public async Task<IActionResult> DeleteBook(string id)
+    //{
+    //    var result = await _booksCollection.DeleteOneAsync(b => b.Id == id);
+    //    if (result.DeletedCount == 0) return NotFound();
+    //    return NoContent();
+    //}
+
+
     [HttpDelete("{id:length(24)}")]
-    public async Task<IActionResult> DeleteBook(string id)
+    public async Task<IActionResult> DeleteBook(string id, [FromQuery] string userEmail)
     {
+        var book = await _booksCollection.Find(b => b.Id == id).FirstOrDefaultAsync();
+        if (book == null) return NotFound();
+
+        var user = await _userService.GetUserByEmail(userEmail);
+        if (user == null) return Unauthorized("User not found.");
+
+        if (user.Role != "admin" && book.CreatedBy != userEmail)
+            return Forbid("You can only delete your own books.");
+
         var result = await _booksCollection.DeleteOneAsync(b => b.Id == id);
         if (result.DeletedCount == 0) return NotFound();
+
         return NoContent();
     }
 

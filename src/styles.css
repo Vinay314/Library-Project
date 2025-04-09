@@ -61,7 +61,7 @@ body {
     
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Wider cards with auto-fit */
     gap: 1rem; /* Space between grid items */
-    padding: 2rem;
+    padding: 0.7rem;
     max-width: 900px;
     margin: 0 auto;
 }

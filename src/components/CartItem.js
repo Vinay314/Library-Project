@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import './CartItem.css';
 
-const CartItem = ({ item, handleRemoveBook, handleIncreaseBook }) => {
+const CartItem = ({ item, handleRemoveBook, handleIncreaseBook, handleDecreaseBook }) => {
     const dispatch = useDispatch();
     const [title, setTitle] = useState('');
     const [author, setAuthor] = useState('');
@@ -102,17 +102,17 @@ const CartItem = ({ item, handleRemoveBook, handleIncreaseBook }) => {
     };
     */
 
-    const handleDecreaseBook = () => {
-        if (item.quantity > 1) {
-            dispatch({
-                type: DECREASE_QUANTITY,
-                payload: { id: item.id }
-            });
-            handleRemoveBook();
-        } else {
-            handleRemoveBook(true);
-        }
-    };
+    //const handleDecreaseBook = () => {
+    //    if (item.quantity > 1) {
+    //        dispatch({
+    //            type: DECREASE_QUANTITY,
+    //            payload: { id: item.id }
+    //        });
+    //        handleRemoveBook();
+    //    } else {
+    //        handleRemoveBook(true);
+    //    }
+    //};
 
     return (
         //<div

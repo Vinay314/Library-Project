@@ -28,6 +28,8 @@ import axios from "axios";
 import { motion } from "framer-motion";
 import FlippableImage from "./FlippableImage";
 import { ChevronDown, ChevronUp, Settings } from "lucide-react";
+import { X } from "lucide-react";
+import Loader from './Loader';
 function ProductListingPage() {
     const [products, setProducts] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
@@ -48,24 +50,69 @@ function ProductListingPage() {
     const [isChatOpen, setIsChatOpen] = useState(false);
     const [isAboutModalOpen, setIsAboutModalOpen] = useState(false);
     const [showButton, setShowButton] = useState(false);
-    const [books, setBooks] = useState([]); 
+    const [books, setBooks] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [isAnimating, setIsAnimating] = useState(false);
     const [isFlipped, setIsFlipped] = useState(false);
     const [filterBy, setFilterBy] = useState("title");
-    const [sortOrder, setSortOrder] = useState("");
+    const [sortOrder, setSortOrder] = useState("title");
     const [isOpen, setIsOpen] = useState(false);
     const [showInStock, setShowInStock] = useState(false);
+    const username = localStorage.getItem("username"); // Get user info
+    const [admins, setAdmins] = useState([]);
+    const [isExpanded, setIsExpanded] = useState(false);
+    const [activeChips, setActiveChips] = useState([]);
+    const [region, setRegion] = useState();
+    const canEditOrDelete = () => {
+        if (!Array.isArray(admins)) {
+            console.warn("admins is not an array or is null/undefined.");
+            return false;
+        }
 
+        return admins.includes(username);
+    };
+
+    const [loading, setLoading] = useState(true);
+
+    var query = window.location.search.substring(1);
+    //console.log("1",query)
+
+    const [showLoader, setShowLoader] = useState(query === "loader=true");
+    if (showLoader) {
+        setTimeout(() => {
+            setShowLoader(false); // Navigate to products after 2s
+        }, 3000);
+    }
+    const updateChips = (type, value) => {
+        setActiveChips((prev) => {
+            // Remove any existing chip of the same type
+            const filtered = prev.filter((chip) => chip.type !== type);
+            return [...filtered, { type, value }];
+        });
+    };
+
+    const isAdmin = canEditOrDelete();
 
     const handleToggleInStock = (event) => {
         event.preventDefault();
         setShowInStock(prevState => !prevState);
     };
+    const handleRegionChange = (e) => {
+        const value = e.target.value;
+        /*setFilterBy("region");*/ // Make sure filter is on region
+        setRegion(value);  // Region name acts like searchTerm
+    };
 
     const handleReset = () => {
-        setSortOrder('');
+        setSortOrder('title');
+
+        setRegion('all');
         setFilterBy('');
+        setTimeout(() => {
+            setSearchTerm('');
+            setFilterBy('title');
+        }, 500); // 1000 milliseconds = 1 second
+
         setShowInStock(false);
     };
 
@@ -87,7 +134,7 @@ function ProductListingPage() {
     };
     useEffect(() => {
         const handleScroll = () => {
-            if (window.scrollY > 200) {
+            if (window.scrollY > 100) {
                 setShowButton(true);
             } else {
                 setShowButton(false);
@@ -109,7 +156,7 @@ function ProductListingPage() {
                 return;
             }
 
-           
+            setAdmins(data.adminUsers);
             setBooks(data.books); // Ensure state updates
 
         } catch (error) {
@@ -121,7 +168,7 @@ function ProductListingPage() {
         fetchBooks();
     }, []);
 
-  
+
 
     const handleBookUpdate = () => {
         fetchBooks(); // Call this function after update
@@ -177,7 +224,7 @@ function ProductListingPage() {
 
     useEffect(() => {
         fetchBooks();
-    }, [books]); // This ensures it refreshes when books change
+    }, [products]); // This ensures it refreshes when books change
 
 
 
@@ -185,12 +232,12 @@ function ProductListingPage() {
     const handleAddBook = () => {
         /*navigate("/add-book");*/
         setIsAddBookModalOpen(true);
-        
+
 
     };
     const handleCloseAddBookModal = () => {
         setIsAddBookModalOpen(false);
-        
+
     };
     useEffect(() => {
         if (isAddBookModalOpen || isUpdateBookModalOpen || selectedBook || isAboutModalOpen) {
@@ -214,23 +261,23 @@ function ProductListingPage() {
                 customClass: {
                     confirmButton: "swal-custom-ok-button" // Apply teal color to the OK button
                 }
-               
+
             });
         }
-    }, [bookAdded]); 
+    }, [bookAdded]);
 
     const handleEditBook1 = (book) => {
         setBookToUpdate(book);
         setIsUpdateBookModalOpen(true);
-        
+
     };
     const handleCloseUpdateBookModal = () => {
         setIsUpdateBookModalOpen(false);
         setBookToUpdate(null);
-        
+
     };
 
-    
+
 
     const handleBookUpdated = async () => {
         await fetchBooks(); // Ensure data is updated
@@ -280,7 +327,8 @@ function ProductListingPage() {
             setCartItems((prevCartItems) => {
                 //const updatedCart = { ...cartItems, [selectedBook.id]: selectedBook }
                 const updatedCart = {
-                    ...prevCartItems, [book.id]: { ...book, quantity: 1 } };
+                    ...prevCartItems, [book.id]: { ...book, quantity: 1 }
+                };
                 //updatedCart.Push(book);
                 localStorage.setItem("cartItems", JSON.stringify(updatedCart));
                 console.log("Cart before update:", cartItems);
@@ -336,7 +384,7 @@ function ProductListingPage() {
 
 
 
-    
+
     const filteredProducts = products.filter((product) =>
         product?.title?.toLowerCase().includes(searchQuery.toLowerCase())
     );
@@ -374,9 +422,12 @@ function ProductListingPage() {
 
 
 
-    const handleFilterChange = (event) => {
-        setFilterBy(event.target.value);
+
+    const handleFilterChange = (e) => {
+        const value = e.target.value;
+        setFilterBy(value);
     };
+
 
     let filteredBooks = books.filter((book) => {
         if (filterBy === "title") {
@@ -390,21 +441,67 @@ function ProductListingPage() {
         }
         return true;
     });
+    if (region && region!=='all')
+    filteredBooks = filteredBooks.filter((book) =>
+        book.category.toLowerCase() === region
+    );
+    useEffect(() => {
+        const chips = [];
 
-    if (sortOrder) { 
-    filteredBooks.sort((a, b) => {
-        const getSortableValue = (book, key) => book[key].toLowerCase();
+        if (filterBy === "title" && searchTerm.trim() !== "") {
+            chips.push({ type: "Filter", value: `Title: ${searchTerm}` });
+        } else if (filterBy === "author" && searchTerm.trim() !== "") {
+            chips.push({ type: "Filter", value: `Author: ${searchTerm}` });
+        }  else if (filterBy === "stock") {
+            chips.push({ type: "Filter", value: `Out of Stock` });
+        }
+        if(region && region!=="all")
+        chips.push({ type: "Region", value: ` ${region}` });
+        if (showInStock) {
+            chips.push({ type: "Stock", value: "In Stock" });
+        }
 
-        let valueA = getSortableValue(a, sortOrder);
-        let valueB = getSortableValue(b, sortOrder);
+        if (sortOrder) {
+            chips.push({ type: "Sort", value: sortOrder.charAt(0).toUpperCase() + sortOrder.slice(1) });
+        }
 
-        return valueA.localeCompare(valueB, undefined, { numeric: true });
-    });
+        setActiveChips(chips);
+    }, [filterBy, sortOrder, showInStock, searchTerm , region]);
+
+
+    const removeChip = (type) => {
+        setActiveChips((prev) => prev.filter((chip) => chip.type !== type));
+
+        // Reset corresponding state
+        if (type === "Filter") {
+            setFilterBy("title");
+            setSearchTerm("");
+        }
+        if (type === "Sort") setSortOrder("title");
+        if (type === "Stock") setShowInStock(false);
+        if (type === "Region") setRegion("all");
+    };
+
+    if (sortOrder) {
+        filteredBooks.sort((a, b) => {
+            const getSortableValue = (book, key) => book[key].toLowerCase();
+
+            let valueA = getSortableValue(a, sortOrder);
+            let valueB = getSortableValue(b, sortOrder);
+
+            return valueA.localeCompare(valueB, undefined, { numeric: true });
+        });
+
+        
     }
+
 
     if (showInStock) {
-        filteredBooks=filteredBooks.filter(book => book.availableCopies!==0);
+        filteredBooks = filteredBooks.filter(book => book.availableCopies !== 0);
     }
+    
+
+
     //useEffect(() => {
     //    let sortedBooks = [...filteredBooks]; // Sort filtered books, not the original list
 
@@ -678,45 +775,61 @@ function ProductListingPage() {
                 {/*        Add a New Book*/}
                 {/*    </button>*/}
                 {/*</div>*/}
-                <div className="collapsible-container">
-                    <div className="collapsible-header" onClick={() => setIsOpen(!isOpen)}>
-                        <span>Settings</span>
-                        <span className="arrow">
-                            {isOpen ? <ChevronUp size={20} className="arrow-icon" /> : <ChevronDown size={20} className="arrow-icon" />}
-                        </span>
+                
+                    <div className="controls-bar">
+                        <div className="form-group">
+                            <label htmlFor="filter">Filter By:</label>
+                            <select id="filter" onChange={handleFilterChange} value={filterBy}>
+                                <option value="title">Title</option>
+                                <option value="author">Author</option>
+                                {/*<option value="region">Region</option>*/}
+                                
+                            </select>
+                        </div>
+                    <div className="form-group">
+                        <label htmlFor="filter">Region:</label>
+                        <select id="filter" onChange={handleRegionChange} value={region}>
+                            <option value="all">All</option>
+                            <option value="wilrijk">Wilrijk</option>
+                            <option value="gecia">Gecia</option>
+                            <option value="brno">Brno</option>
+                            <option value="china">China</option>
+                            
+                        </select>
                     </div>
-                    {isOpen && (
-                        <form className="controls-form">
-                            <div className="form-group">
-                                <label htmlFor="filter">Filter By:</label>
-                                <select id="filter" onChange={handleFilterChange} value={filterBy}>
-                                    <option value="title">Title</option>
-                                    <option value="author">Author</option>
-                                    <option value="region">Region</option>
-                                    <option value="stock">Out of stock</option>
-                                </select>
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="sort">Sort By:</label>
-                                <select id="sort" value={sortOrder} onChange={(e) => setSortOrder(e.target.value)}>
-                                    <option value="title">Title</option>
-                                    <option value="author">Author</option>
-                                </select>
-                            </div>
+                        <div className="form-group">
+                            <label htmlFor="sort">Sort By:</label>
+                            <select id="sort" value={sortOrder} onChange={(e) => setSortOrder(e.target.value)}>
+                                <option value="title">Title</option>
+                                <option value="author">Author</option>
+                            </select>
+                        </div>
 
-                            {/* Toggle Switch for In Stock */}
-                            <div className="toggle-container">
-                                <label className="toggle-label">Show In Stock:</label>
-                                <div className="toggle-switch" onClick={handleToggleInStock}>
-                                    <div className={`slider ${showInStock ? "active" : ""}`}></div>
-                                </div>
+                        <div className="toggle-container">
+                            <label className="toggle-label">Show In Stock:</label>
+                            <div className="toggle-switch" onClick={handleToggleInStock}>
+                                <div className={`slider ${showInStock ? "active" : ""}`}></div>
                             </div>
-
-                            {/* Reset Button */}
-                            <button className="reset-btn" onClick={handleReset}>Reset All</button>
-                        </form>
-                    )}
+                        </div>
+                    
+                        
+                    </div>
+                <div className="chips-reset-container">
+                    <div className="active-chips">
+                        {activeChips.map((chip) => (
+                            <div key={chip.type} className="chip">
+                                {chip.type}: {chip.value}
+                                <span className="remove-chip" onClick={() => removeChip(chip.type)}>
+                                    <X size={16} />
+                                </span>
+                            </div>
+                        ))}
+                    </div>
+                    <button className="reset-btn-text" onClick={handleReset}>Reset All</button>
                 </div>
+
+
+                
                 {/* Product Listing Section */}
                 <div className="album py-5">
                     {/*<div className="container">*/}
@@ -766,8 +879,8 @@ function ProductListingPage() {
 
                             {filteredBooks.length > 0 ? (
 
-                                filteredBooks.map(product => 
-                                    < FlippableImage product = { product } cartItems = { cartItems } handleOpenModal = { handleOpenModal } handleEditBook1 = { handleEditBook1 } removeBookByTitle = { removeBookByTitle } handleRemoveFromCart = { handleRemoveFromCart } handleAddToCart = { handleAddToCart } />
+                                filteredBooks.map(product =>
+                                    < FlippableImage product={product} cartItems={cartItems} handleOpenModal={handleOpenModal} handleEditBook1={handleEditBook1} removeBookByTitle={removeBookByTitle} handleRemoveFromCart={handleRemoveFromCart} handleAddToCart={handleAddToCart} book={product} admins={admins} />
 
                                 )
 
@@ -777,26 +890,31 @@ function ProductListingPage() {
                                         flexDirection: 'column',
                                         alignItems: 'center',
                                         justifyContent: 'center',
+                                        height: '100vh',           // Full viewport height
+                                        width: '100%',
                                         textAlign: 'center',
-                                        position: 'absolute',  // Absolute positioning for full-page centering
-                                        top: '85%',
-                                        left: '50%',
-                                        transform: 'translate(-50%, -50%)',  // Moves the div exactly to the center
-                                        padding: '20px'
+                                        padding: '20px',
+                                        boxSizing: 'border-box'
                                     }}>
-                                        <img src={emptyBookImage} alt="No Product" style={{
-                                            width: '150px',
-                                            display: 'block'
-                                        }} />
+                                        <img
+                                            src={emptyBookImage}
+                                            alt="No Product"
+                                            style={{
+                                                width: '150px',
+                                                maxWidth: '80%',
+                                                height: 'auto',
+                                                display: 'block'
+                                            }}
+                                        />
                                         <p style={{
                                             fontSize: '16px',
                                             color: '#555',
-                                            marginTop: '10px',
-                                            marginLeft: '20px' // Adjust to move text slightly right
+                                            marginTop: '10px'
                                         }}>
                                             No books found.
                                         </p>
                                     </div>
+
 
 
                             )}
@@ -805,23 +923,31 @@ function ProductListingPage() {
 
 
                 </div>
+                {showLoader && <Loader />}
 
             </div>
 
             {/* Floating Add Button above Footer */}
-            <button className="add-book-button" onClick={handleAddBook}>
-                <Plus size={30} />
-            </button>
+            {isAdmin &&
+                <button className="add-book-button" onClick={handleAddBook}>
+                    <Plus size={30} />
+                </button>
+            }
             <button className="chat-button" onClick={() => setIsChatOpen(!isChatOpen)} >
                 <BotMessageSquare size={30} />
             </button>
+            {isAdmin &&
+                <button className="add-book-button" onClick={handleAddBook}>
+                    <Plus size={30} />
+                </button>
+            }
             {showButton && (
                 <button
                     onClick={scrollToTop}
                     style={{
                         position: 'fixed',
-                        bottom: '200px', // Adjusted for better placement
-                        right: '0.8%', // Default for small screens, aligns to the right
+                        bottom: '50px', // Adjusted for better placement
+                        right: '0.81%', // Default for small screens, aligns to the right
                         transform: 'translateX(0)', // Default for small screens
                         padding: '10px 20px',
                         fontSize: '16px',
@@ -848,7 +974,7 @@ function ProductListingPage() {
                 </button>
 
             )}
-s
+
      
             {isChatOpen && <Chatbot onClose={() => setIsChatOpen(false)}/>}
             {isAddBookModalOpen && (
@@ -945,7 +1071,7 @@ s
                             <img
                                 src={selectedBook.image || 'https://via.placeholder.com/200'}
                                 alt={selectedBook.title}
-                                style={{ width: "65%" }}
+                                className="responsive-image"
                             />
                             {/* Book Details Table */}
                             <div className="book-details">
@@ -979,7 +1105,17 @@ s
                         {/* Right Side: Book Summary */}
                         <div className="modal-text">
                             <h2 className="fw-bold">Book Summary</h2>
-                            <p>{selectedBook.description || "No summary available."}</p>
+
+                            {/* Read More Section */}
+                            <p className={`formatted-summary ${isExpanded ? 'expanded' : 'collapsed'}`}>
+                                {selectedBook.description || "No summary available."}
+                            </p>
+
+                            {selectedBook.description && (
+                                <button className="read-more-btn" onClick={() => setIsExpanded(!isExpanded)}>
+                                    {isExpanded ? 'Read less' : 'Read more'}
+                                </button>
+                            )}
                         </div>
 
                         {/* Add to Cart Button at Bottom Right */}

@@ -1,9 +1,22 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
 import './ProductListingPage.css';
-const FlippableImage = ({ product, cartItems, handleOpenModal, handleEditBook1, removeBookByTitle, handleRemoveFromCart, handleAddToCart }) => {
+const FlippableImage = ({ product, cartItems, handleOpenModal, handleEditBook1, removeBookByTitle, handleRemoveFromCart, handleAddToCart,book,admins }) => {
     const [isOpening, setIsOpening] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const username = localStorage.getItem("username"); // Get user info
+    
+    const canEditOrDelete = () => {
+        
+        if (!Array.isArray(admins)) {
+            console.warn("admins is not an array or is null/undefined.");
+            return false;
+        }
+
+        return admins.includes(username);
+    };
+
+
     const handlePageTurnAndOpenModal = () => {
         if (!isMenuOpen){
         setIsOpening(true); // Start book opening animation
@@ -22,12 +35,12 @@ const FlippableImage = ({ product, cartItems, handleOpenModal, handleEditBook1, 
     return (
         <motion.div
             className="flip-container mt-4"
-            animate={{
+            /*animate={{
                 rotateY: !isMenuOpen && isOpening ? -120 : 0, // Opens outward towards the viewer
                 opacity: !isMenuOpen && isOpening ? 0.9 : 1,
                 scale: !isMenuOpen && isOpening ? 1.1 : 1, // Slightly zooms forward
             }}
-            transition={{ duration: 0.6, ease: "easeInOut" }}
+            transition={{ duration: 0.6, ease: "easeInOut" }}*/
             onClick={handlePageTurnAndOpenModal}
             style={{
                 display: "inline-block",
@@ -47,8 +60,8 @@ const FlippableImage = ({ product, cartItems, handleOpenModal, handleEditBook1, 
                     zIndex: 1, // Below the book cover
                     borderRadius: "5px",
                 }}              animate={{
-                  opacity: !isMenuOpen && isOpening ? 1 : 0, // Pages fade out as book opens
-                  scaleX: !isMenuOpen && isOpening ? 1 : 0, // Expands before disappearing
+                  opacity: !isMenuOpen && isOpening ? 0 : 0, // Pages fade out as book opens
+                  scaleX: !isMenuOpen && isOpening ? 0 : 0, // Expands before disappearing
                 }}
                 transition={{ duration: 0.5, ease: "easeInOut" }}
             />
@@ -66,13 +79,17 @@ const FlippableImage = ({ product, cartItems, handleOpenModal, handleEditBook1, 
                         onMouseLeave={handleMouseLeave} >
                         <i className="bi bi-three-dots-vertical settings-icon"></i>
                         <div className="dropdown-menu">
+                            {canEditOrDelete(book) && (
+                                <>
                             <button onClick={() => handleEditBook1(product)} className="dropdown-item">
                                 <i className="bi bi-pencil"></i> Edit
                             </button>
 
                             <button onClick={() => removeBookByTitle(product.title, product.id)} className="dropdown-item">
                                 <i className="bi bi-trash3"></i> Delete
-                            </button>
+                                    </button>
+                            </>
+                            )}
 
                             {/* Disable 'Place in Cart' if out of stock */}
                             <button

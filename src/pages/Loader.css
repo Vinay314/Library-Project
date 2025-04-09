@@ -1,104 +1,144 @@
-/* Fullscreen Loader */
-.loader-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
+.loader-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%; /* Changed to viewport height to help centering */
+    width: 100%;
+    backdrop-filter: blur(6px);
+    font-family: 'Georgia', serif;
+    text-align: center;
+    padding: 20px;
+    z-index: 1;
+    position: absolute; /* Changed from absolute to relative for better control */
+    overflow: hidden; /* Prevents scrollbars due to animation */
+}
+
+/*  NEW WRAPPER for sticky positioning */
+.loader-content {
+    position: sticky; /* Sticky position added */
+    top: 50%; /* Center vertically */
+    left: 50%;
+    transform: translate(-50%, -50%); /* Perfect center trick */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 10;
+}
+
+/* Book stays centered inside loader-content */
+.book {
+    position: relative;
+    width: 180px;
+    height: 240px;
+    perspective: 1600px;
+    transform: translateX(90px); /* Move the book 90px to the right */
+    transform-style: preserve-3d;
+}
+
+/* No changes to cover */
+.cover {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #00695c;
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    padding: 10px;
+}
+
+.page {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: white;
+    border-left: 3px solid #004d40;
+    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.1);
+    transform-origin: left center;
+    border-radius: 3px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #ffffff; /* Clean white background */
-    overflow: hidden;
-    z-index: 9999;
-    perspective: 2000px; /* For realistic 3D depth */
+    padding: 12px;
+    box-sizing: border-box;
 }
 
-/* 3D Rotating Cube */
-.cube {
-    width: 80px;
-    height: 80px;
-    position: relative;
-    transform-style: preserve-3d;
-    animation: rotateCube 6s infinite linear;
+.page-content.front {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    height: 100%;
+    text-align: center;
 }
 
-/* Cube Faces (NO GLOW, Clean and Sharp) */
-.face {
-    position: absolute;
-    width: 80px;
-    height: 80px;
-    background: transparent; /* No fill */
-    border: 3px solid #009688; /* Solid teal outline */
+.page-content {
+    font-size: 0.85rem;
+    color: #111;
+    text-align: center;
 }
 
-/* Positioning Cube Faces */
-.front {
-    transform: translateZ(40px);
+.logo {
+    max-width: 120px;
+    height: auto;
+    margin-bottom: 12px;
 }
 
-.back {
-    transform: rotateY(180deg) translateZ(40px);
+.logo-text {
+    font-weight: bold;
+    color: white;
+    font-size: 17px;
+    text-align: center;
 }
 
-.left {
-    transform: rotateY(-90deg) translateZ(40px);
+.flip {
+    animation: flipPage 2.5s forwards ease-in-out infinite;
 }
 
-.right {
-    transform: rotateY(90deg) translateZ(40px);
-}
-
-.top {
-    transform: rotateX(90deg) translateZ(40px);
-}
-
-.bottom {
-    transform: rotateX(-90deg) translateZ(40px);
-}
-
-/* Rotating Animation */
-@keyframes rotateCube {
+@keyframes flipPage {
     0% {
-        transform: rotateX(0deg) rotateY(0deg);
-    }
-
-    25% {
-        transform: rotateX(90deg) rotateY(90deg);
+        transform: rotateY(0deg);
+        opacity: 1;
     }
 
     50% {
-        transform: rotateX(180deg) rotateY(180deg);
-    }
-
-    75% {
-        transform: rotateX(270deg) rotateY(270deg);
+        transform: rotateY(-150deg);
+        opacity: 0.7;
     }
 
     100% {
-        transform: rotateX(360deg) rotateY(360deg);
+        transform: rotateY(-180deg);
+        opacity: 0;
     }
 }
 
-/* Loading Text */
-.loader-text {
-    color: #00796b; /* Dark teal for contrast */
-    font-size: 1.8rem;
-    font-weight: bold;
-    letter-spacing: 2px;
-    position: absolute;
-    bottom: 10%;
+/* Adjusted quote inside sticky loader-content */
+.quote {
+    margin-top: 30px;
+    max-width: 90%;
+    font-size: 1.1rem;
+    color: #004d40;
+    font-style: italic;
+    animation: fadeQuote 3s ease-in-out infinite;
     text-align: center;
-    animation: fade-in 2s ease-in-out infinite alternate;
 }
 
-/* Fade-in Text Effect */
-@keyframes fade-in {
-    0% {
-        opacity: 0.3;
+@keyframes fadeQuote {
+    0%, 100% {
+        opacity: 1;
     }
 
-    100% {
-        opacity: 1;
+    50% {
+        opacity: 0.6;
     }
 }

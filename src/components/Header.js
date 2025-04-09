@@ -143,15 +143,15 @@ const Header = ({ searchQuery, setSearchQuery, products ,onOpenAbout}) => {
             </div>
             <div
                 style={{
-                    /*display: 'flex',*/
                     justifyContent: 'center',
-                    fontSize: '20px', // Increased size
+                    fontSize: '20px',
                     fontWeight: 'bold',
-                    paddingLeft: '0%', // Moves it more to the right
+                    marginLeft: '-25px', // Move it a bit to the left
                     width: '100%',
                 }}
+
             >
-                BrainBank Library Project
+                BrainBank Library 
             </div>
 
             {/* Search Bar */}

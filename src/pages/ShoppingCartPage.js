@@ -22,10 +22,23 @@ const Tabs = ({ activeTab, setActiveTab }) => {
     const [currentBooks, setCurrentBooks] = useState([]);
     const [borrowedBooks, setBorrowedBooks] = useState([]);
     const [filterDate, setFilterDate] = useState("");
+    const [title, setTitle] = useState('');
+    const { id } = useParams();
+    const [searchTerm, setSearchTerm] = useState('');
+    const [author, setAuthor] = useState('');
+    
     const allBooks = [...currentBooks, ...borrowedBooks];
-    const filteredBooks = allBooks.filter((book) =>
-        filterDate ? book.returnDate && book.returnDate.includes(filterDate) : true
-    );
+
+    const filteredBooks = allBooks.filter((book) => {
+        const matchesDate = filterDate ? book.returnDate && book.returnDate.includes(filterDate) : true;
+        const matchesSearch = searchTerm
+            ? book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            book.author?.toLowerCase().includes(searchTerm.toLowerCase())
+            : true;
+
+        return matchesDate && matchesSearch;
+    });
+
 
 
 
@@ -84,7 +97,7 @@ const Tabs = ({ activeTab, setActiveTab }) => {
                                     {/* Book Information */}
                                     <div className="text-container">
                                         <p className="item-name">{book.title}</p>
-                                        {book.author && <p className="author">Author: {book.author}</p>}
+                                        <p className="author">Author: {book.author}</p>
                                         <p className="date-info">
                                             Date of Return: {book.returnDate ? new Date(book.returnDate).toDateString() : "Not Set"}
                                         </p>
@@ -103,16 +116,43 @@ const Tabs = ({ activeTab, setActiveTab }) => {
 
             {activeTab === "borrowed" && (
                 <div className = "borrowed-books">
+
                     
-                    <div className="date-filter">
-                        <label htmlFor="filter-date">Filter by Date:</label>
-                        <input
-                            type="date"
-                            id="filter-date"
-                            value={filterDate}
-                            onChange={(e) => setFilterDate(e.target.value)}
-                        />
+                    <div className="filters" style={{ display: 'flex', alignItems: 'flex-end', gap: '20px', marginBottom: '24px', marginTop: '-62px' }}>
+
+                        {/* Search Bar with horizontal label and input */}
+                        <div className="search-bar1" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginLeft:'12px' }}>
+                            <label htmlFor="search" style={{ color: 'teal', fontWeight: '600' }}>
+                                Search:
+                            </label>
+                            <input
+                                id="search"
+                                type="text"
+                                placeholder="Title or Author"
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                style={{
+                                    padding: '8px',
+                                    border: '1px solid #ccc',
+                                    borderRadius: '4px',
+                                    width: '200px',
+                                }}
+                            />
+                        </div>
+
+                        {/* Date Filter - position unchanged */}
+                        <div className="date-filter">
+                            <label htmlFor="filter-date">Filter by Date:</label>
+                            <input
+                                type="date"
+                                id="filter-date"
+                                value={filterDate}
+                                onChange={(e) => setFilterDate(e.target.value)}
+                            />
+                        </div>
                     </div>
+
+
                     {filteredBooks.length > 0 ? (
                         filteredBooks.map((book) => (
                             <div className ="shopping-cart">
@@ -124,10 +164,10 @@ const Tabs = ({ activeTab, setActiveTab }) => {
                                 <div className="cart-item-details">
                                     {/* Book Information */}
                                     <div className="text-container">
-                                        <p className="item-name">{book.title}</p>
-                                        {book.author && <p className="author">Author: {book.author}</p>}
-                                        <p className="date-info">
-                                            Date of Return: {book.returnDate ? new Date(book.returnDate).toDateString() : "Not Set"}
+                                                <p className="item-name">{book.title}</p>
+                                                <p className="author1">{book.author}</p>
+                                                <p className="date-info1">
+                                                    <span style={{ fontWeight: "bold" }} >Date of return:</span>{book.returnDate ? new Date(book.returnDate).toDateString() : "Not Set"}
                                         </p>
                                     </div>
                                 </div>
@@ -195,36 +235,135 @@ const ShoppingCartPage = () => {
     const [validCartItems, setValidCartItems] = useState(validCartItemsArray);
 
     const handleRemoveBook = (item, isDelete) => {
+
         if (isDelete)
-        dispatch({
-            type: REMOVE_FROM_CART,
-            payload: { id: item.id },
-        });
 
-        // Retrieve current cart from localStorage
-        const storedCart = JSON.parse(localStorage.getItem("cartItems")) || {};
-        if (storedCart[item.id].quantity > 1 && !isDelete) {
-            storedCart[item.id].quantity--;
+            dispatch({
+
+                type: REMOVE_FROM_CART,
+
+                payload: { id: item.id },
+
+            });
+
+        const isLastItemInCart = (validCartItems?.length || 0) === 1;
+
+        if (isDelete && isLastItemInCart) {
+
+            Swal.fire({
+
+                title: "Empty Cart?",
+
+                text: "Are you sure you want to remove the last item and empty the cart?",
+
+                icon: "warning",
+
+                showCancelButton: true,
+
+                confirmButtonText: "Yes, remove it",
+
+                cancelButtonText: "Cancel",
+
+                customClass: {
+
+                    confirmButton: "swal-custom-ok-button",
+
+                    cancelButton: "swal-custom-cancel-button"
+
+                }
+
+            }).then((result) => {
+
+                if (result.isConfirmed) {
+
+                    // Retrieve current cart from localStorage
+
+                    const storedCart = JSON.parse(localStorage.getItem("cartItems")) || {};
+
+                    if (storedCart[item.id].quantity > 1 && !isDelete) {
+
+                        storedCart[item.id].quantity--;
+
+                    }
+
+                    else {
+
+                        // Remove the item from cart
+
+                        delete storedCart[item.id];
+
+                    }
+
+                    // Update localStorage
+
+                    localStorage.setItem("cartItems", JSON.stringify(storedCart));
+
+                    console.log("Updated Cart in handleRemoveBook:", storedCart);
+
+                    let validCartItemsArray1 = [];// cartItems.filter(item => item?.title !== undefined && item?.title !== null);
+
+                    for (let key in storedCart) {
+
+                        if (storedCart[key].title) {
+
+                            validCartItemsArray1.push(storedCart[key]);
+
+                        }
+
+                    }
+
+                    setValidCartItems(validCartItemsArray1);
+
+                }
+
+            });
+
         }
+
         else {
-            // Remove the item from cart
-            delete storedCart[item.id];
-        }
 
-        // Update localStorage
-        localStorage.setItem("cartItems", JSON.stringify(storedCart));
+            // Retrieve current cart from localStorage
 
-        console.log("Updated Cart in handleRemoveBook:", storedCart);
+            const storedCart = JSON.parse(localStorage.getItem("cartItems")) || {};
 
-        let validCartItemsArray1 = [];// cartItems.filter(item => item?.title !== undefined && item?.title !== null);
-        for (let key in storedCart) {
-            if (storedCart[key].title) {
-                validCartItemsArray1.push(storedCart[key]);
+            if (storedCart[item.id].quantity > 1 && !isDelete) {
+
+                storedCart[item.id].quantity--;
+
             }
+
+            else {
+
+                // Remove the item from cart
+
+                delete storedCart[item.id];
+
+            }
+
+            // Update localStorage
+
+            localStorage.setItem("cartItems", JSON.stringify(storedCart));
+
+            console.log("Updated Cart in handleRemoveBook:", storedCart);
+
+            let validCartItemsArray1 = [];// cartItems.filter(item => item?.title !== undefined && item?.title !== null);
+
+            for (let key in storedCart) {
+
+                if (storedCart[key].title) {
+
+                    validCartItemsArray1.push(storedCart[key]);
+
+                }
+
+            }
+
+            setValidCartItems(validCartItemsArray1);
+
         }
 
-        setValidCartItems(validCartItemsArray1);
     };
+
 
     const handleIncreaseBook = (item) => {
         if (item.quantity < item.availableCopies) {
@@ -266,7 +405,84 @@ const ShoppingCartPage = () => {
             });
         }
     };
-   
+
+
+    const handleDecreaseBook = (item) => {
+
+
+        const isLastItemInCart = (validCartItems?.length || 0) === 1;
+
+
+        if (item.quantity > 1) {
+
+            dispatch({
+
+                type: DECREASE_QUANTITY,
+
+                payload: { id: item.id }
+
+            });
+
+            handleRemoveBook(item);
+
+        } else if (isLastItemInCart) {
+
+            Swal.fire({
+
+                title: "Empty Cart?",
+
+                text: "Are you sure you want to remove the last item and empty the cart?",
+
+                icon: "warning",
+
+                showCancelButton: true,
+
+                confirmButtonText: "Yes, remove it",
+
+                cancelButtonText: "Cancel",
+
+                customClass: {
+
+                    confirmButton: "swal-custom-ok-button",
+
+                    cancelButton: "swal-custom-cancel-button"
+
+                }
+
+            }).then((result) => {
+
+                if (result.isConfirmed) {
+
+                    dispatch({
+
+                        type: REMOVE_FROM_CART,
+
+                        payload: { id: item.id }
+
+                    });
+
+                    handleRemoveBook?.(item); // Optional UI updates
+
+                }
+
+            });
+
+        } else {
+
+            dispatch({
+
+                type: REMOVE_FROM_CART,
+
+                payload: { id: item.id }
+
+            });
+
+            handleRemoveBook?.(item);
+
+        }
+
+    };
+
     const tabs = [
         { id: "borrowed", label: "Borrowed Books" },
         { id: "current", label: "Books With You" },
@@ -346,18 +562,20 @@ const ShoppingCartPage = () => {
             const bookDetails = await Promise.all(
                 validCartItems.map(async (item) => {
                     if (item.id) {
-                        const [titleRes, imageRes, regionRes] = await Promise.all([
+                        const [titleRes, imageRes, regionRes,authorRes] = await Promise.all([
                             fetch(`http://localhost:5198/api/books/${item.id}/title`),
                             fetch(`http://localhost:5198/api/books/${item.id}/image`),
                             fetch(`http://localhost:5198/api/books/${item.id}/category`),
+                            fetch(`http://localhost:5198/api/books/${item.id}/author`),
                         ]);
 
                         const title = await titleRes.text();
                         const image = await imageRes.text();
                         const region = await regionRes.text();
-                        return { id: item.id, title, image,region, quantity: item.quantity };
+                        const author = await authorRes.text();
+                        return { id: item.id, title, image,region,author, quantity: item.quantity};
                     } else {
-                        return { id: item.id, title: "Unknown Title", image: "/default-book.jpg",region : "N/A", quantity: item.quantity };
+                        return { id: item.id, title: "Unknown Title", image: "/default-book.jpg",region : "N/A",author : "N/A", quantity: item.quantity };
                     }
                 })
             );
@@ -381,7 +599,7 @@ const ShoppingCartPage = () => {
                 title: "Borrow Summary",
                 width: "950px",
                 html: `
-<div style="max-width: 900px; max-height: 300px; overflow-y: auto; padding: 20px;">
+<div style="max-width: 900px; max-height: 400px; overflow-y: auto; padding: 20px;">
     <p><strong>Borrowing Date:</strong> ${today.toDateString()}</p>
     <p><strong>Return Date:</strong> ${returnDate.toDateString()}</p>
     
@@ -435,10 +653,11 @@ const ShoppingCartPage = () => {
                 confirmButtonText: "OK",
                 confirmButtonColor: "#008080",
             }).then(() => {
-                navigate("/loader"); // Navigate to Loader component first
-                setTimeout(() => {
-                    navigate("/products"); // Navigate to products after 2s
-                }, 2000);
+                //navigate("/loader"); // Navigate to Loader component first
+                //setTimeout(() => {
+                //    navigate("/products"); // Navigate to products after 2s
+                //}, 2000);
+                navigate("/products?loader=true");
             });  
             const transitionStyle = isTransitioning
                 ? {
@@ -565,7 +784,7 @@ const ShoppingCartPage = () => {
                         {validCartItems.length > 0 ? (
                             validCartItems.map(item => (
                                 <div className="outer-cart-item" key={item.id}>
-                                    <CartItem item={item} handleRemoveBook={(isDelete) => { handleRemoveBook(item, isDelete) }} handleIncreaseBook={() => { handleIncreaseBook(item) }} />
+                                    <CartItem item={item} handleRemoveBook={(isDelete) => { handleRemoveBook(item, isDelete) }} handleIncreaseBook={() => { handleIncreaseBook(item) }} handleDecreaseBook={() => { handleDecreaseBook(item) }} />
                                 </div>
                             ))
                         ) : (

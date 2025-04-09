@@ -30,4 +30,8 @@ public class Book
 
     [BsonElement("image")]
     public string? Image { get; set; }
+
+    [BsonElement("createdBy")]
+    public string CreatedBy { get; set; } // Stores the email or user ID of the creator
 }
+

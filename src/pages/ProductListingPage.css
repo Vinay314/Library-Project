@@ -461,7 +461,7 @@ section .lead {
     max-width: 1000px;
     max-height: 85vh;
     background: white;
-    padding: 35px;
+    padding: 11px;
     border-radius: 10px;
     position: relative;
     overflow: hidden;
@@ -489,20 +489,22 @@ section .lead {
 }
 
 /* ----- Increased Book Image Size ----- */
-.book-image img {
-    max-width: 220px; /* Increased from 200px */
-    height: 320px; /* Increased from 280px */
-    border-radius: 8px;
+/*.book-image img {
+    max-width: 230px;*/ /* Increased from 200px */
+    /*height: 320px;*/ /* Increased from 280px */
+    /*border-radius: 8px;
     object-fit: cover;
     margin-bottom: 10px;
-}
+}*/
 
 /* ----- Book Details (Table Styling) ----- */
 .book-details {
-    width: 100%;
+    width: 67%;
     background: #f5f5f5;
-    padding: 15px;
+    padding: 10px;
     border-radius: 8px;
+    height:75%;
+    display:flex;
     text-align: left;
     min-height: 200px;
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
@@ -616,39 +618,63 @@ section .lead {
         }*/
 /* ----- Text & Details Section ----- */
 .modal-text {
-    flex-grow: 1;
-    max-height: 60vh;
-    overflow-y: auto;
-    padding: 15px;
+    flex-grow: 0;
+    padding: 20px;
     text-align: justify;
-    margin-left: 15px;
-    margin-bottom: 15px;
+    margin: -25px auto;
     background: white;
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-/*New changes   */
-    /*padding:28px;*/
-    display:flex;
-    align-items:center;
-    /*justify-content:center;*/
-    flex-direction:column;
-    margin-bottom:57px;
-    min-width:584px;
-    min-height:459px;
-    margin-top:35px;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    width: fit-content;
+    /*    max-width: 600px;*/
+    border-radius: 8px;
+    width: 92%;
 }
 
 .formatted-summary {
     word-wrap: break-word;
-    white-space: pre-line;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
+    transition: all 0.3s ease-in-out;
+    line-height: 1.6;
 }
+
+    .formatted-summary.collapsed {
+        display: -webkit-box;
+        -webkit-line-clamp: 3; /* Show only 3 lines */
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-height: 4.8em; /* 3 lines x line-height (1.6) */
+    }
+
+    .formatted-summary.expanded {
+        display: block;
+        max-height: none;
+    }
+
+.read-more-btn {
+    background: none;
+    color: #007bff;
+    border: none;
+    cursor: pointer;
+    font-size: 15.5px;
+    text-decoration: underline;
+    /*padding: 0;*/
+    margin-top: 4px;
+}
+
+    .read-more-btn:hover {
+        text-decoration: none;
+    }
 
 /* ----- Button at Bottom Right ----- */
 .modal-footer {
     /*    position: absolute;
     bottom: 10px;
     right: 10px;*/
-    bottom: -35px;
+    bottom: -33px;
     right: 10px;
     background: white;
     height: 12%;
@@ -688,10 +714,10 @@ section .lead {
     }
 
     /* Adjusted Image Size for Small Screens */
-    .book-image img {
+    /*.book-image img {
         max-width: 180px;
         height: 260px;
-    }
+    }*/
 
     /* Adjusted Table Styling for Small Screens */
     .book-details {
@@ -717,6 +743,44 @@ section .lead {
         position: sticky;
     }
 }
+.responsive-image {
+    width: 20%;
+    height: 180px;
+   
+    object-fit: contain;
+    display: block;
+}
+
+/* Tablet and up */
+/*@media screen and (min-width: 750px) {
+    .responsive-image {
+        width: 40%;
+        height: 223px;
+        max-width: 254px;
+        max-height: 300px;
+        object-fit: contain;
+        display: block;
+    }
+}*/
+
+/* Desktop */
+@media screen and (min-width: 1600px) {
+    .responsive-image {
+        width: 400px;
+        height: 350px;
+        
+    }
+}
+
+/* Large desktops */
+/*@media screen and (min-width: 1440px) {
+    .responsive-image {
+        width: 10vw;
+        height:500px;*/
+       /* max-width: 5000px;
+        max-height: 800px;*/
+    /*}
+}*/
 
 /* ----- Update Modal Styling ----- */
 .modal-overlay-update {
@@ -729,6 +793,7 @@ section .lead {
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow-y: auto;
     z-index: 1000;
 }
 .removecart{
@@ -740,15 +805,47 @@ section .lead {
     border-radius: 10px;
     width: 900px;
     max-height: 90vh;
-    /*overflow-y: auto;*/
+    
     position: relative;
 }
 
 /* ----- Add Modal Overlay ----- */
+.modal-overlay-update {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.removecart {
+    height: 45px;
+}
+
+.modal-content-update {
+    background: transparent;
+    padding: 20px;
+    border-radius: 10px;
+    width: 900px;
+    max-height: 90vh;
+    /*overflow-y: auto;*/
+
+    position: relative;
+}
+
+/* ----- Add Modal Overlay ----- */
+
 .modal-overlay-add {
     z-index: 2000 !important; /* Ensure it's above everything */
+
     display: flex !important; /* Force display */
-    background-color:transparent !important;
+
+    background-color: transparent !important;
 }
 
 .modal-overlay-add {
@@ -762,6 +859,7 @@ section .lead {
     justify-content: center;
     align-items: center;
     z-index: 1000;
+    overflow-y:auto;
 }
 
 .modal-content-add {
@@ -771,20 +869,25 @@ section .lead {
     width: 900px;
     max-height: 90vh;
     /*overflow-y: auto;*/
+
     position: relative;
     background-color: transparent !important;
 }
 
 /* ----- Buttons Styling ----- */
+
 .modal-buttons {
     display: flex;
     justify-content: center; /* Align buttons horizontally */
+
     gap: 10px; /* Space between buttons */
+
     margin-top: 15px;
 }
 
     .modal-buttons button {
         flex: 1; /* Make buttons equal width */
+
         padding: 10px;
         font-size: 16px;
         border: none;
@@ -794,6 +897,7 @@ section .lead {
     }
 
 /* ----- Warning Button ----- */
+
 .btn-warning {
     background-color: #f0ad4e;
     color: white;
@@ -804,6 +908,7 @@ section .lead {
     }
 
 /* ----- Close Button ----- */
+
 .close-button {
     position: absolute;
     top: 0px;
@@ -811,6 +916,7 @@ section .lead {
     font-size: 24px;
     cursor: pointer;
 }
+
  
 
 /* Floating Chat Button */
@@ -1007,6 +1113,7 @@ section .lead {
     border: none;
     border-radius: 8px;
     transition: all 0.3s ease-in-out;
+    
 }
 
 .btn-light-mode {
@@ -1120,7 +1227,8 @@ section .lead {
 .hero-section {
     position: relative;
     width: auto;
-    height: 500px; /* Adjust height as needed */
+    height: 250px !important; /* Adjust height as needed */
+
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1139,6 +1247,7 @@ section .lead {
         height: 100%;
         background: rgba(24, 77, 89, 0.75);
         /*        Darker Teal Overlay */
+
         border-radius: 10px;
     }
 
@@ -1146,12 +1255,13 @@ section .lead {
         position: relative;
         z-index: 1; /* Ensures text and content stay above the overlay */
     }
+ 
 
 /* Sticky Add book Button */
 
 .add-book-button {
     position: fixed;
-    bottom: 30px;
+    bottom: 190px;
     right: 15px;
     width: 65px;
     height: 65px;
@@ -1181,9 +1291,9 @@ section .lead {
 }
 
 .hero-title {
-    font-size: 3.8rem;
+    font-size: 2.8rem;
     font-weight: bold;
-    margin-top:54px
+    margin-top:-13px
 }
 
 .hero-subtitle {
@@ -1353,7 +1463,7 @@ section .lead {
 
 .search-bar {
     position: absolute;
-    bottom: 59px; /* Sticks to bottom */
+    bottom: 33px; /* Sticks to bottom */
     left: 50%;
     transform: translateX(-50%);
     width: 51%;
@@ -1364,7 +1474,7 @@ section .lead {
     border-radius: 20px;
     padding: 10px;
     backdrop-filter: blur(10px);
-    height:12%;
+    height:17%;
 }
 
 .suggestions-list {
@@ -1407,17 +1517,22 @@ section .lead {
     }
 /* Book details table below image */
 .book-details {
-    width: 100%;
+    width: 67%;
     margin-top: 15px;
     background: #f5f5f5;
     padding: 10px;
     border-radius: 8px;
-    margin-left: 49px;
-    height: 95%;
+    margin-left: 60px !important;
+    height: 75%;
     display: flex;
     text-align: left;
     min-height: 200px;
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+}
+/* styles.css */
+.py-5 {
+    padding-top: 0rem !important;
+    padding-bottom: 3rem !important;
 }
 
     .book-details table {
@@ -1717,46 +1832,7 @@ section .lead {
 }
 
 
-/* Filter and Sort Form */
-.controls-form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;
-    background-color: #f9f9f9;
-    padding: 20px;
-    border-radius: 0 0 10px 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: fit-content;
-    margin: auto;
-    margin-top: -1px;
-}
 
-/* Form Group */
-.form-group {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    gap: 10px;
-}
-
-    /* Labels */
-    .form-group label {
-        font-weight: bold;
-        white-space: nowrap;
-        color: black; /* Ensure labels are visible */
-    }
-
-    /* Select Dropdowns */
-    .form-group select {
-        padding: 8px 12px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 14px;
-        min-width: 150px;
-    }
 
 /* Responsive Design */
 @media (max-width: 600px) {
@@ -1781,6 +1857,81 @@ section .lead {
     font-size: 16px;
 }
 
+
+
+.active-chips {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+.chip {
+    background-color: #e0f7fa;
+    color: #006064;
+    padding: 0.4rem 0.75rem;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+}
+
+.remove-chip {
+    margin-left: 8px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+
+.chips-reset-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+}
+
+
+
+.reset-btn-text {
+    background: none;
+    border: none;
+    color: teal;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 0.25rem 0.5rem;
+    text-decoration: underline;
+    transition: color 0.3s ease;
+}
+
+    .reset-btn-text:hover {
+        color: #0e3d3e;
+    }
+
+
+
+
+
+
+
+
+.controls-bar {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Distributes children across the width */
+    background-color: #184d59;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    color: white;
+    flex-wrap: wrap; /* Wrap on smaller screens */
+    width: 100%;
+    box-sizing: border-box;
+    row-gap: 1rem; /* Add some vertical spacing when wrapped */
+}
+
+
 /* Filter and Sort Form */
 .controls-form {
     display: flex;
@@ -1799,10 +1950,8 @@ section .lead {
 /* Form Group */
 .form-group {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    gap: 10px;
+    flex-direction: column;
+    color: white;
 }
 
     /* Labels */
@@ -1858,11 +2007,11 @@ section .lead {
 
 .form-group {
     display: flex;
+    flex-direction: row; /* Ensures label and select/input are side by side */
     align-items: center;
-    justify-content: space-between;
-    width: 100%;
     gap: 10px;
 }
+
 
     .form-group label {
         font-weight: bold;
@@ -1898,12 +2047,12 @@ section .lead {
 .toggle-container {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 7px;
 }
 
 .toggle-label {
     font-weight: bold;
-    color: #333;
+    color: white;
 }
 
 .toggle-switch {
@@ -1992,7 +2141,7 @@ section .lead {
     }
 /* Book Card */
 .book-card {
-    height: 525px;
+    height: 480px;
     width: 300px; /* Increase card width */
     padding: 0px; /* Add spacing inside */
     border-radius: 2px; /* Smooth corners */
@@ -2078,29 +2227,62 @@ section .lead {
     /*padding-top: 40px;*/ /* Center the image */
 /*}*/
 
+
+
+
+
+.responsive-box {
+    width: 65%;
+    height: 224px;
+}
+
+@media (min-width: 1000px) {
+    .responsive-box {
+        width: 800px;
+        height: 300px;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* Book Image */
 .book-image {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    width: 84%; /* Adjust width to make it proportional */
+    width: 92%; /* Adjust width to make it proportional */
     height: 77%; /* Fixed height */
     object-fit: cover; /* Ensures images don't get stretched */
     border-radius: 10px; /* Slight rounding for better look */
     /*padding-top: 40px;*/ /* Center the image */
-    margin-top:30px;
+    margin-top: 15px;
+    margin-bottom: 30px;
 }
 
-    .book-image img {
-        width: 88%; /* Ensures responsiveness */
+    /*.book-image img {
+        width: 88%;*/ /* Ensures responsiveness */
         /*max-width: 300px;*/ /* Sets a reasonable max width */
-        height: auto; /* Maintains aspect ratio */
-        object-fit: cover;
-        border-radius: 10px; /* Keeps rounded corners */
-        display: block; /* Prevents inline spacing issues */
-        margin: 0 auto; /* Centers the image */
-    }
+        /*height: auto;*/ /* Maintains aspect ratio */
+        /*object-fit: cover;
+        border-radius: 10px;*/ /* Keeps rounded corners */
+        /*display: block;*/ /* Prevents inline spacing issues */
+        /*margin: 0 auto;*/ /* Centers the image */
+    /*}*/
+
 /* Card Body */
 .card-body {
     padding: 10px;

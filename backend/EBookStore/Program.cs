@@ -26,6 +26,7 @@ builder.Services.AddScoped<IMongoCollection<Book>>(s =>
 
 // Add services to the container
 builder.Services.AddControllers();
+builder.Services.AddScoped<UserService>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReactApp",
@@ -53,5 +54,7 @@ app.UseCors("AllowReactApp");
 
 app.UseAuthorization();
 app.MapControllers();
+var adminSync = new AdminSyncService();
+adminSync.StartWatching();
 
 app.Run();

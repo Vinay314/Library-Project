@@ -95,13 +95,13 @@ function ProductListingPage() {
 
             setShowLoader(true);
 
-            document.body.style.overflow = "hidden";
+            document.documentElement.style.overflow = "hidden";
 
             setTimeout(() => {
 
                 setShowLoader(false);
 
-                document.body.style.overflow = "auto";
+                document.documentElement.style.overflow = "auto";
 
                 sessionStorage.removeItem("showLoaderOnce");
 
@@ -322,13 +322,13 @@ function ProductListingPage() {
     };
     useEffect(() => {
         if (isAddBookModalOpen || isUpdateBookModalOpen || selectedBook || isAboutModalOpen) {
-            document.body.style.overflow = "hidden";
+            document.documentElement.style.overflow = "hidden";
         } else {
-            document.body.style.overflow = "auto";
+            document.documentElement.style.overflow = "auto";
         }
 
         return () => {
-            document.body.style.overflow = "auto"; // Cleanup function to reset overflow
+            document.documentElement.style.overflow = "auto"; // Cleanup function to reset overflow
         };
     }, [isAddBookModalOpen, isUpdateBookModalOpen, selectedBook, isAboutModalOpen]);
 
@@ -641,8 +641,8 @@ function ProductListingPage() {
 
 
 
-    {/*
-        RIGHT CLICK DISABLED CODE
+    
+        //RIGHT CLICK DISABLED CODE
 
         useEffect(() => {
         const disableRightClick = (event) => {
@@ -662,7 +662,7 @@ function ProductListingPage() {
     }, [selectedBook, isAddBookModalOpen, isUpdateBookModalOpen]);
     
     
-    */}
+    
     
 
 

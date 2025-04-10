@@ -17,9 +17,9 @@ const AboutUs = () => {
                 <div style={styles.divider}></div>
                 <p style={styles.text}>
                     Welcome to BrainBank Library, your go-to digital hub for knowledge and learning.
-                    Our platform provides a vast collection of books across various genres, making it easy for readers, students, and researchers to access valuable resources.<br />
+                    Our platform provides a vast collection of books , making it easy for readers, students, and researchers to access valuable resources.<br />
                     <br></br>
-                    Whether you're looking for academic materials, fiction, or industry insights, BrainBank Library is designed to support your intellectual growth.
+                    BrainBank Library is designed to support your intellectual growth.
                     With a user-friendly interface and seamless browsing experience, we aim to make reading and learning more accessible than ever.
                 </p>
 

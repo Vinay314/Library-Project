@@ -641,10 +641,12 @@ const ShoppingCartPage = () => {
             Swal.fire({
                 title: "Borrow Summary",
                 width: "950px",
+                
                 html: `
 <div style="max-width: 900px; max-height: 400px; overflow-y: auto; padding: 20px;">
-    <p><strong>Borrowing Date:</strong> ${today.toDateString()}</p>
-    <p><strong>Return Date:</strong> ${returnDate.toDateString()}</p>
+   <p><strong>Borrowing Date:</strong> ${today.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
+<p><strong>Return Date:</strong> ${returnDate.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
+
     
     <hr style="border: 0; height: 1px; background: #008080; margin: 10px 0;">
 
@@ -689,7 +691,7 @@ const ShoppingCartPage = () => {
         </tbody>
     </table>
 
-    <p style="margin-top: 10px; font-size: 16px;">Thank you for borrowing!</p>
+    
 </div>
 `,
                 icon: "success",
@@ -802,8 +804,8 @@ const ShoppingCartPage = () => {
             {/*            Checkout*/}
             {/*        </button>*/}
             {/*    </div>*/}
-            {/*)}*/}
-            {(validCartItems.length === 0 && !showSummary) && (
+                {/*)}*/}
+                {(activeTab==="cart" && validCartItems.length === 0 && !showSummary) && (
                 <div style={styles.stickyButtons}>
                     <Link to="/products">
                         <button style={styles.continueShoppingButton}>Continue Shopping</button>

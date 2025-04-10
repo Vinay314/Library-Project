@@ -18,7 +18,7 @@ const Loader = () => {
         pages.forEach((page, i) => {
             if (i % 2 === 0) page.style.zIndex = z--;
             page.classList.add('flip');
-            page.style.animationDelay = `${i * 1.8}s`; // Slower flip delay
+            page.style.animationDelay = `${i * 1.65}s`; // Slower flip delay
         });
     }, []);
 

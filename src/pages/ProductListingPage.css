@@ -796,7 +796,10 @@ section .lead {
     align-items: center;
     overflow-y: auto;
     z-index: 1000;
+    scrollbar-width: thin;
+    scrollbar-color: #008080 #e0f7f7; 
 }
+
 .removecart{
     height:45px;
 }
@@ -811,7 +814,7 @@ section .lead {
 }
 
 /* ----- Add Modal Overlay ----- */
-.modal-overlay-update {
+/*.modal-overlay-update {
     position: fixed;
     top: 0;
     left: 0;
@@ -822,22 +825,22 @@ section .lead {
     justify-content: center;
     align-items: center;
     z-index: 1000;
-}
+}*/
 
 .removecart {
     height: 45px;
 }
 
-.modal-content-update {
+/*.modal-content-update {
     background: transparent;
     padding: 20px;
     border-radius: 10px;
     width: 900px;
-    max-height: 90vh;
+    max-height: 90vh;*/
     /*overflow-y: auto;*/
 
-    position: relative;
-}
+    /*position: relative;
+}*/
 
 /* ----- Add Modal Overlay ----- */
 

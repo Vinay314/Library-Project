@@ -100,6 +100,8 @@ const UpdateBookPage = ({ book, onClose, onBookUpdated }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isbn, setIsbn] = useState('');
     const [email, setEmail] = useState('');
+    const [selectedFileName, setSelectedFileName] = useState('');
+
     // Fetch the current book data from the API when the component mounts
     useEffect(() => {
         console.log("Received book:", book); 
@@ -175,6 +177,11 @@ const UpdateBookPage = ({ book, onClose, onBookUpdated }) => {
 
 
     const handleImageUpload = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setSelectedFileName(file.name);
+            // Do any existing logic (like uploading or previewing)
+        }
         setImage(e.target.files[0]);
     };
 
@@ -299,7 +306,8 @@ const UpdateBookPage = ({ book, onClose, onBookUpdated }) => {
 <option value="">Select Region</option>
 <option value="Wilrijk">Wilrijk</option>
 <option value="Gecia">Gecia</option>
-<option value="Brno">Brno</option>
+                        <option value="Brno">Brno</option>
+                        <option value="China">China</option>
 </select>
 </div>
 </div>
@@ -318,7 +326,7 @@ const UpdateBookPage = ({ book, onClose, onBookUpdated }) => {
 <label style={styles.label}>ISBN</label>
 <div style={styles.formGroup}>
 <IdCard size={18} style={styles.icon} />
-<input type="text" value={isbn} onChange={(e) => setIsbn(e.target.value)} style={styles.input} required />
+<input type="text" value={isbn} onChange={(e) => setIsbn(e.target.value)} style={styles.input} />
 </div>
 </div>
  
@@ -375,18 +383,19 @@ const UpdateBookPage = ({ book, onClose, onBookUpdated }) => {
                         >
                             Choose Image
                         </label>
-                    <p
-                        style={{
-                            color: "teal",
-                            whiteSpace: "nowrap",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                            maxWidth: "100%",
-                            marginTop: "12px", // Adjust this value as needed
-                        }}
->
-                        {book.image}
-</p>
+                        <p
+                            style={{
+                                color: "teal",
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                                maxWidth: "100%",
+                                marginTop: "12px",
+                            }}
+                        >
+                            {selectedFileName || book.image}
+                        </p>
+
  
                 </div>
  

@@ -1,3 +1,4 @@
+
 .container {
     padding-top: 1rem;
 }
@@ -656,7 +657,7 @@ section .lead {
 
 .read-more-btn {
     background: none;
-    color: #007bff;
+    color: #008080;
     border: none;
     cursor: pointer;
     font-size: 15.5px;
@@ -922,10 +923,10 @@ section .lead {
 /* Floating Chat Button */
 .chat-button {
     position: fixed;
-    bottom: 110px; /* Positioned above the Add Book button */
+    bottom: 70px; /* Positioned above the Add Book button */
     right: 15px;
-    width: 65px;
-    height: 65px;
+    width: 55px;
+    height: 50px;
     /*background: linear-gradient(#184d59, #257d77);*/
     background: linear-gradient(#257d77,#184d59);
     color: white;
@@ -936,7 +937,7 @@ section .lead {
     justify-content: center;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s ease-in-out;
-    z-index: 1000;
+    z-index: 10000;
 }
 
     /* Hover Effect */
@@ -1073,7 +1074,7 @@ section .lead {
 }
 
 .full-page-container {
-    min-height: 100vh; /* Full viewport height */
+    min-height: 90vh; /* Full viewport height */
     width: 100%; /* Full width */
     display: flex;
     flex-direction: column;
@@ -1261,10 +1262,10 @@ section .lead {
 
 .add-book-button {
     position: fixed;
-    bottom: 190px;
+    bottom: 130px;
     right: 15px;
-    width: 65px;
-    height: 65px;
+    width: 55px;
+    height: 50px;
     background: linear-gradient(#184d59, #257d77);
     color: white;
     background-color: #007a8e;
@@ -1443,7 +1444,7 @@ section .lead {
 }
 .out-of-stock-badge {
     position: absolute;
-    top: 444px;
+    top: 396px;
     right: 93px;
     /*background: linear-gradient(135deg, #008080, #20B2AA);*/
     background: linear-gradient(135deg, #D32F2F, #FF6B6B);
@@ -2141,7 +2142,7 @@ section .lead {
     }
 /* Book Card */
 .book-card {
-    height: 480px;
+    height: 435px;
     width: 300px; /* Increase card width */
     padding: 0px; /* Add spacing inside */
     border-radius: 2px; /* Smooth corners */
@@ -2287,7 +2288,7 @@ section .lead {
 .card-body {
     padding: 10px;
     text-align: center;
-    margin-top: -2px;
+    margin-top: -33px;
 }
 
 .card-title {

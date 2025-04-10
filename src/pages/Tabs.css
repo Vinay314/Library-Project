@@ -6,6 +6,7 @@
     padding: 10px;
     border-radius: 8px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+
 }
 
 .tab-button {
@@ -27,7 +28,7 @@
 
     .tab-button.active {
         color: #008080;
-        border-bottom: 2px solid #007bff;
+        border-bottom: 2px solid #008080;
     }
 
 

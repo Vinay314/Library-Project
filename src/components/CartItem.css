@@ -56,6 +56,7 @@
 
 /* Parent container to stack books vertically */
 .cart-container {
+    /*margin-top: 67px;*/
     display: flex;
     flex-direction: column; /* Stack items vertically */
     align-items: center;

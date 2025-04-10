@@ -21,7 +21,12 @@ const Header = ({ searchQuery, setSearchQuery, products ,onOpenAbout}) => {
     const [user, setUser] = React.useState("");
     const [imageUrl, setImageUrl] = React.useState();
 
- 
+    const handleCartClick = () => {
+        // We use location.key as a "force-refresh" key
+        const key = Math.random().toString(36).substring(7); // random string
+        localStorage.setItem("forceCartTabSwitch", key);
+        navigate('/cart');
+    };
  
     let totalQuantity = useSelector((state) =>
         state.cart.items.reduce((total, item) => total + item.quantity, 0)
@@ -193,15 +198,19 @@ const Header = ({ searchQuery, setSearchQuery, products ,onOpenAbout}) => {
                         </li>
                     </div>
                     <li>
-                        <Link to="/cart" className="cart-link position-relative">
+                        <span
+                            className="cart-link position-relative"
+                            onClick={handleCartClick}
+                            style={{ cursor: 'pointer' }}
+                        >
                             <span className="cart-icon">
                                 <i className="bi bi-cart2"></i>
                             </span>
-
                             {totalQuantity > 0 && (
                                 <span className="cart-quantity">{totalQuantity}</span>
                             )}
-                        </Link>
+                        </span>
+
                     </li>
                     {/* Profile Dropdown */}
                     <div

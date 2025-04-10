@@ -18,7 +18,7 @@ const Loader = () => {
         pages.forEach((page, i) => {
             if (i % 2 === 0) page.style.zIndex = z--;
             page.classList.add('flip');
-            page.style.animationDelay = `${i * 1.2}s`; // Slower flip delay
+            page.style.animationDelay = `${i * 1.8}s`; // Slower flip delay
         });
     }, []);
 
@@ -42,7 +42,7 @@ const Loader = () => {
                     ))}
                 </div>
 
-                <p className="quote">A reader lives a thousand lives before he dies.</p>
+               {/* <p className="quote">A reader lives a thousand lives before he dies.</p>*/}
 
             </div>
         </div>

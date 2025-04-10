@@ -9,11 +9,11 @@ const styles = {
     },
     form: {
         backgroundColor: '#184d59',
-        padding: '50px',
+        padding: '17px',
         borderRadius: '20px',
         boxShadow: '0 0 10px rgba(255, 255, 255, 0.1)',
-        width: '100%',
-        maxWidth: '650px',
+        width: '98%',
+        maxWidth: '571px',
         display: 'flex',
         flexDirection: 'column',
         position: 'relative',
@@ -21,8 +21,8 @@ const styles = {
         boxShadow: 'none !important',
         marginLeft: 'auto',
         marginRight: 'auto',
-        
-       
+        alignItems: 'center',
+       textAlign:'center'
     },
 
 
@@ -31,9 +31,10 @@ const styles = {
         alignItems: 'center',
         backgroundColor: 'white',
         padding: '10px',
-        borderRadius: '5px',
-        marginBottom: '15px',
+        borderRadius: '9px',
+        marginBottom: '10px',
         justifyContent: 'space-between',
+        width:'89%'
 
     },
     icon: {
@@ -67,8 +68,9 @@ const styles = {
         borderRadius: '10px',
         cursor: 'pointer',
         fontWeight: 'bold',
-        marginTop:'20px',
-        height:'70px',
+        marginTop:'7px',
+        height: '40px',
+        width:'90%'
     },
     closeButton: {
         position: 'absolute',
@@ -204,7 +206,8 @@ const AddBookPage = ({onClose ,onBookAdded}) => {
             <h1 style={{
                 color: 'white',
                 textAlign: 'center',
-                marginBottom: '50px' // Adjust the spacing as needed
+                marginBottom: '10px',
+                fontSize: '2rem'// Adjust the spacing as needed
             }}>Add a new book</h1>
 
             {/* Placeholder styling */}
@@ -279,12 +282,19 @@ const AddBookPage = ({onClose ,onBookAdded}) => {
                 <BookCopy size={18} style={styles.icon} />
                 <input
                     type="number"
+                    min="0"
                     value={availableCopies}
-                    onChange={(e) => setAvailableCopies(e.target.value)}
+                    onChange={(e) => {
+                        const value = parseInt(e.target.value, 10);
+                        if (value >= 0 || isNaN(value)) {
+                            setAvailableCopies(e.target.value);
+                        }
+                    }}
                     style={styles.input}
                     required
                 />
             </div>
+
             {/* ISBN */}
             <div style={styles.formGroup}>
                 <IdCard size={18} style={styles.icon} />
@@ -294,7 +304,7 @@ const AddBookPage = ({onClose ,onBookAdded}) => {
                     value={isbn}
                     onChange={(e) => setIsbn(e.target.value)}
                     style={styles.input}
-                    required
+                    
                 />
             </div>
            

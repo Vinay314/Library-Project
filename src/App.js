@@ -15,6 +15,7 @@ import Loader from './pages/Loader';
 const App = () => {
     const [userString, setUserString] = useState(""); // State to manage userString
     const [searchQuery, setSearchQuery] = useState("");
+
     const [isAboutModalOpen, setIsAboutModalOpen] = useState(false);
     const location = useLocation();
     const handleOpenAboutModal = () => {

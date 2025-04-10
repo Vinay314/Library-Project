@@ -12,7 +12,8 @@ import "./Tabs.css";
 import Loader from './Loader.jsx'
 import { REMOVE_FROM_CART, INCREASE_QUANTITY, DECREASE_QUANTITY } from '../store/actions';
 import emptyhistory from './assets/emptyhistory1.png';
-
+import { useLocation } from "react-router-dom";
+import { ArrowUp } from "lucide-react";
 const Tabs = ({ activeTab, setActiveTab }) => {
     const tabs = [
         { id: "borrowed", label: "Borrowed Books" },
@@ -27,9 +28,9 @@ const Tabs = ({ activeTab, setActiveTab }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [author, setAuthor] = useState('');
     
-    const allBooks = [...currentBooks, ...borrowedBooks];
+    const allBooks = [...borrowedBooks];
 
-    const filteredBooks = allBooks.filter((book) => {
+    let filteredBooks = allBooks.filter((book) => {
         const matchesDate = filterDate ? book.returnDate && book.returnDate.includes(filterDate) : true;
         const matchesSearch = searchTerm
             ? book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -48,8 +49,11 @@ const Tabs = ({ activeTab, setActiveTab }) => {
         let today = new Date();
 
         let current = checkedOutBooks.filter(book => new Date(book.returnDate) >= today);
-        let borrowed = checkedOutBooks.filter(book => new Date(book.returnDate) < today);
-
+        let borrowed = checkedOutBooks
+            .filter(book => new Date(book.returnDate) > today)
+            .sort((a, b) => new Date(b.returnDate) - new Date(a.returnDate)); // Descending
+        //filteredBooks = borrowed;
+        console.log("test", borrowed);
         setCurrentBooks(current);
         setBorrowedBooks(borrowed);
 
@@ -167,7 +171,16 @@ const Tabs = ({ activeTab, setActiveTab }) => {
                                                 <p className="item-name">{book.title}</p>
                                                 <p className="author1">{book.author}</p>
                                                 <p className="date-info1">
-                                                    <span style={{ fontWeight: "bold" }} >Date of return:</span>{book.returnDate ? new Date(book.returnDate).toDateString() : "Not Set"}
+                                                    <span style={{ fontWeight: "bold" }}>Date of return:</span>{' '}
+                                                    {book.returnDate
+                                                        ? new Date(book.returnDate).toLocaleDateString('en-US', {
+                                                            weekday: 'long',
+                                                            year: 'numeric',
+                                                            month: 'long',
+                                                            day: 'numeric'
+                                                        })
+                                                        : "Not Set"}
+
                                         </p>
                                     </div>
                                 </div>
@@ -224,7 +237,28 @@ const ShoppingCartPage = () => {
     const [activeTab, setActiveTab] = useState("cart");
     const [isTransitioning, setIsTransitioning] = useState(false);
     const [loading, setLoading] = useState(true);
-    
+    const location = useLocation();
+    const [showButton, setShowButton] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            if (window.scrollY > 100) {
+                setShowButton(true);
+            } else {
+                setShowButton(false);
+            }
+        };
+
+        window.addEventListener("scroll", handleScroll);
+        return () => {
+            window.removeEventListener("scroll", handleScroll);
+        };
+    }, []);
+ 
+    const scrollToTop = () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+
     
     let validCartItemsArray = [];// cartItems.filter(item => item?.title !== undefined && item?.title !== null);
     for (let key in cartItems) {
@@ -363,6 +397,15 @@ const ShoppingCartPage = () => {
         }
 
     };
+
+    useEffect(() => {
+        const storedKey = localStorage.getItem("forceCartTabSwitch");
+
+        if (storedKey) {
+            setActiveTab("cart");
+            localStorage.removeItem("forceCartTabSwitch");
+        }
+    }, [location.key]); // will run even if path doesn't change
 
 
     const handleIncreaseBook = (item) => {
@@ -657,7 +700,9 @@ const ShoppingCartPage = () => {
                 //setTimeout(() => {
                 //    navigate("/products"); // Navigate to products after 2s
                 //}, 2000);
-                navigate("/products?loader=true");
+                /*navigate("/products?loader=true");*/
+                sessionStorage.setItem("showLoaderOnce", "true"); // Set the flag
+                navigate("/products");
             });  
             const transitionStyle = isTransitioning
                 ? {
@@ -777,7 +822,32 @@ const ShoppingCartPage = () => {
                 </div>
             )}
 
+                {(showButton && activeTab==='borrowed') && (
+                    <button
+                        onClick={scrollToTop}
+                        style={{
+                            position: 'fixed',
+                            bottom: '10px',
+                            right: '15px',
+                            width: '55px',
+                            height: '50px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            background: 'linear-gradient(#257d77,#184d59)',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '50%',
+                            cursor: 'pointer',
+                            boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
+                            zIndex: 1000,
+                        }}
+                    >
+                        <ArrowUp size={30} />
+                    </button>
 
+
+                )}
                <div className="cart-container"> {/* Updated class for overall layout */}
                     {activeTab === "cart" && !checkoutComplete && (
                         <div className="shopping-cart">

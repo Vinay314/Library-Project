@@ -23,7 +23,7 @@ public class Book
     public required string Description { get; set; }
 
     [BsonElement("ISBN")]
-    public required string ISBN { get; set; }
+    public required string? ISBN { get; set; }
 
     [BsonElement("availableCopies")]
     public int AvailableCopies { get; set; }

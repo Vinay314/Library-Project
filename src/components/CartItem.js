@@ -165,7 +165,17 @@ const CartItem = ({ item, handleRemoveBook, handleIncreaseBook, handleDecreaseBo
                     {author && <p className="author"><span className="label">Author:</span> <span className="value">{author}</span></p>}
                     {region && <p className="author"><span className="label"> Pick up and drop location:</span> <span className="value">{region}</span></p>}
                     <p className="date-info">
-                        <span className="label">Date of Return:</span> <span className="value">{returnDate ? returnDate.toDateString() : "Not Set"}</span>
+                        <span className="label">Date of Return: </span>
+                        <span className="value">
+                            {returnDate ? returnDate.toLocaleDateString('en-US', {
+                                weekday: 'long',
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric'
+                            }) : "Not Set"}
+                        </span>
+
+
     </p>
 </div>
 

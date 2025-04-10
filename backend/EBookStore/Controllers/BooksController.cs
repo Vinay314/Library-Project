@@ -98,7 +98,7 @@ public class BooksController : ControllerBase
                                            [FromForm] string category,
                                            [FromForm] decimal price,
                                            [FromForm] string description,
-                                           [FromForm] string ISBN,
+                                           [FromForm] string? ISBN,
                                            [FromForm] int availableCopies
                                            )
     {
@@ -174,7 +174,7 @@ public class BooksController : ControllerBase
 
 
     [HttpPut("{id:length(24)}")]
-    public async Task<IActionResult> UpdateBook(string id, [FromForm] string title, [FromForm] string author, [FromForm] string category, [FromForm] string description, [FromForm] string isbn, [FromForm] int availableCopies, [FromForm] IFormFile file = null)
+    public async Task<IActionResult> UpdateBook(string id, [FromForm] string title, [FromForm] string author, [FromForm] string category, [FromForm] string description, [FromForm] string? isbn, [FromForm] int availableCopies, [FromForm] IFormFile file = null)
     {
         var book = await _booksCollection.Find(b => b.Id == id).FirstOrDefaultAsync();
         if (book == null)

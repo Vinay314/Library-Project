@@ -74,15 +74,50 @@ function ProductListingPage() {
 
     const [loading, setLoading] = useState(true);
 
-    var query = window.location.search.substring(1);
-    //console.log("1",query)
+    //var query = window.location.search.substring(1);
+    ////console.log("1",query)
 
-    const [showLoader, setShowLoader] = useState(query === "loader=true");
-    if (showLoader) {
-        setTimeout(() => {
-            setShowLoader(false); // Navigate to products after 2s
-        }, 3000);
-    }
+    //const [showLoader, setShowLoader] = useState(query === "loader=true");
+    //if (showLoader) {
+    //    document.body.style.overflow = 'hidden';
+    //    setTimeout(() => {
+    //        setShowLoader(false); // Navigate to products after 2s
+    //        document.body.style.overflow = 'auto';
+    //    }, 3000);
+    //}
+    const [showLoader, setShowLoader] = useState(false);
+    //loader transition
+    useEffect(() => {
+
+        const shouldShowLoader = sessionStorage.getItem("showLoaderOnce") === "true";
+
+        if (shouldShowLoader) {
+
+            setShowLoader(true);
+
+            document.body.style.overflow = "hidden";
+
+            setTimeout(() => {
+
+                setShowLoader(false);
+
+                document.body.style.overflow = "auto";
+
+                sessionStorage.removeItem("showLoaderOnce");
+
+            }, 2500);
+
+        }
+
+    }, []);
+    useEffect(() => {
+        // Check if this is the first page load
+        if (!sessionStorage.getItem("hasLoadedBefore")) {
+            localStorage.removeItem("cartItems"); // Clear cart ONLY on full refresh
+            setCartItems({}); // Reset cart state
+            sessionStorage.setItem("hasLoadedBefore", "true"); // Set flag to prevent clearing on navigation
+        }
+    }, []);
     const updateChips = (type, value) => {
         setActiveChips((prev) => {
             // Remove any existing chip of the same type
@@ -116,6 +151,9 @@ function ProductListingPage() {
         setShowInStock(false);
     };
 
+
+
+
     const handleFlip = () => {
         setIsFlipped(true);
         setTimeout(() => setIsFlipped(false), 600); // Reset flip after animation
@@ -146,6 +184,7 @@ function ProductListingPage() {
             window.removeEventListener("scroll", handleScroll);
         };
     }, []);
+
     const fetchBooks = async () => {
         try {
             const response = await fetch("http://localhost:5198/api/books");
@@ -157,12 +196,54 @@ function ProductListingPage() {
             }
 
             setAdmins(data.adminUsers);
-            setBooks(data.books); // Ensure state updates
+
+            const fetchImageWithRetry = async (bookId, retries = 3) => {
+                const imageUrl = `http://localhost:5198/api/books/${bookId}/image`;
+                for (let i = 0; i < retries; i++) {
+                    try {
+                        const res = await fetch(imageUrl);
+                        if (!res.ok) throw new Error("Failed to load image");
+
+                        const imagePath = await res.text();
+                        const img = new Image();
+                        img.src = `http://localhost:5198${imagePath}`;
+
+                        // Confirm image actually loads
+                        await new Promise((resolve, reject) => {
+                            img.onload = () => resolve();
+                            img.onerror = () => reject();
+                        });
+
+                        return imagePath; // success
+                    } catch (e) {
+                        if (i === retries - 1) {
+                            return null; // failed all attempts
+                        }
+                    }
+                }
+            };
+
+            for (const book of data.books) {
+                const imagePath = await fetchImageWithRetry(book.id);
+                if (!imagePath) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Image Load Failed',
+                        text: `Failed to load image for book: ${book.title}`,
+                    });
+                    break; // Stop if any image fails
+                } else {
+                    book.image = imagePath; // Update image path with fetched one
+                }
+            }
+
+            setBooks(data.books);
 
         } catch (error) {
             console.error("Error fetching books:", error);
         }
     };
+
 
     useEffect(() => {
         fetchBooks();
@@ -201,9 +282,9 @@ function ProductListingPage() {
             const filteredSuggestions = products
                 .filter(product => {
                     if (filterBy === "title") {
-                        return product.title.toLowerCase().includes(value.toLowerCase());
+                        return product.title?.toLowerCase().includes(value.toLowerCase());
                     } else if (filterBy === "author") {
-                        return product.author.toLowerCase().includes(value.toLowerCase());
+                        return product.author?.toLowerCase().includes(value.toLowerCase());
                     }
                     return false;
                 })
@@ -431,11 +512,11 @@ function ProductListingPage() {
 
     let filteredBooks = books.filter((book) => {
         if (filterBy === "title") {
-            return book.title.toLowerCase().includes(searchTerm.toLowerCase());
+            return book.title?.toLowerCase().includes(searchTerm.toLowerCase());
         } else if (filterBy === "author") {
-            return book.author.toLowerCase().includes(searchTerm.toLowerCase());
+            return book.author?.toLowerCase().includes(searchTerm.toLowerCase());
         } else if (filterBy === "region") {
-            return book.category.toLowerCase().includes(searchTerm.toLowerCase());
+            return book.category?.toLowerCase().includes(searchTerm.toLowerCase());
         } else if (filterBy === "stock") {
             return book.availableCopies === 0;
         }
@@ -443,7 +524,7 @@ function ProductListingPage() {
     });
     if (region && region!=='all')
     filteredBooks = filteredBooks.filter((book) =>
-        book.category.toLowerCase() === region
+        book.category?.toLowerCase() === region
     );
     useEffect(() => {
         const chips = [];
@@ -604,6 +685,9 @@ function ProductListingPage() {
         }
     }, []);
     const removeBookByTitle = (title, productId) => {
+        const normalizedTitle = title?.trim().toLowerCase() ?? '';
+ // normalize for comparison
+
         Swal.fire({
             title: `Are you sure?`,
             text: `Do you really want to delete "${title}"? This action cannot be undone.`,
@@ -619,18 +703,20 @@ function ProductListingPage() {
                 fetch(`http://localhost:5198/api/books/remove-by-title/${encodeURIComponent(title)}`, { method: 'DELETE' })
                     .then(response => {
                         if (!response.ok) throw new Error('Failed to remove book');
-                        return response.text();  
+                        return response.text();
                     })
                     .then(() => {
-                        
+                        // Remove book from products case-insensitively
                         setProducts(prevProducts =>
-                            [...prevProducts.filter(product => product.title.toLowerCase() !== title.toLowerCase())]
+                            prevProducts.filter(product =>
+                                (product.title?.trim().toLowerCase() ?? '') !== normalizedTitle
+                            )
                         );
 
-                        
+                        // Remove from cart (Redux)
                         dispatch(removeFromCart(productId));
 
-                        
+                        // Remove from localStorage/cartItems
                         setCartItems(prevCart => {
                             const updatedCart = { ...prevCart };
                             delete updatedCart[productId];
@@ -638,7 +724,6 @@ function ProductListingPage() {
                             return updatedCart;
                         });
 
-                        
                         Swal.fire({
                             title: 'Deleted!',
                             text: `Book titled "${title}" has been removed successfully.`,
@@ -661,6 +746,7 @@ function ProductListingPage() {
             }
         });
     };
+
 
 
 
@@ -890,7 +976,7 @@ function ProductListingPage() {
                                         flexDirection: 'column',
                                         alignItems: 'center',
                                         justifyContent: 'center',
-                                        height: '100vh',           // Full viewport height
+                                        height: '40vh',           // Full viewport height
                                         width: '100%',
                                         textAlign: 'center',
                                         padding: '20px',
@@ -946,37 +1032,31 @@ function ProductListingPage() {
                     onClick={scrollToTop}
                     style={{
                         position: 'fixed',
-                        bottom: '50px', // Adjusted for better placement
-                        right: '0.81%', // Default for small screens, aligns to the right
-                        transform: 'translateX(0)', // Default for small screens
-                        padding: '10px 20px',
-                        fontSize: '16px',
-                        background:'linear-gradient(#257d77,#184d59)',
+                        bottom: '10px',
+                        right: '15px',
+                        width: '55px',
+                        height: '50px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        background: 'linear-gradient(#257d77,#184d59)',
                         color: 'white',
                         border: 'none',
-                        borderRadius: '90px',
+                        borderRadius: '50%',
                         cursor: 'pointer',
                         boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
                         zIndex: 1000,
-                        width: 'auto',
-                        minWidth: '50px',
-                        '@media (max-width: 768px)': {
-                            left: '10px', // Adjusts for smaller screens
-                            transform: 'translateX(0)',
-                        },
-                        '@media (min-width: 769px)': {
-                            left: '50%', // Centers the button on larger screens
-                            transform: 'translateX(-50%)',
-                        },
                     }}
                 >
-                    <ArrowUp />
+                    <ArrowUp size={30} />
                 </button>
+
 
             )}
 
-     
-            {isChatOpen && <Chatbot onClose={() => setIsChatOpen(false)}/>}
+            <div onClick={(e) => e.stopPropagation()}>
+                {isChatOpen && <Chatbot onClose={() => setIsChatOpen(false)} />}
+            </div>
             {isAddBookModalOpen && (
                 <div className="modal-overlay-add" onClick={handleCloseAddBookModal}>
                     <div className="modal-content-add" onClick={(e) => e.stopPropagation()}>
@@ -1111,11 +1191,14 @@ function ProductListingPage() {
                                 {selectedBook.description || "No summary available."}
                             </p>
 
-                            {selectedBook.description && (
+                            {selectedBook.description && selectedBook.description.length > 200 && (
                                 <button className="read-more-btn" onClick={() => setIsExpanded(!isExpanded)}>
+
                                     {isExpanded ? 'Read less' : 'Read more'}
                                 </button>
+
                             )}
+
                         </div>
 
                         {/* Add to Cart Button at Bottom Right */}

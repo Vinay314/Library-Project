@@ -773,16 +773,22 @@ section .lead {
     }
 }
 
+@media screen and (max-width: 1400px) {
+    body {
+        zoom: 0.67; /* Scale everything to 67% */
+    }
+}
+
+
 /* Large desktops */
 /*@media screen and (min-width: 1440px) {
     .responsive-image {
         width: 10vw;
         height:500px;*/
-       /* max-width: 5000px;
+/* max-width: 5000px;
         max-height: 800px;*/
-    /*}
+/*}
 }*/
-
 /* ----- Update Modal Styling ----- */
 .modal-overlay-update {
     position: fixed;
@@ -797,7 +803,7 @@ section .lead {
     overflow-y: auto;
     z-index: 1000;
     scrollbar-width: thin;
-    scrollbar-color: #008080 #e0f7f7; 
+    scrollbar-color: #008080 #e0f7f7;
 }
 
 .removecart{
@@ -1537,6 +1543,7 @@ section .lead {
 .py-5 {
     padding-top: 0rem !important;
     padding-bottom: 3rem !important;
+    
 }
 
     .book-details table {
@@ -1867,7 +1874,7 @@ section .lead {
     display: flex;
     gap: 0.5rem;
     flex-wrap: wrap;
-    margin-top: 10px;
+    margin-bottom: 18px;
 }
 
 .chip {
@@ -1900,17 +1907,19 @@ section .lead {
 .reset-btn-text {
     background: none;
     border: none;
-    color: teal;
+    color: white;
     cursor: pointer;
     font-weight: 600;
     font-size: 1rem;
     padding: 0.25rem 0.5rem;
     text-decoration: underline;
     transition: color 0.3s ease;
+    margin-bottom:20px;
+    margin-left:0px
 }
 
     .reset-btn-text:hover {
-        color: #0e3d3e;
+        color: white;
     }
 
 
@@ -1924,16 +1933,18 @@ section .lead {
     margin-top: 20px;
     display: flex;
     align-items: center;
-    justify-content: space-between; /* Distributes children across the width */
+    justify-content: flex-start;
     background-color: #184d59;
     padding: 1rem;
     border-radius: 0.5rem;
     color: white;
-    flex-wrap: wrap; /* Wrap on smaller screens */
+    flex-wrap: wrap;
     width: 100%;
     box-sizing: border-box;
-    row-gap: 1rem; /* Add some vertical spacing when wrapped */
+    row-gap: 0.25rem;
+    column-gap: 3.5rem; /* Add this to control horizontal spacing */
 }
+
 
 
 /* Filter and Sort Form */
@@ -2101,6 +2112,7 @@ section .lead {
     cursor: pointer;
     transition: background 0.3s ease;
     margin-top: 10px;
+   
 }
 
     .reset-btn:hover {
@@ -2275,6 +2287,7 @@ section .lead {
     /*padding-top: 40px;*/ /* Center the image */
     margin-top: 15px;
     margin-bottom: 30px;
+    
 }
 
     /*.book-image img {

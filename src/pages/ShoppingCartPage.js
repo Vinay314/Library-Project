@@ -27,8 +27,11 @@ const Tabs = ({ activeTab, setActiveTab }) => {
     const { id } = useParams();
     const [searchTerm, setSearchTerm] = useState('');
     const [author, setAuthor] = useState('');
-    
+    let userName = localStorage.getItem("username");
+
     const allBooks = [...borrowedBooks];
+
+    /*const allBooks = borrowedBooks.filter((book) => book.userName === userName);//[...borrowedBooks];*/
 
     let filteredBooks = allBooks.filter((book) => {
         const matchesDate = filterDate ? book.returnDate && book.returnDate.includes(filterDate) : true;
@@ -43,23 +46,33 @@ const Tabs = ({ activeTab, setActiveTab }) => {
 
 
 
-    useEffect(() => {
-        let checkedOutBooks = JSON.parse(localStorage.getItem("checkedOutBooks")) || [];
+useEffect(() => {
+    const fetchCheckoutBooks = async () => {
+        try {
+            const userName = localStorage.getItem("username");
+            const response = await axios.get(`http://localhost:5198/api/books/checkout/${userName}`);
+            const books = response.data;
+            const today = new Date();
 
-        let today = new Date();
+            const current = books.filter(book => new Date(book.returnDate) >= today);
+            const borrowed = books
+                .filter(book => new Date(book.returnDate) > today)
+                .sort((a, b) => new Date(b.returnDate) - new Date(a.returnDate)); // Descending
 
-        let current = checkedOutBooks.filter(book => new Date(book.returnDate) >= today);
-        let borrowed = checkedOutBooks
-            .filter(book => new Date(book.returnDate) > today)
-            .sort((a, b) => new Date(b.returnDate) - new Date(a.returnDate)); // Descending
-        //filteredBooks = borrowed;
-        console.log("test", borrowed);
-        setCurrentBooks(current);
-        setBorrowedBooks(borrowed);
+            console.log("test", borrowed);
 
-        let objs = localStorage.getItem("cartItems");
+            setCurrentBooks(current);
+            setBorrowedBooks(borrowed);
+        } catch (error) {
+            console.error("Error fetching checkout books:", error);
+        }
+    };
 
-    }, []);
+    fetchCheckoutBooks();
+
+    let objs = localStorage.getItem("cartItems");
+}, []);
+
     return (
         <div>
             {/* Tabs for Navigation */}
@@ -119,7 +132,7 @@ const Tabs = ({ activeTab, setActiveTab }) => {
             )}
 
             {activeTab === "borrowed" && (
-                <div className = "borrowed-books">
+                <div className="borrowed-books" >
 
                     
                     <div className="filters" style={{ display: 'flex', alignItems: 'flex-end', gap: '20px', marginBottom: '24px', marginTop: '-62px' }}>
@@ -170,6 +183,8 @@ const Tabs = ({ activeTab, setActiveTab }) => {
                                     <div className="text-container">
                                                 <p className="item-name">{book.title}</p>
                                                 <p className="author1">{book.author}</p>
+                                                <p className="usrnm" style={{ color: "black" }}><span style={{ fontWeight: "bold" }}>Borrowed by:</span> {book.userName}</p>
+                                                <p className="usrnm" style={{ color: "black" }}><span style={{ fontWeight: "bold" }}>Date of borrow:</span> {book.borrowedDate}</p>
                                                 <p className="date-info1">
                                                     <span style={{ fontWeight: "bold" }}>Date of return:</span>{' '}
                                                     {book.returnDate
@@ -294,7 +309,7 @@ const ShoppingCartPage = () => {
 
                 showCancelButton: true,
 
-                confirmButtonText: "Yes, remove it",
+                confirmButtonText: "Yes",
 
                 cancelButtonText: "Cancel",
 
@@ -480,7 +495,7 @@ const ShoppingCartPage = () => {
 
                 showCancelButton: true,
 
-                confirmButtonText: "Yes, remove it",
+                confirmButtonText: "Yes",
 
                 cancelButtonText: "Cancel",
 
@@ -585,7 +600,7 @@ const ShoppingCartPage = () => {
             showCancelButton: true,
             confirmButtonColor: "#008080",
             cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, Checkout",
+            confirmButtonText: "Yes",
             cancelButtonText: "Cancel",
         });
 
@@ -595,6 +610,7 @@ const ShoppingCartPage = () => {
         }
 
         const today = new Date();
+        let userName = localStorage.getItem("username");
         setPurchaseDate(today);
         const returnDate = calculateReturnDate(today);
         setReturnDate(returnDate);
@@ -624,18 +640,31 @@ const ShoppingCartPage = () => {
             );
 
             setBookTitles(bookDetails);
+            const booksToSend = bookDetails.map(book => ({
+                bookId: book.id,
+                title: book.title,
+                author: book.author,
+                image: book.image,
+                quantity: book.quantity,
+                userName: userName,
+                borrowedDate: today.toISOString(),
+                returnDate: returnDate.toISOString()
+            }));
 
+            await axios.post("http://localhost:5198/api/books/checkout", booksToSend);
             // Store checked-out books in localStorage
-            let checkedOutBooks = JSON.parse(localStorage.getItem("checkedOutBooks")) || [];
+            /*let checkedOutBooks = JSON.parse(localStorage.getItem("checkedOutBooks")) || [];*/
+            
 
-            bookDetails.forEach((book) => {
-                checkedOutBooks.push({
-                    ...book,
-                    returnDate: returnDate.toISOString(), // Save due date
-                });
-            });
+            //bookDetails.forEach((book) => {
+            //    checkedOutBooks.push({
+            //        ...book,
+            //        userName: userName,
+            //        returnDate: returnDate.toISOString(), // Save due date
+            //    });
+            //});
 
-            localStorage.setItem("checkedOutBooks", JSON.stringify(checkedOutBooks));
+            //localStorage.setItem("checkedOutBooks", JSON.stringify(checkedOutBooks));
             localStorage.removeItem("cartItems");
             // Generate the Swal popup with book images
             Swal.fire({
@@ -699,12 +728,12 @@ const ShoppingCartPage = () => {
                 confirmButtonColor: "#008080",
             }).then(() => {
                 //navigate("/loader"); // Navigate to Loader component first
-                //setTimeout(() => {
-                //    navigate("/products"); // Navigate to products after 2s
-                //}, 2000);
+                setTimeout(() => {
+                    navigate("/products"); // Navigate to products after 2s
+                }, 500);
                 /*navigate("/products?loader=true");*/
-                sessionStorage.setItem("showLoaderOnce", "true"); // Set the flag
-                navigate("/products");
+                //sessionStorage.setItem("showLoaderOnce", "true"); // Set the flag
+                //navigate("/products");
             });  
             const transitionStyle = isTransitioning
                 ? {
@@ -763,6 +792,7 @@ const ShoppingCartPage = () => {
     <Tabs activeTab={activeTab} setActiveTab={setActiveTab} />
     return (
         <>
+            
             <Tabs activeTab={activeTab} setActiveTab={setActiveTab} />
         <div>
             
@@ -902,7 +932,8 @@ const ShoppingCartPage = () => {
 
         </div>
 
-            </div>
+                </div>
+          
         </>
             );
     

@@ -137,6 +137,7 @@ const Header = ({ searchQuery, setSearchQuery, products ,onOpenAbout}) => {
     //};
 
     return (
+        
         <header className="header">
             
             <div className="logo-container" onClick={handleNavigation}>
@@ -239,8 +240,10 @@ const Header = ({ searchQuery, setSearchQuery, products ,onOpenAbout}) => {
                         )}
                     </div>
                 </ul>
-            </nav>
-        </header>
+                </nav>
+
+            </header>
+        
     );
 };
 

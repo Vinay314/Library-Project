@@ -24,6 +24,15 @@ builder.Services.AddScoped<IMongoCollection<Book>>(s =>
     return database.GetCollection<Book>(settings.BooksCollectionName);
 });
 
+builder.Services.AddScoped<IMongoCollection<CheckoutBook>>(s =>
+{
+    var settings = s.GetRequiredService<IOptions<MongoDbSettings>>().Value;
+    var database = s.GetRequiredService<IMongoDatabase>();
+    return database.GetCollection<CheckoutBook>("CheckoutBooks");
+});
+
+
+
 // Add services to the container
 builder.Services.AddControllers();
 builder.Services.AddScoped<UserService>();

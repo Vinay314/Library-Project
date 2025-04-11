@@ -95,13 +95,18 @@ function ProductListingPage() {
 
             setShowLoader(true);
 
-            document.documentElement.style.overflow = "hidden";
+            setTimeout(() => {
+                document.documentElement.style.overflow = "hidden";
+                document.body.style.overflow = "hidden";
+            }, 0);
+
 
             setTimeout(() => {
 
                 setShowLoader(false);
 
                 document.documentElement.style.overflow = "auto";
+                document.body.style.overflow = "auto";
 
                 sessionStorage.removeItem("showLoaderOnce");
 
@@ -115,7 +120,7 @@ function ProductListingPage() {
         if (!sessionStorage.getItem("hasLoadedBefore")) {
             localStorage.removeItem("cartItems"); // Clear cart ONLY on full refresh
             setCartItems({}); // Reset cart state
-            sessionStorage.setItem("hasLoadedBefore", "true"); // Set flag to prevent clearing on navigation
+            localStorage.setItem("hasLoadedBefore", "true"); // Set flag to prevent clearing on navigation
         }
     }, []);
     const updateChips = (type, value) => {
@@ -150,6 +155,7 @@ function ProductListingPage() {
 
         setShowInStock(false);
     };
+
 
 
 
@@ -644,22 +650,22 @@ function ProductListingPage() {
     
         //RIGHT CLICK DISABLED CODE
 
-        useEffect(() => {
-        const disableRightClick = (event) => {
-            if (selectedBook || isAddBookModalOpen || isUpdateBookModalOpen) {
-                event.preventDefault();
-            }
-        };
+    //    useEffect(() => {
+    //    const disableRightClick = (event) => {
+    //        if (selectedBook || isAddBookModalOpen || isUpdateBookModalOpen) {
+    //            event.preventDefault();
+    //        }
+    //    };
 
-        document.addEventListener("contextmenu", disableRightClick);
+    //    document.addEventListener("contextmenu", disableRightClick);
 
-        return () => {
-            document.removeEventListener("contextmenu", disableRightClick);
-        };
+    //    return () => {
+    //        document.removeEventListener("contextmenu", disableRightClick);
+    //    };
 
 
 
-    }, [selectedBook, isAddBookModalOpen, isUpdateBookModalOpen]);
+    //}, [selectedBook, isAddBookModalOpen, isUpdateBookModalOpen]);
     
     
     
@@ -758,7 +764,8 @@ function ProductListingPage() {
 
     return (
         <>
-
+            <div className="parent-container">
+            <div className="scale-container">
             <Header searchQuery={searchQuery} setSearchQuery={setSearchQuery} products={products} onOpenAbout={handleOpenAboutModal} />
 
             <div className={`container-fluid full-page-container ${darkMode ? 'bg-dark text-white' : 'bg-light text-dark'} ${selectedBook ? 'blur-background' : ''} ${isAddBookModalOpen ? 'blur-background' : ''} ${isUpdateBookModalOpen ? 'blur-background' : ''} ${isAboutModalOpen ? 'blur-background' : ''}`}>
@@ -897,21 +904,26 @@ function ProductListingPage() {
                                 <div className={`slider ${showInStock ? "active" : ""}`}></div>
                             </div>
                         </div>
-                    
+                            <div className="chips-reset-container">
+                                <div className="active-chips">
+                                    {activeChips.map((chip) => (
+                                        <div key={chip.type} className="chip">
+                                            {chip.type}: {chip.value}
+                                            <span className="remove-chip" onClick={() => removeChip(chip.type)}>
+                                                <X size={16} />
+                                            </span>
+                                        </div>
+                                    ))}
+                                </div>
+                                <button className="reset-btn-text" onClick={handleReset}>Reset All</button>
+                            </div>
                         
                     </div>
                 <div className="chips-reset-container">
                     <div className="active-chips">
-                        {activeChips.map((chip) => (
-                            <div key={chip.type} className="chip">
-                                {chip.type}: {chip.value}
-                                <span className="remove-chip" onClick={() => removeChip(chip.type)}>
-                                    <X size={16} />
-                                </span>
-                            </div>
-                        ))}
+                        
                     </div>
-                    <button className="reset-btn-text" onClick={handleReset}>Reset All</button>
+                    
                 </div>
 
 
@@ -1009,7 +1021,7 @@ function ProductListingPage() {
 
 
                 </div>
-                {showLoader && <Loader />}
+                {/*{showLoader && <Loader />}*/}
 
             </div>
 
@@ -1275,7 +1287,9 @@ function ProductListingPage() {
             {/* Sticky Dark Mode Toggle Button */}
             {/*<button onClick={toggleDarkMode} className="dark-mode-toggle">*/}
             {/*{darkMode ? <i className="bi bi-brightness-high-fill"></i> : <i className="bi bi-moon-fill"></i>}*/}
-            {/*</button>*/}
+                {/*</button>*/}
+                </div>
+            </div>
         </>
     );
 }

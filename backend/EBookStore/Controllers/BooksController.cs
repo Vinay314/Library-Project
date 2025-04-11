@@ -15,11 +15,13 @@ public class BooksController : ControllerBase
     private readonly IMongoCollection<Book> _booksCollection;
     private readonly UserService _userService;
     private readonly IConfiguration _configuration;
-    public BooksController(IMongoCollection<Book> booksCollection, UserService userService, IConfiguration configuration)
+    private readonly IMongoCollection<CheckoutBook> _checkoutBooksCollection;
+    public BooksController(IMongoCollection<Book> booksCollection, IMongoCollection<CheckoutBook> checkoutBooksCollection, UserService userService, IConfiguration configuration)
     {
         _booksCollection = booksCollection;
         _userService = userService;
         _configuration= configuration;
+        _checkoutBooksCollection = checkoutBooksCollection;
     }
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterRequest request)
@@ -133,6 +135,48 @@ public class BooksController : ControllerBase
             Book = newBook,
         });
     }
+
+
+    [HttpPost("checkout")]
+    public async Task<IActionResult> CheckoutBooks([FromBody] List<CheckoutBook> books)
+    {
+        if (books == null || !books.Any()) return BadRequest("No books provided");
+        for (int i = 0; i < books.Count; i++)
+        {
+            await _checkoutBooksCollection.InsertOneAsync(books[i]);
+        }
+        
+          
+        
+        
+        return Ok(new { message = "Books checked out successfully!" });
+    }
+
+
+    [HttpGet("checkout/{username}")]
+    public async Task<IActionResult> GetCheckoutBooks(string username)
+    {
+        var adminUsers = _configuration.GetSection("AdminUsers").Get<string[]>()?.ToList();
+        bool isAdmin = adminUsers != null && adminUsers.Contains(username);
+
+        List<CheckoutBook> books;
+        if (isAdmin)
+        {
+            books = await _checkoutBooksCollection.Find(_ => true).ToListAsync(); 
+        }
+        else
+        {
+            books = await _checkoutBooksCollection.Find(cb => cb.UserName == username).ToListAsync();
+        }
+
+        return Ok(books); 
+    }
+
+
+
+
+
+
 
 
 
